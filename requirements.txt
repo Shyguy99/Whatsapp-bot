@@ -1,0 +1,8 @@
+openwa
+selenium
+beautifulsoup4
+bs4
+Pillow
+python-axolotl
+python-magic
+requests
