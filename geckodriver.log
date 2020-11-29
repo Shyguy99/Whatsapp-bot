@@ -1,0 +1,119 @@
+1606636318467	geckodriver	INFO	Listening on 127.0.0.1:58182
+1606636321554	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kaila\\AppData\\Local\\Temp\\rust_mozprofileQAlLz4"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1606636327119	Marionette	INFO	Listening on port 58190
+1606636327372	Marionette	WARN	TLS certificate errors will be ignored for this session
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1606636330548	Marionette	INFO	Stopped listening on port 58190
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1606636403769	geckodriver	INFO	Listening on 127.0.0.1:58245
+1606636406832	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kaila\\AppData\\Local\\Temp\\rust_mozprofileyZVsDs"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1606636411441	Marionette	INFO	Listening on port 58253
+1606636411615	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://web.whatsapp.com/app.79cf3884c4bdafb8f9ef.js, line 1: unreachable code after return statement
+JavaScript warning: https://web.whatsapp.com/app.79cf3884c4bdafb8f9ef.js, line 1: unreachable code after return statement
+JavaScript warning: https://web.whatsapp.com/, line 1428: unreachable code after return statement
+JavaScript warning: https://web.whatsapp.com/, line 1428: unreachable code after return statement
+[Parent 29376, Gecko_IOThread] WARNING: pipe error: 232: file /builds/worker/checkouts/gecko/ipc/chromium/src/chrome/common/ipc_channel_win.cc:545
+1606636484451	Marionette	INFO	Stopped listening on port 58253
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+1606644967642	geckodriver	INFO	Listening on 127.0.0.1:61063
+1606644970681	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\kaila\\AppData\\Local\\Temp\\rust_mozprofileppTtoj"
+*** You are running in headless mode.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1606644974087	Marionette	INFO	Listening on port 61071
+1606644974374	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+[Parent 42312, Gecko_IOThread] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:166
+1606646543468	Marionette	INFO	Stopped listening on port 61071
+adless mode.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1606645010501	Marionette	INFO	Listening on port 61115
+1606645010586	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://web.whatsapp.com/app.79cf3884c4bdafb8f9ef.js, line 1: unreachable code after return statement
+JavaScript warning: https://web.whatsapp.com/app.79cf3884c4bdafb8f9ef.js, line 1: unreachable code after return statement
+JavaScript error: , line 0: NS_ERROR_NOT_AVAILABLE
+A content process crashed and MOZ_CRASHREPORTER_SHUTDOWN is set, shutting down
+[Parent 37408, Gecko_IOThread] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:166
+1606646546427	Marionette	INFO	Stopped listening on port 61115
+adless mode.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1606645052960	Marionette	INFO	Listening on port 61176
+1606645053159	Marionette	WARN	TLS certificate errors will be ignored for this session
+1606645055728	geckodriver	INFO	Listening on 127.0.0.1:61211
+1606645078740	geckodriver	INFO	Listening on 127.0.0.1:61220
+1606645081763	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "-foreground" "-no-remote" "-profile" "C:\\Users\\kaila\\AppData\\Local\\Temp\\rust_mozprofileqg5Tj4"
+*** You are running in headless mode.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1606645084702	Marionette	INFO	Listening on port 61228
+1606645084946	Marionette	WARN	TLS certificate errors will be ignored for this session
+1606645087574	geckodriver	INFO	Listening on 127.0.0.1:61261
+1606645117127	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kaila\\AppData\\Local\\Temp\\rust_mozprofile66se7e"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1606645121430	Marionette	INFO	Listening on port 61269
+1606645121903	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://web.whatsapp.com/app.79cf3884c4bdafb8f9ef.js, line 1: unreachable code after return statement
+JavaScript warning: https://web.whatsapp.com/app.79cf3884c4bdafb8f9ef.js, line 1: unreachable code after return statement
+JavaScript warning: https://web.whatsapp.com/, line 1428: unreachable code after return statement
+JavaScript warning: https://web.whatsapp.com/, line 1428: unreachable code after return statement
+
+###!!! [Parent][RunMessage] Error: Channel error: cannot send/recv
+
+1606645254858	geckodriver	INFO	Listening on 127.0.0.1:61392
+1606645257872	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-foreground" "-no-remote" "-profile" "C:\\Users\\kaila\\AppData\\Local\\Temp\\rust_mozprofilehpcy55"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1606645262351	Marionette	INFO	Listening on port 61400
+1606645262689	Marionette	WARN	TLS certificate errors will be ignored for this session
+1606646190769	Marionette	INFO	Stopped listening on port 61400
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+
+Temp\\rust_mozprofileGm9F58"
+Can't find symbol 'eglSwapBuffersWithDamageEXT'.
+Can't find symbol 'eglSetDamageRegionKHR'.
+JavaScript error: resource://gre/modules/XULStore.jsm, line 66: Error: Can't find profile directory.
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1606645298247	Marionette	INFO	Listening on port 61446
+1606645298407	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript warning: https://web.whatsapp.com/app.79cf3884c4bdafb8f9ef.js, line 1: unreachable code after return statement
+JavaScript warning: https://web.whatsapp.com/app.79cf3884c4bdafb8f9ef.js, line 1: unreachable code after return statement
+1606646192156	Marionette	INFO	Stopped listening on port 61446
+
+###!!! [Child][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][MessageChannel::SendAndWait] Error: Channel error: cannot send/recv
+

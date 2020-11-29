@@ -1,0 +1,5 @@
+2020/11/29-13:24:30.409 9bf0 Reusing MANIFEST D:\Giga\python file\bot\wp bot\User_Data\Default\IndexedDB\https_www.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
+2020/11/29-13:24:33.753 8584 Level-0 table #5: started
+2020/11/29-13:24:33.777 8584 Level-0 table #5: 382 bytes OK
+2020/11/29-13:24:33.788 8584 Delete type=0 #3
+2020/11/29-13:24:33.792 8584 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
