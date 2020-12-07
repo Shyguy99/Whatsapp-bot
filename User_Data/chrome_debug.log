@@ -1,4 +1,0 @@
-[47352:40856:1129/164939.377:INFO:CONSOLE(0)] "Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://fonts.gstatic.com/s/roboto/v20/KFOmCnqEu92Fr1Mu4mxK.woff2", source: chrome-search://local-ntp/local-ntp.html (0)
-[47352:40856:1129/164941.414:ERROR:device_event_log_impl.cc(211)] [16:49:41.414] USB: usb_device_handle_win.cc:1020 Failed to read descriptor from node connection: A device attached to the system is not functioning. (0x1F)
-[47352:40856:1129/164941.415:ERROR:device_event_log_impl.cc(211)] [16:49:41.416] USB: usb_device_handle_win.cc:1020 Failed to read descriptor from node connection: A device attached to the system is not functioning. (0x1F)
-[47352:40856:1129/165220.222:WARNING:pref_notifier_impl.cc(40)] Pref observer for media_router.cast_allow_all_ips found at shutdown.
