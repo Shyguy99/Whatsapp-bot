@@ -1,2 +1,4 @@
-User_Data/
-.idea/
+User_Data/*
+__pycache__/*
+.idea/*
+
