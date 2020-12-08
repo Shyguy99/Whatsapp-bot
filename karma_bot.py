@@ -30,7 +30,8 @@ class karma_word_game:
       #initilizing some helping variables
       def __init__(self):
          self.wstarted = 'no'             #check whether game started or not
-         self.c=0                         #check whether 3 peoples voted or not for skiping a word
+         self.c=0   #check whether 3 peoples voted or not for skiping a word
+         self.score_board=[]
          with open('words.json', 'r+') as f:
             self.li = json.load(f)        #json file containing all words
       

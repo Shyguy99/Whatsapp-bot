@@ -1,5 +1,4 @@
 import threading
-import multiprocessing
 import karma_bot
 
 from selenium import webdriver
@@ -41,8 +40,8 @@ def reading_message():
         while True:
             for contact in driver.get_unread(include_me=True, include_notifications=True):  # reading all incoming messages
                 for message in contact.messages:
-                    print(message,"pink")
-                    if (message.type=='chat' or message.type=='image' or message.type=='video') and ((hasattr(message, 'caption') and message.caption == '#sticker') or message.content[0:1]=='#') and bot=='on':
+                   
+                    if (message.type=='chat' or message.type=='image' or message.type=='video') and ((hasattr(message, 'caption') and message.caption == '#sticker') or message.content[0:1]=='#'):
                          all_commands.append(message)       #adding all commands to list
                          print(all_commands[-1],"reading")
 def running_commands():
@@ -53,6 +52,7 @@ def running_commands():
                while i<len(all_commands):           #running commands till there new commands added
                     message=all_commands[i]
                     i+=1
+                    print("i=",i)
                     print(message,"running")
                     if message.type == 'chat' and message.content == '#on' and (
                             str(message.sender.id) == '918319917110@c.us' or str(message.sender.id) == '919675642959@c.us'):
@@ -64,7 +64,7 @@ def running_commands():
 
                         # commands for help and controls
                         elif (message.content == '#help' or message.content == '#command'):
-                            s = """*Welcome to the bot*\n\n*Features*\n\n*1. STICKER MAKER*\nSend any photo with #sticker in caption for sticker *GIF/VIDEOS NOT SUPPORTED RIGHT NOW*\n\n*SEND PHOTO*\nhttps://chat.whatsapp.com/Ie6OO51PR5z8VcBZBY5UiX\n\n*RECEIVE STICKER*\nhttps://chat.whatsapp.com/G5M7sNLTOdBFXb4tcnWYQB\n--------------------------------------------------\n*2. TEXT TO AUDIO*\nSend msg with #voice\n\nEx.-: #voice#This is bot\n\nYou can choose language also hi for hindi,\nen for English,\nbn for bengali,\nfr for French, \nja for japanese\n\nEx-: #voice#mei hu ek bot#hi\n--------------------------------------------------\n*3. Tic Tac Toe Game*\nTo play send *#tic_game#(tag the number you want to play with)*\nTo end the game early send *#end*\nType #help_tic for controls\n--------------------------------------------------\n\n*4. Word game*\nTo start send #wordgame\nType #help_wgame for controls\n--------------------------------------------------\n\n"""
+                            s = """*Welcome to the bot*\n\n*Features*\n\n*1. STICKER MAKER*✅\nSend any photo with #sticker in caption for sticker *GIF/VIDEOS NOT SUPPORTED RIGHT NOW*\n\n*BOT GROUP LINK/SEND IMAGE HERE*\nhttps://chat.whatsapp.com/Ie6OO51PR5z8VcBZBY5UiX\n\n*RECEIVE STICKER*\nhttps://chat.whatsapp.com/G5M7sNLTOdBFXb4tcnWYQB\n--------------------------------------------------\n*2. TEXT TO AUDIO*✅\nSend msg with #voice\n\nEx.-: #voice#This is bot\n\nYou can choose language also hi for hindi,\nen for English,\nbn for bengali,\nfr for French, \nja for japanese\n\nEx-: #voice#mei hu ek bot#hi\n--------------------------------------------------\n*3. Tic Tac Toe Game*✅\nTo play send *#tic_game#(tag the number you want to play with)*\nTo end the game early send *#end*\nType #help_tic for controls\n--------------------------------------------------\n\n*4. Word game*✅\nTo start send #wordgame\nType #help_wgame for controls\n--------------------------------------------------\n\n*5.Geeks for Geeks code extractor*✅\nAny person can get the code from geeks for geeks site according ro the asked question.\nTo get the code for particular problem type \n\n#gfg#Your question#the language in which you want the code\n\nEx-: ->#gfg#merge sort#python\n      ->#gfg #kadane algorithm #c++"""
                             driver.reply_message(message.chat_id, message.id, s)
                         elif message.content == '#help_wgame':
                             s = """*Welcome to the Word Game*\n\n*First register by entering your name*\nSend #enter#your name\n\n*To enter a guess enter*\n#ans#your answer\n\n*To check the score enter*\n#score\n\n*After correctly guessing,to go to the next word enter*\n#nex_word\n\n*To see the current word enter*\n#currword\n\n*If unable to guess and want to skip to the next word enter*\n#nex_word\n\n*NOTE- IT'LL REQUIRE 3 PEOPLE TO SKIP FOR THE CURRENT WORD TO GET SKIPPED*"""
