@@ -37,7 +37,7 @@ def reading_message():
         while True:
             for contact in driver.get_unread(include_me=True, include_notifications=True):  # reading all incoming messages
                 for message in contact.messages:
-                    if (message.type=='chat' or message.type=='image' or message.type=='video') and ((hasattr(message, 'caption') and message.caption == '#sticker')):
+                    if (message.type=='chat' or message.type=='image' or message.type=='video') and ((hasattr(message, 'caption') and message.caption == '#sticker')or message.content[0:1]=='#'):
                          all_commands.append(message)       #adding all commands to list
                          print(all_commands[-1],"reading")
 def running_commands():
