@@ -6,15 +6,12 @@ from selenium import webdriver
 options = webdriver.ChromeOptions();
 options.headless = True
 
-# options.add_argument('--user-data-dir=./User_Data')
-# uncomment the above statement for first you run the bot to create user data folder to store login info
 
 from openwa import WhatsAPIDriver
 
 wd = webdriver.Chrome(options=options)
 
-driver = WhatsAPIDriver(client='chrome',
-                        profile='./User_Data')  # remove the profile parameter first time you run the bot as first time there is no folder name this
+driver = WhatsAPIDriver(client='chrome')  
 driver.wait_for_login()
 
 wd.get("https://www.google.com/")  # opening google in one tab
@@ -40,8 +37,7 @@ def reading_message():
         while True:
             for contact in driver.get_unread(include_me=True, include_notifications=True):  # reading all incoming messages
                 for message in contact.messages:
-                   
-                    if (message.type=='chat' or message.type=='image' or message.type=='video') and ((hasattr(message, 'caption') and message.caption == '#sticker') or message.content[0:1]=='#'):
+                    if (message.type=='chat' or message.type=='image' or message.type=='video') and ((hasattr(message, 'caption') and message.caption == '#sticker')):
                          all_commands.append(message)       #adding all commands to list
                          print(all_commands[-1],"reading")
 def running_commands():
@@ -52,14 +48,13 @@ def running_commands():
                while i<len(all_commands):           #running commands till there new commands added
                     message=all_commands[i]
                     i+=1
-                    print("i=",i)
                     print(message,"running")
                     if message.type == 'chat' and message.content == '#on' and (
-                            str(message.sender.id) == '918319917110@c.us' or str(message.sender.id) == '919675642959@c.us'):
+                            str(message.sender.id) == '911211212121@c.us' or str(message.sender.id) == '911212111212@c.us'):   #bot owner1 and owner2 phone numbers
                         bot = 'on'
                     if message.type == 'chat' and bot == 'on':
                         if message.content == '#off' and (
-                                str(message.sender.id) == '918319917110@c.us' or str(message.sender.id) == '919675642959@c.us'):
+                                str(message.sender.id) == '911212112121@c.us' or str(message.sender.id) == '912121212121@c.us'):
                             bot = 'off'
 
                         # commands for help and controls
@@ -88,7 +83,7 @@ def running_commands():
                         elif message.content == '#score':
                             word_game.show_score(driver, message)
                         elif message.content == '#endwgame' and (
-                                str(message.sender.id) == '918319917110@c.us' or str(message.sender.id) == '919675642959@c.us'):
+                                str(message.sender.id) == '911212121212@c.us' or str(message.sender.id) == '911212121212@c.us'):
                             word_game.end_wgame(driver, message)
 
 
