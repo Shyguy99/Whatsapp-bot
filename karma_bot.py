@@ -17,8 +17,10 @@ class karma_sticker:
                print(str(a))
                try:
                   if message.chat_id == '919675642959-1606755119@g.us' or message.chat_id == '919557666582-1580308963@g.us':  #custom setting you can ignore it 
-                     driver.send_image_as_sticker(a, '919675642959-1606756367@g.us')
+                      driver.driver.switch_to_window(driver.driver.window_handles[0])
+                      driver.send_image_as_sticker(a, '919675642959-1606756367@g.us')
                   else:
+                     driver.driver.switch_to_window(driver.driver.window_handles[0])
                      driver.send_image_as_sticker(a, message.chat_id)  #sending converted sticker
                except Exception as ex:
                   print(ex)
@@ -359,7 +361,7 @@ class GFG:
                     wd.switch_to_window(win1)
                     a = wd.find_element_by_name('q')                #finding the google search box
                     a.clear()
-                    a.send_keys(str(srh_title) + " gfg")            #entering the question text
+                    a.send_keys(str(srh_title) + " gfg "+srh_lang)            #entering the question text
                     a.send_keys(Keys.ENTER)                         #pressing enter key to search
                     b = wd.find_elements_by_css_selector(".g a")    #selecting all the links shown in google result
                     got_it = False
