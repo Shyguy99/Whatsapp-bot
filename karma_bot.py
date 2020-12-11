@@ -260,7 +260,7 @@ class tic_tac_game:
                                 q = 1
                             if q == 1:
                                 driver.reply_message(message.chat_id, message.id,
-                                                     "Match Ended!!\n" + self.a + " Wins the Game")
+                                                     "Match Ended!!\n" + a + " Wins the Game")
                                 ga = "no"
                                 pler = []
                             else:
