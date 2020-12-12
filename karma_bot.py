@@ -284,10 +284,13 @@ class tic_tac_game:
         
         #function for ending game in middle
         def end_tic_game(self,driver,message):
-            driver.reply_message(message.chat_id, message.id, "Game Ended in middle")
-            self.ga = "no"
-            self.pler = []
-
+            if self.ga=="yes":
+               driver.reply_message(message.chat_id, message.id, "Game Ended in middle!")
+               self.ga = "no"
+               self.pler = []
+            else:
+                  driver.reply_message(message.chat_id, message.id, "To end you have to start the game first!")
+             
 #class for converting text to speech
 class voice_converse:
 
