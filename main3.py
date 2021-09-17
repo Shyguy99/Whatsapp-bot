@@ -1,23 +1,11 @@
-import os, sys
 from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+import os
 
-print("Environment", os.environ)
-try:
-    os.environ["CHROMEDRIVER_PATH"]
-except KeyError:
-    print("Please set the environment variable SELENIUM to Selenium URL")
-    sys.exit(1)
-driver = webdriver.Remote(
-    command_executor=os.environ["CHROMEDRIVER_PATH"],
-
-    desired_capabilities=DesiredCapabilities.CHROME
-)
-
-print("Driver initialized")
-print("Getting https://web.whatsapp.com")
-driver.get("https://web.whatsapp.com")
-driver.save_screenshot('shot.png')
-print("Screenshot saved")
-driver.close()
-print("Driver closed")
+chrome_options = webdriver.ChromeOptions()
+chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--no-sandbox")
+driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+driver.get("www.google.com")
+print(driver.page_source)
