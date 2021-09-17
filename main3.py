@@ -8,7 +8,6 @@ try:
 except KeyError:
     print("Please set the environment variable SELENIUM to Selenium URL")
     sys.exit(1)
-options=
 driver = webdriver.Remote(
     command_executor=os.environ["CHROMEDRIVER_PATH"],
     desired_capabilities=DesiredCapabilities.CHROME
