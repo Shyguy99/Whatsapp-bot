@@ -10,6 +10,7 @@ except KeyError:
     sys.exit(1)
 driver = webdriver.Remote(
     command_executor=os.environ["CHROMEDRIVER_PATH"],
+
     desired_capabilities=DesiredCapabilities.CHROME
 )
 
