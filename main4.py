@@ -13,7 +13,7 @@ except KeyError:
 ##The "app" directory is internal to docker, it corresponds to the root of the project.
 ##The profile parameter requires a directory not a file.
 
-driver = WhatsAPIDriver( client='chrome', remote=True, command_executor=os.environ["CHROMEDRIVER_PATH"],executable_path=os.environ["GOOGLE_CHROME_BIN"])
+driver = WhatsAPIDriver( client='chrome', command_executor=os.environ["CHROMEDRIVER_PATH"],executable_path=os.environ["GOOGLE_CHROME_BIN"])
 print("Waiting for QR")
 driver.wait_for_login()
 print("Saving session")
