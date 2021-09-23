@@ -206,12 +206,15 @@ class WhatsAPIDriver(object):
                 self._profile.add_argument('--remote-debugging-port=9222')
                 self._profile.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36')
             if chrome_options is not None:
+                self._profile.binary_location=os.environ.get("GOOGLE_CHROME_BIN")
                 for option in chrome_options:
                     self._profile.add_argument(option)
 
             if executable_path is not None:
                 self.logger.info("Starting webdriver")
+
                 self.driver = webdriver.Chrome(executable_path=executable_path, chrome_options=self._profile, **extra_params)
+
             else:
                 self.logger.info("Starting webdriver")
                 self.driver = webdriver.Chrome(chrome_options=self._profile, **extra_params)
