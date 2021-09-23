@@ -12,14 +12,14 @@ chrome_options.add_argument("--no-sandbox")
 driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
 
 
-li=[("user-data-dir="+os.environ.get("USER_DATA")),"--disable-dev-shm-usage","--no-sandbox"]
+li=[("user-data-dir="+os.environ.get("USER_DATA")),"--headless","--disable-dev-shm-usage","--no-sandbox"]
 dr = WhatsAPIDriver(client='chrome', chrome_options=li,executable_path=os.environ.get("CHROMEDRIVER_PATH"))
 driver.get("https://www.google.com")
 
 print("Waiting for QR")
 
 while not dr.wait_for_login():
-    time.sleep(30)
+    time.sleep(5)
 print("Bot started")
 while True:
     for contact in dr.get_unread(include_me=True):
