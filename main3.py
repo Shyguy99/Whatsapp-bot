@@ -1,3 +1,5 @@
+import time
+
 from selenium import webdriver
 import os
 from openwa import WhatsAPIDriver
@@ -13,4 +15,16 @@ driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), o
 li=[("user-data-dir="+os.environ.get("USER_DATA")),"--headless","--disable-dev-shm-usage","--no-sandbox"]
 dr = WhatsAPIDriver(client='chrome', chrome_options=li,executable_path=os.environ.get("CHROMEDRIVER_PATH"))
 driver.get("https://www.google.com")
-print(driver.page_source)
+
+print("Waiting for QR")
+
+while not dr.wait_for_login():
+    time.sleep(30)
+print("Bot started")
+while True:
+    for contact in dr.get_unread(include_me=True):
+        for i in contact.messages:
+            if i.type=='chat':
+                if i.content=="#qq":
+                    dr.reply_message(i.chat_id,i.id,"Chal gyaaaaa")
+
