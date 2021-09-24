@@ -26,5 +26,6 @@ while True:
         for i in contact.messages:
             if i.type=='chat':
                 if i.content=="#qq":
+                    print(i.content)
                     dr.reply_message(i.chat_id,i.id,"Chal gyaaaaa")
 
