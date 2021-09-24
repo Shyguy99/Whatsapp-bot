@@ -359,7 +359,7 @@ def main(message):
 
 
             # not a command
-            else:
+            elif message.content!="#on" and message.content!="#off":
                 driver.reply_message(message.chat_id,message.id,"Wrong Command!!.Check #help to see list of commands")
 
         # command for creating sticker from image
