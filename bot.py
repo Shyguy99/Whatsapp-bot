@@ -1,4 +1,3 @@
-import msilib
 import threading
 import karma_bot
 from selenium import webdriver
