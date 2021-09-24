@@ -19,5 +19,6 @@ bs4
 Pillow
 beautifulsoup4
 requests
+wikipedia
 
 

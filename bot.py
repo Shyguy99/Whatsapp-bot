@@ -1,9 +1,11 @@
+import msilib
 import threading
 import karma_bot
 from selenium import webdriver
 from openwa import WhatsAPIDriver
 import time
 import os
+import wikipedia
 
 #Change these variable before running the bot
 YOUR_MOBILE_NUMBER = "918319917110"                    # Ex-:   918273627374
@@ -14,7 +16,7 @@ sticker = karma_bot.karma_sticker()
 GFG = karma_bot.GFG()
 quit = karma_bot.quit_bot()
 
-bot = "on"  # setting bot status on
+
 
 # object dict for matchgame
 match_player_dict = dict()
@@ -67,7 +69,7 @@ def main(message):
 
             # commands for help and controls
             elif (message.content == '#help' or message.content == '#command'):
-                s = """*Welcome to the bot*\n\n*Features*\n\n*1. STICKER MAKER*✅\nSend any photo with #sticker in caption for sticker *GIF/VIDEOS NOT SUPPORTED RIGHT NOW*\n\n--------------------------------------------------\n*2. TEXT TO AUDIO*✅\nSend msg with #voice\n\nEx.-: #voice#This is bot\n\nYou can choose language also hi for hindi,\nen for English,\nbn for bengali,\nfr for French, \nja for japanese\n\nEx-: #voice#mei hu ek bot#hi\n--------------------------------------------------\n*3. Tic Tac Toe Game*✅\nTo play send *#ticgame#(tag the number you want to play with)*\nTo end the game early send *#end*\nType #help_tic for controls\n--------------------------------------------------\n\n*4. Word game*✅\nTo start send #wordgame\nType #help_wgame for controls\n--------------------------------------------------\n\n*5.Geeks for Geeks code extractor*✅\nAny person can get the code from geeks for geeks site according ro the asked question.\nTo get the code for particular problem type \n\n#gfg#Your question#the language in which you want the code\n\nEx-: ->#gfg#merge sort#python\n      ->#gfg #kadane algorithm #c++\n--------------------------------------------------\n*6.Match Emoji Game*✅\nTo start the game send #matchgame\nFor setting level add 2 or 4 or 6 after #matchgame with a space\nFor more detail send #help_match\n--------------------------------------------------\n*6.Minesweeper Game*✅.*\n\n*To start the game send #minegame and to chosse a pair send #mine xy where x is row and y is column."""
+                s = """*Welcome to the bot*\n\n*Features*\n\n*1. STICKER MAKER*✅\nSend any photo with #sticker in caption for sticker *GIF/VIDEOS NOT SUPPORTED RIGHT NOW*\n\n--------------------------------------------------\n*2. Tic Tac Toe Game*✅\nTo play send *#ticgame#(tag the number you want to play with)*\nTo end the game early send *#end*\nType #help_tic for controls\n\n--------------------------------------------------\n*3. Word game*✅\nTo start send #wordgame\nType #help_wgame for controls\n\n--------------------------------------------------\n*4.Geeks for Geeks code extractor*✅\nAny person can get the code from geeks for geeks site according ro the asked question.\nTo get the code for particular problem type \n\n#gfg#Your question#the language in which you want the code\n\nEx-: ->#gfg#merge sort#python\n     ->#gfg #kadane algorithm #c++\n\n--------------------------------------------------\n*5.Match Emoji Game*✅\n\n*To start the game send #matchgame\nFor setting level add 2 or 4 or 6 after #matchgame with a space\n*For more detail send #help_match\n\n--------------------------------------------------\n*6.Minesweeper Game*✅.*\n\n*To start the game send #minegame and to chosse a pair send #mine xy where x is row and y is column.\n\n--------------------------------------------------\n*7.Wikipedia Search*✅.*\n\n*Search anything on wikipedia by sending #wiki title\n\nEx. #wiki monkey\n\n--------------------------------------------------\n*Common admin commands*\n\n*#add 919876543210\n*#kick tag the person\n*#tagall \n*Note-: #tagall can be used in middle of sentence also.\n\nBot created by *Karma*\nGithub link-:https://github.com/Shyguy99/Whatsapp-bot"""
                 driver.reply_message(message.chat_id, message.id, s)
             elif message.content == '#help_wgame':
                 s = """*Welcome to the Word Game*\n\n*First register by entering your name*\nSend #enter#your name\n\n*To enter a guess enter*\n#ans#your answer\n\n*To check the score enter*\n#score\n\n*After correctly guessing,to go to the next word enter*\n#nex_word\n\n*To see the current word enter*\n#currword\n\n*If unable to guess and want to skip to the next word enter*\n#nex_word\n\n*NOTE- IT'LL REQUIRE 3 PEOPLE TO SKIP FOR THE CURRENT WORD TO GET SKIPPED*"""
@@ -166,16 +168,6 @@ def main(message):
                     driver.reply_message(message.chat_id, message.id,
                                          "You don't have any ongoing match!\nType #ticgame tag the person to play with. to start the game.")
 
-
-
-
-
-
-
-            # command for converting text to speech
-            elif "#voice" in message.content[0:8]:
-                print(message.content)
-                voice.text_to_speech(driver, message)
 
 
 
@@ -308,9 +300,68 @@ def main(message):
                                          "You haven't started your game yet 😅\nStart it by sending #minegame")
 
 
-            # command for quiting
-            elif message.content == '#quit':
-                quit.quit(driver, wd)
+            elif "#wiki " in message.content:
+                s=message.content.split("#wiki ")
+                if len(s)==2:
+
+                    try:
+                        out=wikipedia.page(s[1])
+                        message.reply_message('*Title* :{}\n*Source* : {}\n{}'.format(out.title,out.url,out.content))
+                    except:
+                        message.reply_message("Can't find anything!!")
+
+
+
+            #kick and add member command
+            elif "#kick " in message.content or "#add " in message.content:
+                try:
+                    if message.sender.id in driver.wapi_functions.getGroupAdmins(message.chat_id):
+                        if isAdmin(message.chat_id):
+                            s=message.content.split()
+                            if len(s)==2:
+
+
+                                if "#kick " in message.content:
+                                    if driver.remove_participant_group(message.chat_id, s[1].replace("@", "") + "@c.us"):
+                                        message.reply_message("Removed")
+                                    else:
+                                        message.reply_message("Kick Fail")
+                                else:
+                                    try:
+                                        driver.add_participant_group(message.chat_id, s[1] + '@c.us')
+                                    except:
+                                        message.reply_message("Fail!!\n Format for adding number is:\n#add 918888888888")
+                        else:
+                            driver.wapi_functions.sendMessage(message.chat_id, "Bot not admin yet")
+                    else:
+                        message.reply_message('Sorry!! Admin command')
+                except Exception as e:
+                    print(f"Error -> {str(e)}")
+                    message.reply_message("Fail!!")
+
+            elif "#tagall" in message.content:
+
+                if message.sender.id in driver.wapi_functions.getGroupAdmins(message.chat_id):
+                        s = message.content.split("#tagall")
+                        all_parti = driver.wapi_functions.getGroupParticipantIDs(message.chat_id)
+                        msg=s[0]+"\n"
+                        for i in all_parti:
+                            msg += ' @{} '.format(i)
+                        msg+=s[1]
+                        driver.wapi_functions.sendMessageWithMentions(message.chat_id, msg.replace('@c.us', ''), '')
+
+                else:
+                    message.reply_message('Sorry!! Admin command only')
+
+
+
+
+
+
+
+            # not a command
+            else:
+                driver.reply_message(message.chat_id,message.id,"Wrong Command!!.Check #help to see list of commands")
 
         # command for creating sticker from image
         elif message.type == 'image' or message.type == 'video':
@@ -323,6 +374,8 @@ while True:
         while not driver.wait_for_login():
                 time.sleep(5)
         print("Bot started")
+        bot = "on"  # setting bot status on
+        isAdmin = lambda _: driver.wapi_functions.getMe()["wid"] in driver.wapi_functions.getGroupAdmins(_)
     except:
         print("Cant login trying again")
         continue
