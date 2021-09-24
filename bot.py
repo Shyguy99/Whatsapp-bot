@@ -44,10 +44,7 @@ driver = WhatsAPIDriver(client='chrome', headless=True,chrome_options=li,executa
 
 
 
-print("Waiting for QR")
-while not driver.wait_for_login():
-        time.sleep(5)
-print("Bot started")
+
 
 wd.get("https://www.google.com/")  # opening google in one tab
 win1 = wd.window_handles[0]
@@ -322,11 +319,24 @@ def main(message):
 
 while True:
     try:
-        for contact in driver.get_unread(include_me=True):
-            for i in contact.messages:
-                if i.type=='chat' and i.content=="#quitbot":
-                    break
-                threading.Thread(target=main, args=(i,)).start()
+        print("Waiting for QR")
+        while not driver.wait_for_login():
+                time.sleep(5)
+        print("Bot started")
     except:
-        print("Error Trying Again")
+        print("Cant login trying again")
+        continue
+    while True:
+        try:
+            if driver.is_logged_in():
+
+                for contact in driver.get_unread(include_me=True):
+                    for i in contact.messages:
+                        if i.type=='chat' and i.content=="#quitbot":
+                            break
+                        threading.Thread(target=main, args=(i,)).start()
+            else:
+                break
+        except:
+            print("Error Trying Again")
 
