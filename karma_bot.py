@@ -2,10 +2,7 @@ import json
 import random
 
 import time
-import pyperclip
-from selenium import webdriver
 from bs4 import BeautifulSoup
-from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 
 
@@ -711,135 +708,37 @@ class mine:
 class compiler:
 
     def __init__(self):
-        #variable to check whether some programming in running state or not
+        self.r = pydoodle.Compiler(clientId="f4024ff5ac6b07c27fe236582c7c5331",
+                              clientSecret="55e17e9e99239d105df4f5e9014f08b554d007c3ed044ea798b5e66b3b49e664")
+
         self.inuse=0
-        #variable to hold the code
-        self.code=""
-        #variable to hold the inputs if any
-        self.inp=[]
 
-        self.webd=webdriver.Chrome()
-        #opening compiler
-        self.webd.get("https://www.onlinegdb.com/online_c++_compiler#")
-
-        #saving all the drop down options to a varible to select language
-        self.select = Select(self.webd.find_element_by_id('lang-select'))
-        #running the default code for first time just to set up things
-        self.webd.find_element_by_id('control-btn-run').click()
 
     def run(self,message,lang,code):
-        if lang.lower() in ['c++','cpp','python','python3']:
-            if lang.lower()=="c++" or lang.lower()=="cpp":
-                self.select.select_by_visible_text('C++ 17')
-            else:
-                self.select.select_by_visible_text('Python 3')
+        self.code=code
+        self.lang=lang.lower()
+        languages=['ada', 'bash', 'bc', 'brainfuck', 'c', 'c-99', 'clisp', 'clojure', 'cobol', 'coffeescript', 'cpp',
+                    'cpp17', 'csharp', 'd', 'dart', 'elixir', 'erlang', 'factor', 'falcon', 'fantom', 'forth',
+                    'fortran', 'freebasic', 'fsharp', 'gccasm', 'go', 'groovy', 'hack', 'haskell', 'icon', 'intercal',
+                    'java', 'jlang', 'kotlin', 'lolcode', 'lua', 'mozart', 'nasm', 'nemerle', 'nim', 'nodejs', 'objc',
+                    'ocaml', 'octave', 'pascal', 'perl', 'php', 'picolisp', 'pike', 'prolog', 'python2', 'python3', 'r',
+                    'racket', 'rhino', 'ruby', 'rust', 'scala', 'scheme', 'smalltalk', 'spidermonkey', 'sql', 'swift',
+                    'tcl', 'unlambda', 'vbn', 'verilog', 'whitespace', 'yabasic']
+
+        if lang.lower() in languages:
+
             self.inuse=1
-            self.code=code
 
-            #writing code in text area
-
-            #focusing the code area to write
-            to_act =self.webd.find_element_by_id('editor_1')
-            to_act.click()
-
-            tarea = self.webd.find_element_by_class_name('ace_text-input')
-            tarea.send_keys(Keys.TAB)
-            tarea.send_keys(Keys.CONTROL, 'a')
-            pyperclip.copy(code)
-            tarea.send_keys(Keys.CONTROL, 'v')
-
-            #checking if input is needed or not
-            if "cin>>" in self.code or "scanf(" in self.code or "input(" in self.code:
-                message.reply_message("Input needed!\nType and send all the input at once by using \n#inp\n2 3\n3 4 5 6 7")
+            result = self.r.execute(script=self.code, language=self.lang)
+            res=list(result.output)[0]
+            if "Timeout" in res:
+                message.reply_message("Program Timeout:\nCauses can be INFINITE LOOP or INPUT STATEMENTS")
             else:
-                self.inp_run(message)
+                message.reply_message("Output-:\n"+res+"\n\n"+str(result.cpuTime)+" s")
+
+            self.inuse=0
         else:
-            message.reply_message("Sorry!! Only for c++ or python ")
-
-    def inp_run(self,message,inp=[]):
-
-        self.inp=inp[:]
-        self.webd.find_element_by_id('control-btn-run').click()
-        time.sleep(3)
-        t = time.time()
-
-        while time.time() - t < 10:
-            soup = BeautifulSoup(self.webd.page_source, 'html.parser')
-            #finding copy from output area button
-            p_btn = soup.find_all("span", attrs={"class": "btn_copy glyphicon glyphicon-copy",
-                                                         'style': 'display: block;'})
-
-            if p_btn:
-                # input area
-                # to focus terminal to write
-                to_active_terminal = self.webd.find_element_by_class_name('terminal')
-                to_active_terminal.click()
-
-                p_btn = self.webd.find_element_by_class_name('btn_copy')
-                p_btn.click()
-                bb = self.webd.find_element_by_class_name('ok-btn')
-                time.sleep(0.5)
-
-                bb.click()
-                p_btn.click()
-                bb = self.webd.find_element_by_class_name('ok-btn')
-                time.sleep(0.5)
-                bb.click()
-
-                t1=pyperclip.paste()
-                print("11111111",t1,"sdasa")
-                pyperclip.copy('1')
-
-                #to focus terminal to write
-                to_active_terminal= self.webd.find_element_by_class_name('terminal')
-                to_active_terminal.click()
-
-                inp_area = self.webd.find_element_by_class_name('xterm-helper-textarea')
-                time.sleep(0.5)
-                inp_area.send_keys(Keys.CONTROL,Keys.SHIFT,'v')
-                p_btn.click()
-                bb = self.webd.find_element_by_class_name('ok-btn')
-                time.sleep(0.5)
-                bb.click()
-
-                # to focus terminal to write
-                to_active_terminal = self.webd.find_element_by_class_name('terminal')
-                to_active_terminal.click()
-
-                inp_area = self.webd.find_element_by_class_name('xterm-helper-textarea')
-                time.sleep(0.5)
-
-                inp_area.send_keys(Keys.BACKSPACE)
-                t2=pyperclip.paste()
-                print("qqqq",t1,"eeeee",t2,"jkljkj")
-                if t1==t2:
-                    message.reply_message("Output:-\n"+t2)
-                    self.inuse=0
-                    break
-                else:
-                    if len(self.inp)!=0:
-                        in1=self.inp[0]
-                        del self.inp[0]
-                        pyperclip.copy(in1)
-                        inp_area = self.webd.find_element_by_class_name('xterm-helper-textarea')
-                        time.sleep(0.5)
-
-                        inp_area.send_keys(Keys.CONTROL,Keys.SHIFT,'v')
-                        inp_area.send_keys(Keys.ENTER)
-                        t=time.time()
-                    else:
-                        message.reply_message("Not enough inputs given Try again!! or infinite loop")
-                        self.inuse = 1
-                        break
-            else:
-                er_area = self.webd.find_element_by_id("stderr-container")
-                tex = er_area.text
-                message.reply_message("Error found:-\n"+tex)
-                self.inuse = 0
-                break
-    def stop(self,message):
-        self.webd.find_element_by_id('control-btn-stop').click()
-        message.reply_message("Program terminated!!")
+            message.reply_message("Sorry!! Only Language supported are:-\n {} ".format('\n'.join(languages)))
 
 
 

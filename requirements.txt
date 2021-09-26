@@ -20,6 +20,5 @@ Pillow
 beautifulsoup4
 requests
 wikipedia
-pyperclip
-
+pydoodle
 
