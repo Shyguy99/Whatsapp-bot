@@ -13,6 +13,11 @@ YOUR_MOBILE_NUMBER = "17207416585"                    # Ex-:   918273627374
 word_game = karma_bot.karma_word_game()
 sticker = karma_bot.karma_sticker()
 GFG = karma_bot.GFG()
+try:
+    COMP=karma_bot.compiler()
+except:
+    pass
+
 quit = karma_bot.quit_bot()
 
 
@@ -308,6 +313,46 @@ def main(message):
                         message.reply_message('*Title* :{}\n*Source* : {}\n{}'.format(out.title,out.url,out.content))
                     except:
                         message.reply_message("Can't find anything!!")
+
+            elif  len(message.content)>5 and "#run " in message.content[0:5]:
+                try:
+                    if COMP.inuse!=1:
+                        s=message.content[1:]
+                        idx=s.index("#")
+                        s1=s[:idx].strip()
+                        lang=s1.replace("run ","")
+                        code=s[idx+1:]
+                        COMP.run(message,lang,code)
+                    else:
+                        message.reply_message("Someone using the compiler.\nLet him/her finish or end it by sending #quitrun")
+                except Exception as e:
+                    print(e)
+                    message.reply_message("Some Error Occured")
+
+            elif "#inp" in message.content:
+                try:
+                    if COMP.inuse==1:
+                        s=message.content.replace("#inp ","")
+                        s=s.replace("#inp","")
+                        s=s.split("\n")
+                        COMP.inp_run(message,s[1:])
+                    else:
+                        message.reply_message("No program running at now")
+                except Exception as e:
+                    print(e)
+                    message.reply_message("Some Error Occured")
+
+
+
+            elif message.content=="#quitrun":
+                try:
+                    if COMP.inuse==1:
+                        COMP.inuse=0
+                        COMP.stop(message)
+                    else:
+                        message.reply_message("No program running at now")
+                except:
+                    message.reply_message("Some Error Occured")
 
 
 
