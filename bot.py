@@ -7,7 +7,7 @@ import os
 import wikipedia
 
 #Change these variable before running the bot
-YOUR_MOBILE_NUMBER = "918319917110"                    # Ex-:   918273627374
+YOUR_MOBILE_NUMBER = "17207416585"                    # Ex-:   918273627374
 
 # creating all classes object
 word_game = karma_bot.karma_word_game()
