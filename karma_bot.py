@@ -856,10 +856,7 @@ class compiler:
 #class for quiting the program (admin only according to calling if condition)
 class quit_bot:
     def quit(self, driver, wd):
-        with open('All_voice\counter.txt', 'r+') as c_fil:       #replacing the counter value in the txt file with the new number
-            c_fil.seek(0)
-            c_fil.truncate()
-            c_fil.write(str(voice_converse.count))
+
         wd.quit()                                                #quiting chrome driver
         driver.quit()                                            #quiting WhatsappApi driver
 
