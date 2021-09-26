@@ -349,7 +349,7 @@ def main(message):
 
                 message.reply_message("Limit Left: " + str(200 - int(COMP.r.usage())))
             elif message.content=="#listlang":
-                s='/'.join(COMP.languages)
+                s=','.join(COMP.languages)
                 message.reply_message("Languages supported by compiler:-\n"+s)
 
             elif message.content=="#resetrun":

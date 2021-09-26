@@ -740,7 +740,7 @@ class compiler:
 
             self.inuse=0
         else:
-            message.reply_message("Sorry!! Only Language supported are:-\n {} ".format(','.join(languages)))
+            message.reply_message("Sorry!! Only Language supported are:-\n {} ".format(','.join(self.languages)))
 
 
 
