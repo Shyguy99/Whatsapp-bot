@@ -327,7 +327,7 @@ def main(message):
                         message.reply_message("Someone using the compiler.\nLet him/her finish or end it by sending #quitrun")
                 except Exception as e:
                     print(e)
-                    message.reply_message("Some Error Occured")
+                    message.reply_message("Some Error Occured"+e)
 
             elif "#inp" in message.content:
                 try:
@@ -340,7 +340,7 @@ def main(message):
                         message.reply_message("No program running at now")
                 except Exception as e:
                     print(e)
-                    message.reply_message("Some Error Occured")
+                    message.reply_message("Some Error Occured"+e)
 
 
 
@@ -351,8 +351,8 @@ def main(message):
                         COMP.stop(message)
                     else:
                         message.reply_message("No program running at now")
-                except:
-                    message.reply_message("Some Error Occured")
+                except Exception as e:
+                    message.reply_message("Some Error Occured"+e)
 
 
 
