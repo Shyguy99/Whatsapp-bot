@@ -719,7 +719,7 @@ class compiler:
     def run(self,message,lang,code):
         self.code=code
         self.lang=lang.lower()
-        languages=['ada', 'bash', 'bc', 'brainfuck', 'c', 'c-99', 'clisp', 'clojure', 'cobol', 'coffeescript', 'cpp',
+        self.languages=['ada', 'bash', 'bc', 'brainfuck', 'c', 'c-99', 'clisp', 'clojure', 'cobol', 'coffeescript', 'cpp',
                     'cpp17', 'csharp', 'd', 'dart', 'elixir', 'erlang', 'factor', 'falcon', 'fantom', 'forth',
                     'fortran', 'freebasic', 'fsharp', 'gccasm', 'go', 'groovy', 'hack', 'haskell', 'icon', 'intercal',
                     'java', 'jlang', 'kotlin', 'lolcode', 'lua', 'mozart', 'nasm', 'nemerle', 'nim', 'nodejs', 'objc',
@@ -727,7 +727,7 @@ class compiler:
                     'racket', 'rhino', 'ruby', 'rust', 'scala', 'scheme', 'smalltalk', 'spidermonkey', 'sql', 'swift',
                     'tcl', 'unlambda', 'vbn', 'verilog', 'whitespace', 'yabasic']
 
-        if lang.lower() in languages:
+        if lang.lower() in self.languages:
 
             self.inuse=1
 
@@ -740,7 +740,7 @@ class compiler:
 
             self.inuse=0
         else:
-            message.reply_message("Sorry!! Only Language supported are:-\n {} ".format('\n'.join(languages)))
+            message.reply_message("Sorry!! Only Language supported are:-\n {} ".format(','.join(languages)))
 
 
 
