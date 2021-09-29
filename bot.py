@@ -8,12 +8,15 @@ import wikipedia
 
 #Change these variable before running the bot
 YOUR_MOBILE_NUMBER = "17207416585"                    # Ex-:   918273627374
+Jdoodle_clientId="f4024ff5ac6b07c27fe236582c7c5331"
+Jdoodle_clientSecret="55e17e9e99239d105df4f5e9014f08b554d007c3ed044ea798b5e66b3b49e664"
+
 
 # creating all classes object
 word_game = karma_bot.karma_word_game()
 sticker = karma_bot.karma_sticker()
 GFG = karma_bot.GFG()
-COMP=karma_bot.compiler()
+COMP=karma_bot.compiler(Jdoodle_clientId,Jdoodle_clientSecret)
 
 quit = karma_bot.quit_bot()
 

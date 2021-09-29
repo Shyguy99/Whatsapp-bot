@@ -710,8 +710,8 @@ class mine:
 class compiler:
 
     def __init__(self,clientId,clientSec):
-        self.r = pydoodle.Compiler(clientId="f4024ff5ac6b07c27fe236582c7c5331",
-                              clientSecret="55e17e9e99239d105df4f5e9014f08b554d007c3ed044ea798b5e66b3b49e664")
+        self.r = pydoodle.Compiler(clientId=clientId,
+                              clientSecret=clientSec)
 
         self.inuse=0
 
