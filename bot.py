@@ -64,12 +64,17 @@ def main(message):
 
         if message.type == 'chat' and message.content == '#on' and (
                 str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us"):
-            group[message.chat_id]=1
-
-        if message.type == 'chat'  and message.content!="#on" and message.chat_id in group:
-            if message.content == '#off' and (str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us"):
+            if message.chat_id in group:
                 del group[message.chat_id]
-                message.reply_message("Bot now off for this group or chat.")
+            else:
+                message.reply_message("Bot is already ON for this group")
+
+        if message.type == 'chat'  and message.content!="#on" and message.chat_id not in group:
+            if message.content == '#off' and (str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us"):
+
+                group[message.chat_id] = 1
+                message.reply_message("Bot now OFF for this group or chat.")
+
 
 
             # commands for help and controls
@@ -343,6 +348,7 @@ def main(message):
                     print(e)
 
                     message.reply_message("Some Error Occured")
+                    COMP.inuse=0
 
 
             elif message.content == "#runlimit":
