@@ -401,10 +401,11 @@ def main(message):
 
 
                                 if "#kick " in message.content:
-                                    if driver.remove_participant_group(message.chat_id, s[1].replace("@", "") + "@c.us"):
-                                        message.reply_message("Removed")
-                                    else:
-                                        message.reply_message("Kick Fail")
+                                    try:
+                                        driver.remove_participant_group(message.chat_id, s[1].replace("@", "") + "@c.us")
+
+                                    except:
+                                        message.reply_message("Can't remove")
                                 else:
                                     try:
                                         driver.add_participant_group(message.chat_id, s[1] + '@c.us')
