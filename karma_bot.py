@@ -716,7 +716,7 @@ class compiler:
         self.inuse=0
 
 
-    def run(self,message,lang,code):
+    def run(self,driver,message,lang,code):
         self.code=code
         self.lang=lang.lower()
         self.languages=['ada', 'bash', 'bc', 'brainfuck', 'c', 'c-99', 'clisp', 'clojure', 'cobol', 'coffeescript', 'cpp',
@@ -736,7 +736,7 @@ class compiler:
             if "Timeout" in res:
                 message.reply_message("Program Timeout:\nCauses can be INFINITE LOOP or INPUT STATEMENTS")
             else:
-                message.reply_message("Output-:\n"+res+"\n\n"+str(result.cpuTime)+" s")
+                driver.wapi_functions.sendMessageWithMentions(message.chat_id,"Output-:\n"+res+"\n\n"+str(result.cpuTime)+" s","")
 
             self.inuse=0
         else:

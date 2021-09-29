@@ -340,7 +340,7 @@ def main(message):
 
                         code = s[idx + 1:]
 
-                        COMP.run(message, lang, code)
+                        COMP.run(driver,message, lang, code)
 
                     else:
 
