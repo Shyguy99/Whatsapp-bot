@@ -736,7 +736,10 @@ class compiler:
             if "Timeout" in res:
                 message.reply_message("Program Timeout:\nCauses can be INFINITE LOOP or INPUT STATEMENTS")
             else:
-                driver.wapi_functions.sendMessageWithMentions(message.chat_id,"Output-:\n"+res+"\n\n"+str(result.cpuTime)+" s","")
+                try:
+                    driver.wapi_functions.sendMessageWithMentions(message.chat_id,"Output-:\n"+res+"\n\n"+str(result.cpuTime)+" s","")
+                except:
+                    message.reply_message("Output-:\n"+res+"\n\n"+str(result.cpuTime)+" s")
 
             self.inuse=0
         else:
