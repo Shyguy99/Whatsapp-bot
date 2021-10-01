@@ -733,6 +733,7 @@ class compiler:
 
             result = self.r.execute(script=self.code, language=self.lang)
             res=list(result.output)[0]
+            print(res)
             if "Timeout" in res:
                 message.reply_message("Program Timeout:\nCauses can be INFINITE LOOP or INPUT STATEMENTS")
             else:
