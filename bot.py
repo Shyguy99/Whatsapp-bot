@@ -339,7 +339,7 @@ def main(message):
                         lang = s1.replace("run ", "")
 
                         code = s[idx + 1:]
-
+                        print(code)
                         COMP.run(driver,message, lang, code)
 
                     else:
