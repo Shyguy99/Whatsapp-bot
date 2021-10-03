@@ -444,7 +444,7 @@ def main(message):
                         if "#tagadmins" in message.content:
                             s = message.content.split("#tagadmins")
 
-                            all_parti = driver.wapi_functions.getGroupAsdmins(message.chat_id)
+                            all_parti = driver.wapi_functions.getGroupAdmins(message.chat_id)
                         else:
                             s=message.content.split("#tagall")
                             all_parti = driver.wapi_functions.getGroupParticipantIDs(message.chat_id)
