@@ -452,6 +452,7 @@ def main(message):
                             s=message.content.split("#tagadmins")
                             all_parti=driver.wapi_functions.getGroupAdmins(message.chat_id)
                         msg=s[0]+"\n"
+                        print(s)
 
                         for i in all_parti:
                             msg += ' @{} '.format(i)
