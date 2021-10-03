@@ -449,6 +449,7 @@ def main(message):
                             s=message.content.split("#tagall")
                             all_parti = driver.wapi_functions.getGroupParticipantIDs(message.chat_id)
                         msg=s[0]+"\n"
+                        msg=msg.replace("#","")
                         print(s)
 
                         for i in all_parti:
