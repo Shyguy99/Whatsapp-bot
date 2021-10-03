@@ -427,8 +427,7 @@ def main(message):
                 try:
                     if message.sender.id in driver.wapi_functions.getGroupAdmins(message.chat_id):
                         if isAdmin(message.chat_id):
-                            print(driver.wapi_functions.getGroupInviteLink(message.chat_id))
-                            message.reply(driver.wapi_functions.getGroupInviteLink(message.chat_id))
+                            message.reply_message(driver.wapi_functions.getGroupInviteLink(message.chat_id))
 
                         else:
                             driver.wapi_functions.sendMessage(message.chat_id, "Bot not admin yet")
