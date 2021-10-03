@@ -401,23 +401,19 @@ def main(message):
 
 
                                 if "#kick " in message.content:
-                                    try:
+
                                         if driver.remove_participant_group(message.chat_id, s[1].replace("@", "") + "@c.us"):
                                             print("Participant Removed")
                                         else:
                                             message.reply_message("Can't remove")
-                                    except:
-                                        message.reply_message("Can't remove")
+
                                 else:
-                                    try:
                                         if driver.add_participant_group(message.chat_id, s[1] + '@c.us'):
                                             print("Participant added")
                                         else:
                                             message.reply_message(
                                                 "Fail!!\n Number is invalid or Format for adding number is:\n#add 918888888888")
 
-                                    except:
-                                        message.reply_message("Fail!!\n Number is invalid or Format for adding number is:\n#add 918888888888")
                         else:
                             driver.wapi_functions.sendMessage(message.chat_id, "Bot not admin yet")
                     else:
@@ -446,11 +442,11 @@ def main(message):
 
                 if message.sender.id in driver.wapi_functions.getGroupAdmins(message.chat_id):
                         if "#tagadmins" in message.content:
-                            s = message.content.split("#tagall")
+                            s = message.content.split("#tagadmins")
                             all_parti = driver.wapi_functions.getGroupParticipantIDs(message.chat_id)
                         else:
-                            s=message.content.split("#tagadmins")
-                            all_parti=driver.wapi_functions.getGroupAdmins(message.chat_id)
+                            s=message.content.split("#tagall")
+                            all_parti=driver.wapi_functions.getGroupAsdmins(message.chat_id)
                         msg=s[0]+"\n"
                         print(s)
 
