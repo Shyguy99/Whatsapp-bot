@@ -437,6 +437,10 @@ def main(message):
                     print(f"Error -> {str(e)}")
                     message.reply_message("Fail!!")
 
+            #to get source code
+            elif message.content=="#source":
+                message.reply_message("https://github.com/Shyguy99/Whatsapp-bot")
+
 
             elif "#tagall" in message.content or "#tagadmins" in message.content:
 
