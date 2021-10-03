@@ -402,13 +402,20 @@ def main(message):
 
                                 if "#kick " in message.content:
                                     try:
-                                        driver.remove_participant_group(message.chat_id, s[1].replace("@", "") + "@c.us")
-                                        print("Removed participant")
+                                        if driver.remove_participant_group(message.chat_id, s[1].replace("@", "") + "@c.us")
+                                            print("Removed participant")
+                                        else:
+                                            message.reply_message("Can't remove")
                                     except:
                                         message.reply_message("Can't remove")
                                 else:
                                     try:
-                                        driver.add_participant_group(message.chat_id, s[1] + '@c.us')
+                                        if driver.add_participant_group(message.chat_id, s[1] + '@c.us'):
+                                            print("Participant added")
+                                        else:
+                                            message.reply_message(
+                                                "Fail!!\n Number is invalid or Format for adding number is:\n#add 918888888888")
+
                                     except:
                                         message.reply_message("Fail!!\n Number is invalid or Format for adding number is:\n#add 918888888888")
                         else:
