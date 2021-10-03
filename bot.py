@@ -12,11 +12,17 @@ Jdoodle_clientId="f4024ff5ac6b07c27fe236582c7c5331"
 Jdoodle_clientSecret="55e17e9e99239d105df4f5e9014f08b554d007c3ed044ea798b5e66b3b49e664"
 
 
+#pre-defining varibales
+all_cmds=["#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans#","#enter#","#score","#nex_word","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
+
+
+
 # creating all classes object
 word_game = karma_bot.karma_word_game()
 sticker = karma_bot.karma_sticker()
 GFG = karma_bot.GFG()
 COMP=karma_bot.compiler(Jdoodle_clientId,Jdoodle_clientSecret)
+suggest=karma_bot.cmd_suggesstion(all_cmds)
 
 quit = karma_bot.quit_bot()
 
@@ -82,19 +88,19 @@ def main(message):
 
             # commands for help and controls
             elif (message.content == '#help' or message.content == '#command'):
-                s = """*Welcome to the bot*\n\n*Features*\n\n*1. Compiler*✅\nRun any language code by sending \n#run cpp#\nWrite your code here from next line\n\nMost of the language are supported like python3, c, java, etc\nNote-: Don't give runtime input statements or try to run infinite loop,it will give error.\n\n--------------------------------------------------\n*2. Tic Tac Toe Game*✅\nTo play send *#ticgame (tag the number you want to play with)*\nTo end the game early send *#quit_tic*\nType #help_tic for controls\n\n--------------------------------------------------\n*3. Word game*✅\nTo start send #wordgame\nType #help_wgame for controls\n\n--------------------------------------------------\n*4.Geeks for Geeks code extractor*✅\nAny person can get the code from geeks for geeks site according ro the asked question.\nTo get the code for particular problem type \n\n#gfg#Your question#the language in which you want the code\n\nEx-: ->#gfg#merge sort#python\n     ->#gfg #kadane algorithm #c++\n\n--------------------------------------------------\n*5.Match Emoji Game*✅\n\n*To start the game send #matchgame\nFor setting level add 2 or 4 or 6 after #matchgame with a space\n*For more detail send #help_match\n\n--------------------------------------------------\n*6.Minesweeper Game*✅.*\n\n*To start the game send #minegame and to chosse a pair send #mine xy where x is row and y is column.\n\n--------------------------------------------------\n*7.Wikipedia Search*✅.*\n\n*Search anything on wikipedia by sending #wiki title\n\nEx. #wiki monkey\n\n--------------------------------------------------\n*Common admin commands*\n\n*#add 919876543210\n*#kick tag the person\n*#link for link of the group\n*#tagall \n*#tagadmins \n*Note-: You can also add some text after #tagall and #tagadmins.\n\nBot created by *Karma*\nGithub link-:https://github.com/Shyguy99/Whatsapp-bot"""
+                s = """*Welcome to the bot*\n\n*Features*\n\n*1. Compiler*✅\nRun any language code by sending \n#run cpp#\nWrite your code here from next line\n\nMost of the language are supported like python3, c, java, etc\nNote-: Don't give runtime input statements or try to run infinite loop,it will give error.\n\n--------------------------------------------------\n*2. Tic Tac Toe Game*✅\nTo play send *#ticgame (tag the number you want to play with)*\nTo end the game early send *#quit_tic*\nType #help_tic for controls\n\n--------------------------------------------------\n*3. Word game*✅\nTo start send #wordgame\nType #help_wgame for controls\n\n--------------------------------------------------\n*4.Geeks for Geeks code extractor*✅\nAny person can get the code from geeks for geeks site according ro the asked question.\nTo get the code for particular problem type \n\n#gfg#Your question#the language in which you want the code\n\nEx-: ->#gfg#merge sort#python\n     ->#gfg #kadane algorithm #c++\n\n--------------------------------------------------\n*5.Match Emoji Game*✅\n\n*To start the game send #matchgame\nFor setting level add 2 or 4 or 6 after #matchgame with a space\n*For more detail send #help_match\n\n--------------------------------------------------\n*6.Minesweeper Game*✅.*\n\n*To start the game send #minegame and to chosse a pair send #mine xy where x is row and y is column.\n*For more commands of this game use #help_mine.\n\n--------------------------------------------------\n*7.Wikipedia Search*✅.*\n\n*Search anything on wikipedia by sending #wiki title\n\nEx. #wiki monkey\n\n--------------------------------------------------\n*Common admin commands*\n\n*#add 919876543210\n*#kick tag the person\n*#link for link of the group\n*#tagall \n*#tagadmins \n*Note-: You can also add some text after #tagall and #tagadmins.\n\nBot created by *Karma*\nGithub link-:https://github.com/Shyguy99/Whatsapp-bot"""
                 driver.reply_message(message.chat_id, message.id, s)
             elif message.content == '#help_wgame':
                 s = """*Welcome to the Word Game*\n\n*First register by entering your name*\nSend #enter#your name\n\n*To enter a guess enter*\n#ans#your answer\n\n*To check the score enter*\n#score\n\n*After correctly guessing,to go to the next word enter*\n#nex_word\n\n*To see the current word enter*\n#currword\n\n*If unable to guess and want to skip to the next word enter*\n#nex_word\n\n*NOTE- IT'LL REQUIRE 3 PEOPLE TO SKIP FOR THE CURRENT WORD TO GET SKIPPED*"""
                 driver.reply_message(message.chat_id, message.id, s)
             elif message.content == '#help_tic':
-                s = """*Welcome to Tic Tac Toe Game*\n\n*Instructions*\n\nSend the corresponding number to the block where you want to place your symbol*\n\n#1 | #2 | #3\n#4 | #5 | #6\n#7 | #8 | #9\n*To end the game early send *#quit_tic*\n"""
+                s = """*Welcome to Tic Tac Toe Game*\n\n*Instructions*\n\nSend the corresponding number to the block where you want to place your symbol*\n\n#1 | #2 | #3\n#4 | #5 | #6\n#7 | #8 | #9\n*To end the game early send *#quit_tic*\n*To see your current game board uses #currtic"""
                 driver.reply_message(message.chat_id, message.id, s)
             elif message.content == "#help_match":
-                s = """*Welcome to Match Emoji Game*\n\n*To end your current game send #quitmatch\n\n*To guess the pairs send #m with two pairs which you want to try matching\n*Ex. #m xy qr means xth row and yth column match with qth row and rth column\n*To check your curren game send #matchcurr"""
+                s = """*Welcome to Match Emoji Game*\n\n*To end your current game send #quitmatch\n\n*To guess the pairs send #m with two pairs which you want to try matching\n*Ex. #m xy qr means xth row and yth column match with qth row and rth column\n*To check your curren game send #currmatch"""
                 driver.reply_message(message.chat_id, message.id, s)
             elif message.content == "#help_mine":
-                s = """*Welcome to Minesweeper Game*\n\n*To choose a position send #mine xy where x is the row and y is column\n*To check your curren game send #minecurr\n*To mark a position send #minemark xy\n*To unmark a position send #mineunmark xy."""
+                s = """*Welcome to Minesweeper Game*\n\n*To choose a position send #mine xy where x is the row and y is column\n*To check your curren game send #currmine\n*To mark a position send #minemark xy\n*To unmark a position send #mineunmark xy."""
                 driver.reply_message(message.chat_id, message.id, s)
 
 
@@ -173,7 +179,7 @@ def main(message):
                     driver.reply_message(message.chat_id, message.id,
                                          "You don't have any ongoing match!\nType #ticgame tag the person to play with. to start the game.")
 
-            elif message.content == "#ticcurr":
+            elif message.content == "#currtic":
                 if message.sender.id in tic_player_dict:
                     tic_player_dict[message.sender.id].current_match()
 
@@ -234,7 +240,7 @@ def main(message):
                     driver.reply_message(message.chat_id, message.id, "Your game haven't started yet!!")
 
             # command for checking current match game
-            elif message.content == "#matchcurr":
+            elif message.content == "#currmatch":
                 if message.sender.id in match_player_dict:
                     match_player_dict[message.sender.id].current_game(driver, message)
                 else:
@@ -294,7 +300,7 @@ def main(message):
                     driver.reply_message(message.chat_id, message.id,
                                          "You haven't started your game yet 😅\nStart it by sending #minegame")
 
-            elif message.content == "#minecurr":
+            elif message.content == "#currmine":
                 if message.sender.id in mine_player_dict:
                     s = mine_player_dict[message.sender.id].mine_cov_map
                     s = mine_player_dict[message.sender.id].listtostring(s)
@@ -467,12 +473,18 @@ def main(message):
 
 
 
+            #all bot commands
+            elif message.content=="#all_cmd":
+                out=" ,".join(suggest.all_cmd)
 
+                message.reply_message("All commands :\n"+out)
 
-
-            # not a command
+            # for wrong command
             elif message.content!="#on" and message.content!="#off":
-                driver.reply_message(message.chat_id,message.id,"Wrong Command!!.Check #help to see list of commands")
+
+                    size=min(12,len(message.content))
+                    suggest.suggest(message,message.content[:size])
+
 
         # command for creating sticker from image
         elif message.type == 'image' or message.type == 'video':
