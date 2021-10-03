@@ -443,10 +443,11 @@ def main(message):
                 if message.sender.id in driver.wapi_functions.getGroupAdmins(message.chat_id):
                         if "#tagadmins" in message.content:
                             s = message.content.split("#tagadmins")
-                            all_parti = driver.wapi_functions.getGroupParticipantIDs(message.chat_id)
+
+                            all_parti = driver.wapi_functions.getGroupAsdmins(message.chat_id)
                         else:
                             s=message.content.split("#tagall")
-                            all_parti=driver.wapi_functions.getGroupAsdmins(message.chat_id)
+                            all_parti = driver.wapi_functions.getGroupParticipantIDs(message.chat_id)
                         msg=s[0]+"\n"
                         print(s)
 
