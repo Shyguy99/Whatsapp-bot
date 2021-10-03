@@ -82,7 +82,7 @@ def main(message):
 
             # commands for help and controls
             elif (message.content == '#help' or message.content == '#command'):
-                s = """*Welcome to the bot*\n\n*Features*\n\n*1. Compiler*✅\nRun any language code by sending \n#run cpp#\nWrite your code here from next line\n\nMost of the language are supported like python3, c, java, etc\nNote-: Don't give runtime input statements or try to run infinite loop,it will give error.\n\n--------------------------------------------------\n*2. Tic Tac Toe Game*✅\nTo play send *#ticgame (tag the number you want to play with)*\nTo end the game early send *#quit_tic*\nType #help_tic for controls\n\n--------------------------------------------------\n*3. Word game*✅\nTo start send #wordgame\nType #help_wgame for controls\n\n--------------------------------------------------\n*4.Geeks for Geeks code extractor*✅\nAny person can get the code from geeks for geeks site according ro the asked question.\nTo get the code for particular problem type \n\n#gfg#Your question#the language in which you want the code\n\nEx-: ->#gfg#merge sort#python\n     ->#gfg #kadane algorithm #c++\n\n--------------------------------------------------\n*5.Match Emoji Game*✅\n\n*To start the game send #matchgame\nFor setting level add 2 or 4 or 6 after #matchgame with a space\n*For more detail send #help_match\n\n--------------------------------------------------\n*6.Minesweeper Game*✅.*\n\n*To start the game send #minegame and to chosse a pair send #mine xy where x is row and y is column.\n\n--------------------------------------------------\n*7.Wikipedia Search*✅.*\n\n*Search anything on wikipedia by sending #wiki title\n\nEx. #wiki monkey\n\n--------------------------------------------------\n*Common admin commands*\n\n*#add 919876543210\n*#kick tag the person\n*#tagall \n*Note-: You can also add some text after #tagall.\n\nBot created by *Karma*\nGithub link-:https://github.com/Shyguy99/Whatsapp-bot"""
+                s = """*Welcome to the bot*\n\n*Features*\n\n*1. Compiler*✅\nRun any language code by sending \n#run cpp#\nWrite your code here from next line\n\nMost of the language are supported like python3, c, java, etc\nNote-: Don't give runtime input statements or try to run infinite loop,it will give error.\n\n--------------------------------------------------\n*2. Tic Tac Toe Game*✅\nTo play send *#ticgame (tag the number you want to play with)*\nTo end the game early send *#quit_tic*\nType #help_tic for controls\n\n--------------------------------------------------\n*3. Word game*✅\nTo start send #wordgame\nType #help_wgame for controls\n\n--------------------------------------------------\n*4.Geeks for Geeks code extractor*✅\nAny person can get the code from geeks for geeks site according ro the asked question.\nTo get the code for particular problem type \n\n#gfg#Your question#the language in which you want the code\n\nEx-: ->#gfg#merge sort#python\n     ->#gfg #kadane algorithm #c++\n\n--------------------------------------------------\n*5.Match Emoji Game*✅\n\n*To start the game send #matchgame\nFor setting level add 2 or 4 or 6 after #matchgame with a space\n*For more detail send #help_match\n\n--------------------------------------------------\n*6.Minesweeper Game*✅.*\n\n*To start the game send #minegame and to chosse a pair send #mine xy where x is row and y is column.\n\n--------------------------------------------------\n*7.Wikipedia Search*✅.*\n\n*Search anything on wikipedia by sending #wiki title\n\nEx. #wiki monkey\n\n--------------------------------------------------\n*Common admin commands*\n\n*#add 919876543210\n*#kick tag the person\n*#link for link of the group\n*#tagall \n*#tagadmins \n*Note-: You can also add some text after #tagall and #tagadmins.\n\nBot created by *Karma*\nGithub link-:https://github.com/Shyguy99/Whatsapp-bot"""
                 driver.reply_message(message.chat_id, message.id, s)
             elif message.content == '#help_wgame':
                 s = """*Welcome to the Word Game*\n\n*First register by entering your name*\nSend #enter#your name\n\n*To enter a guess enter*\n#ans#your answer\n\n*To check the score enter*\n#score\n\n*After correctly guessing,to go to the next word enter*\n#nex_word\n\n*To see the current word enter*\n#currword\n\n*If unable to guess and want to skip to the next word enter*\n#nex_word\n\n*NOTE- IT'LL REQUIRE 3 PEOPLE TO SKIP FOR THE CURRENT WORD TO GET SKIPPED*"""
@@ -402,8 +402,8 @@ def main(message):
 
                                 if "#kick " in message.content:
                                     try:
-                                        if driver.remove_participant_group(message.chat_id, s[1].replace("@", "") + "@c.us")
-                                            print("Removed participant")
+                                        if driver.remove_participant_group(message.chat_id, s[1].replace("@", "") + "@c.us"):
+                                            print("Participant Removed")
                                         else:
                                             message.reply_message("Can't remove")
                                     except:
@@ -426,12 +426,33 @@ def main(message):
                     print(f"Error -> {str(e)}")
                     message.reply_message("Fail!!")
 
-            elif "#tagall" in message.content:
+            #for getting group link
+            elif message.content=="#link":
+                try:
+                    if message.sender.id in driver.wapi_functions.getGroupAdmins(message.chat_id):
+                        if isAdmin(message.chat_id):
+                            driver.wapi_functions.getGroupInviteLink(message.chat_id)
+
+                        else:
+                            driver.wapi_functions.sendMessage(message.chat_id, "Bot not admin yet")
+                    else:
+                        message.reply_message('Sorry!! Admin command')
+                except Exception as e:
+                    print(f"Error -> {str(e)}")
+                    message.reply_message("Fail!!")
+
+
+            elif "#tagall" in message.content or "#tagadmins" in message.content:
 
                 if message.sender.id in driver.wapi_functions.getGroupAdmins(message.chat_id):
-                        s = message.content.split("#tagall")
-                        all_parti = driver.wapi_functions.getGroupParticipantIDs(message.chat_id)
+                        if "#tagadmins" in message.content:
+                            s = message.content.split("#tagall")
+                            all_parti = driver.wapi_functions.getGroupParticipantIDs(message.chat_id)
+                        else:
+                            s=message.content.split("#tagadmins")
+                            all_parti=driver.wapi_functions.getGroupAdmins(message.chat_id)
                         msg=s[0]+"\n"
+
                         for i in all_parti:
                             msg += ' @{} '.format(i)
                         msg+=s[1]
