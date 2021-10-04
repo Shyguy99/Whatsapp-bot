@@ -42,7 +42,7 @@ options = webdriver.ChromeOptions()
 options.add_argument("--headless")
 wd = webdriver.Chrome(options=options)
 
-driver = WhatsAPIDriver(client='chrome')
+driver = WhatsAPIDriver(client='chrome',chrome_options=["user-data-dir={}".format(PROJECT_PATH)])
 
 print("Waiting for QR")
 while not driver.wait_for_login():
