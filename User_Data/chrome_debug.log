@@ -1,8 +1,10 @@
-[8132:8920:0923/190211.276:ERROR:device_event_log_impl.cc(214)] [19:02:11.274] USB: usb_device_handle_win.cc:1048 Failed to read descriptor from node connection: A device attached to the system is not functioning. (0x1F)
-[8132:8920:0923/190211.276:ERROR:device_event_log_impl.cc(214)] [19:02:11.275] USB: usb_device_handle_win.cc:1048 Failed to read descriptor from node connection: A device attached to the system is not functioning. (0x1F)
-[8132:8920:0923/190238.074:INFO:CONSOLE(1)] "Uncaught (in promise) TypeError: Cannot read properties of undefined (reading '_serialized')", source:  (1)
-[8132:8920:0923/220940.396:ERROR:device_event_log_impl.cc(214)] [22:09:40.399] USB: usb_service_win.cc:258 Failed to get device driver name: Element not found. (0x490)
-[8132:8804:0923/221250.845:WARNING:dns_config_service_win.cc(712)] Failed to read DnsConfig.
-[8132:17200:0923/224954.971:WARNING:dns_config_service_win.cc(712)] Failed to read DnsConfig.
-[8132:13684:0923/225028.622:WARNING:dns_config_service_win.cc(712)] Failed to read DnsConfig.
-[8132:8920:0923/225100.159:WARNING:pref_notifier_impl.cc(40)] Pref observer for media_router.cast_allow_all_ips found at shutdown.
+[21344:22268:1005/202010.827:ERROR:device_event_log_impl.cc(214)] [20:20:10.828] USB: usb_device_handle_win.cc:1048 Failed to read descriptor from node connection: A device attached to the system is not functioning. (0x1F)
+[21344:22268:1005/202010.827:ERROR:device_event_log_impl.cc(214)] [20:20:10.829] USB: usb_device_handle_win.cc:1048 Failed to read descriptor from node connection: A device attached to the system is not functioning. (0x1F)
+[21344:20228:1005/202010.835:ERROR:chrome_browser_main_extra_parts_metrics.cc(228)] crbug.com/1216328: Checking Bluetooth availability started. Please report if there is no report that this ends.
+[21344:20228:1005/202010.835:ERROR:chrome_browser_main_extra_parts_metrics.cc(231)] crbug.com/1216328: Checking Bluetooth availability ended.
+[21344:20228:1005/202010.843:ERROR:chrome_browser_main_extra_parts_metrics.cc(234)] crbug.com/1216328: Checking default browser status started. Please report if there is no report that this ends.
+[21344:20228:1005/202010.891:ERROR:chrome_browser_main_extra_parts_metrics.cc(238)] crbug.com/1216328: Checking default browser status ended.
+[21344:22268:1005/202019.369:INFO:CONSOLE(1)] "Uncaught (in promise) TypeError: Failed to execute 'put' on 'Cache': Partial response (status code 206) is unsupported", source: https://web.whatsapp.com/serviceworker.js (1)
+[21344:22268:1005/202019.385:INFO:CONSOLE(1)] "Uncaught (in promise) TypeError: Failed to execute 'put' on 'Cache': Partial response (status code 206) is unsupported", source: https://web.whatsapp.com/serviceworker.js (1)
+[21344:22268:1005/202019.385:INFO:CONSOLE(1)] "Uncaught (in promise) TypeError: Failed to execute 'put' on 'Cache': Partial response (status code 206) is unsupported", source: https://web.whatsapp.com/serviceworker.js (1)
+[21344:22268:1005/202032.246:INFO:CONSOLE(1)] "Uncaught (in promise) TypeError: Cannot read properties of undefined (reading '_serialized')", source:  (1)
