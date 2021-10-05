@@ -100,7 +100,7 @@ def main(message):
                 s = """*Welcome to Match Emoji Game*\n\n*To end your current game send #quitmatch\n\n*To guess the pairs send #m with two pairs which you want to try matching\n*Ex. #m xy qr means xth row and yth column match with qth row and rth column\n*To check your curren game send #currmatch"""
                 driver.reply_message(message.chat_id, message.id, s)
             elif message.content == "#help_mine":
-                s = """*Welcome to Minesweeper Game*\n\n*To choose a position send #mine xy where x is the row and y is column\n*To check your curren game send #currmine\n*To mark a position send #minemark xy\n*To unmark a position send #mineunmark xy."""
+                s = """*Welcome to Minesweeper Game*\n\n*To choose a position send #mine xy where x is the row and y is column\n*To check your curren game send #currmine \n*To mark a position send #minemark xy\n*To unmark a position send #mineunmark xy."""
                 driver.reply_message(message.chat_id, message.id, s)
 
 
