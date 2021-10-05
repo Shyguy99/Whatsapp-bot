@@ -24,7 +24,7 @@ You can run this bot directly on your system by just following some steps:
 ## :sparkles: Supported features and Commands
 
 
-###  1. Compiler ✅ 
+###  1. Compiler  ✅ 
 - This is to run code using Jdoodle api which is free. Get it from [Here](https://www.jdoodle.com/compiler-api), you have to add your api keys in the code to use this feature.
 
 - Command for this :  <code>#run cpp#</code>        (You can choose any languge in place of cpp,check list of language using <code>#listlang</code> command or from Jdoodle website.)
@@ -41,7 +41,7 @@ Write your code here from next line
 
 ---
 
-###  2. Tic Tac Toe Game 
+###  2. Tic Tac Toe Game  ✅ 
 - You can play Tic Tac Toe game with anyone or anyone can play this game with other person in whatsapp chat.
 - To play send <code>#tic_game#(tag the number you want to play with or type the sender id)</code>  
 - Type <code>#help_wgame</code> for controls  
@@ -54,14 +54,14 @@ Write your code here from next line
 
 ---
 
-### 3. Word game ✅  
+### 3. Word game  ✅  
 - You can play word guessing game with friends and compete each other.
 - To start the game send <code>#wordgame</code>   
 - Type <code>#help_wgame</code> for controls and other commands.    
   
 ---
 
-### 4. Geeks for Geeks code extractor✅ 
+### 4. Geeks for Geeks code extractor  ✅ 
 - Get the code from geeks for geeks site of any problem/question.  
 - To get the code for particular problem type #gfg#Your question#the language in which you want the code
 -   Example: <code>#gfg#merge sort#python</code> , <code>#gfg#kadane algorithm #c++</code> 
@@ -70,7 +70,7 @@ Write your code here from next line
 
 ---
 
-### 5. Match Emoji Game ✅ 
+### 5. Match Emoji Game  ✅ 
 - To start the game send <code>#matchgame</code>
 - For setting level add 2 or 4 or 6 after #matchgame with a space
 - example:<code>#matchgame 4</code>
@@ -78,7 +78,7 @@ Write your code here from next line
 
 ---
 
-### 6. Minesweeper Game ✅ 
+### 6. Minesweeper Game  ✅ 
 - To start the game send <code>#minegame</code> and to set level place level number 1 to 6 after #minegame with a space.
 - example: <code>#minegame 3</code>. Default level is 4
 - To choose a box send #mine xy where x is row and y is column.
@@ -86,13 +86,13 @@ Write your code here from next line
 
 ---
 
-### 7. Wikipedia Search✅ 
+### 7. Wikipedia Search  ✅ 
 - Search anything on wikipedia by using <code>#wiki title</code>
 - example: <code>#wiki Albert Einstein</code>
 
 ---
 
-### 8. Commands only for admins of a group 
+### 8. Commands only for admins of a group  ✅ 
 -  <code>#add 919876543210</code>
 -  <code>#kick tag the person</code>
 -  <code>#link</code> for link of the group
@@ -102,7 +102,7 @@ Write your code here from next line
  
 ---
  
-### 9. Commands only for the owner of the bot 
+### 9. Commands only for the owner of the bot  ✅ 
 - <code>#on</code> and <code>#off</code> for turning on and off bot for a particular group of whatsapp.  
 - <code>#endwgame</code> for ending the word game.  
 - <code>#all_cmd</code> to get list of all commands of bot.
