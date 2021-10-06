@@ -563,8 +563,9 @@ def msg_traverse():
                         all_member = driver.wapi_functions.getGroupParticipantIDs(message.chat_id)
                         tag_ids_us=set()
                         for i in ar:
-                            tag_id = msg[i:14]
-                            t=tag_id.replace("@", "") + "@c.us"
+                            tag_id = msg[i + 1:i + 13]
+
+                            t = tag_id + "@c.us"
                             if t in all_member:
                                 tag_ids_us.add(t)
                         for t in tag_ids_us:
