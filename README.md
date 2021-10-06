@@ -72,7 +72,7 @@ Write your code here from next line
 
 ### 5. Match Emoji Game  ✅ 
 - To start the game send <code>#matchgame</code>
-- For setting level add 2 or 4 or 6 after #matchgame with a space
+- For setting level add 2 or 4 or 6 after #matchgame with a space.
 - example:<code>#matchgame 4</code>
 > If you want to know how to play this game go through this link: [Here](https://en.wikipedia.org/wiki/Concentration_(card_game))
 
