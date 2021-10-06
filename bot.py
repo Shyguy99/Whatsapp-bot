@@ -161,6 +161,7 @@ def main(message):
                             driver.reply_message(message.chat_id, id, "You were tagged here!")
                     except Exception as e:
                         print(e)
+                        message.reply_message("Got some error!\nCause can be:Tagged Message Deleted")
                         db = 0
                 else:
                     message.reply_message("Wait 2 sec. Let me process last query")
