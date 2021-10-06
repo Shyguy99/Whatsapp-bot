@@ -63,7 +63,7 @@ Write your code here from next line
 
 ### 4. Geeks for Geeks code extractor  ✅ 
 - Get the code from geeks for geeks site of any problem/question.  
-- To get the code for particular problem type #gfg#Your question#the language in which you want the code
+- To get the code for particular problem type #gfg#Your question#the language in which you want the code.
 -   Example: <code>#gfg#merge sort#python</code> , <code>#gfg#kadane algorithm #c++</code> 
      
 > If language is not given while asking then default c++ is taken as language.
