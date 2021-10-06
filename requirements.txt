@@ -21,4 +21,4 @@ beautifulsoup4
 requests
 wikipedia
 pydoodle
-
+psycopg2
