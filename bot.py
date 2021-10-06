@@ -98,7 +98,7 @@ def main(message):
             else:
                 message.reply_message("Bot is already ON for this group")
 
-        if message.type == 'chat'  and message.content!="#on" and message.chat_id not in group:
+        if message.type == 'chat'  and message.content!="#on" and message.chat_id in group:
             if message.content == '#off' and (str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us"):
 
                 del group[message.chat_id]
@@ -144,77 +144,42 @@ def main(message):
 
             #to get tagged msg
             elif message.content == "#last_tag":
-
                 all_get_tag_msg.append(message)
-
                 if db == 0:
-
                     db = 1
-
                     try:
-
                         cur.callproc('get_last_tag', ("\"" + message.chat_id + "\"", "\"" + message.sender.id + "\""))
-
                         out = cur.fetchone()
-
                         print(out)
-
                         db = 0
-
                         if out[0] == None:
-
                             message.reply_message("You don't have any tag left or your tags are updating\nTry later.")
-
                         else:
-
                             out = out[0]
-
                             id = out[1:-1]
-
                             print(id)
-
                             driver.reply_message(message.chat_id, id, "You were tagged here!")
-
                     except Exception as e:
-
                         print(e)
-
                         db = 0
-
                 else:
-
                     message.reply_message("Wait 2 sec. Let me process last query")
-
 
             #to get msg_count
             elif message.content == "#msg_count":
-
                 if db == 0:
-
                     db = 1
-
                     try:
-
                         cur.callproc('get_msg_count', ("\"" + message.chat_id + "\"", "\"" + message.sender.id + "\""))
-
                         out = cur.fetchone()
-
                         db = 0
-
                         if out[0] == None:
-
                             message.reply_message("Your message count:\n*1*.")
-
                         else:
-
                             out = out[0]
-
                             message.reply_message("Your message count:\n*{}*".format(out))
-
                     except Exception as e:
-
                         print(e)
-
                         db = 0
 
                 else:
@@ -467,30 +432,6 @@ def main(message):
                 COMP.inuse=0
                 message.reply_message("Program Terminated!!")
 
-            # elif "#inp" in message.content:
-
-            #     try:
-
-            #         if COMP.inuse==1:
-
-            #             s=message.content.replace("#inp ","")
-
-            #             s=s.replace("#inp","")
-
-            #             s=s.split("\n")
-
-            #             COMP.inp_run(message,s[1:])
-
-            #         else:
-
-            #             message.reply_message("No program running at now")
-
-            #     except Exception as e:
-
-            #         print(e)
-
-            #         message.reply_message("Some Error Occured")
-
 
 
             #kick and add member command
@@ -618,7 +559,6 @@ def msg_traverse():
                         msg = message.content
                     else:
                         msg = message.caption
-                    print(msg,"innnn")
                     if "@g.us" in message.chat_id and "@91" in msg:
                         ar = [i for i, j in zip(count(), message.content) if j == "@"]
                         print(ar,"arr")
