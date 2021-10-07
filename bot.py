@@ -278,7 +278,7 @@ def main(message):
                     del match_player_dict[message.sender.id]
                     driver.reply_message(message.chat_id, message.id, "Your game deleted!")
                 else:
-                    driver.reply_message(message.chat_id, message.id, "You don't a game to quit!")
+                    driver.reply_message(message.chat_id, message.id, "You are not in the game!\n Send #matchgame to start.")
 
             # command for guessing pairs in match game
             elif "#m " in message.content:
@@ -560,7 +560,7 @@ def msg_traverse():
                     else:
                         msg = message.caption
                     if "@g.us" in message.chat_id and "@91" in msg:
-                        ar = [i for i, j in zip(count(), message.content) if j == "@"]
+                        ar = [i for i, j in zip(count(), msg) if j == "@"]
                         all_member = driver.wapi_functions.getGroupParticipantIDs(message.chat_id)
                         tag_ids_us=set()
                         for i in ar:

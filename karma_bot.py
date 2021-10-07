@@ -473,7 +473,7 @@ class matcher:
             ram.remove(ran_pos2)
 
         out2 = self.list_to_string(self.map_cov)
-        driver.reply_message(message.chat_id, message.id, "Game Started!!" + "\n" + out2)
+        driver.reply_message(message.chat_id, message.id, "Game Started!!" + "\n" + out2+"\nSend #help_match see the controls.")
 
     def list_to_string(self, li):
         p = []
