@@ -170,7 +170,7 @@ class karma_word_game:
     # function to show the scoreboard
     def show_score(self, driver, message):
         if len(self.score_board) != 0:
-            s = "karma: 99999\n"
+            s = ""
             score_boards = dict(sorted(self.score_board.items(), key=lambda x: x[1],
                                        reverse=True))  # sorting the players on basis of high scores
             for key, value in score_boards.items():
