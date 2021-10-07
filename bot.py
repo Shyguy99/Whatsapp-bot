@@ -412,7 +412,7 @@ def main(message):
 
                     else:
 
-                        message.reply_message("Someone using the compiler.\nLet him/her finish")
+                        message.reply_message("Someone using the compiler.\nLet him/her finish or use #resetrun to terminate")
 
                 except Exception as e:
 
