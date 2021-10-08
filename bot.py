@@ -178,7 +178,7 @@ def main(message):
                             message.reply_message("Your message count:\n*1*.")
                         else:
                             out = out[0]
-                            message.reply_message("Your message count:\n*{}*".format(out))
+                            message.reply_message("Your message count from 06-10-21:\n*{}*".format(out))
                     except Exception as e:
                         print(e)
                         db = 0
