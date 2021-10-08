@@ -579,7 +579,7 @@ def msg_traverse():
                             cur.execute('CALL add_tag_msg(\'{}\',\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"",
                                                                                         "\"" + t + "\"",
                                                                                         s))
-                                conn.commit()
+                            conn.commit()
             except Exception as e:
                 print(e)
 
