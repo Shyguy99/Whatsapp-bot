@@ -67,7 +67,7 @@ class karma_word_game:
         self.w_todisplay = "".join(w)  # getting the final word to display
 
         driver.wapi_functions.sendMessage(message.chat_id,
-                                          "Guess the word:\n" + "*" + self.w_todisplay + "*")
+                                          "Guess the word:\n" + "*" + self.w_todisplay.upper() + "*")
         self.already_solved = 0
         self.c = 0
         self.skip_list_players = []
@@ -135,7 +135,7 @@ class karma_word_game:
             out = ""
             for key, value in {k: v for k, v in sorted(self.score_board.items(), key=lambda item: item[1])}.items():
                 out += str(key) + "--> " + str(value) + "\n"
-            message.reply_message("--------Score Board--------\n\n" + out)
+            message.reply_message("-----------Score Board-----------\n\n" + out)
         else:
             message.reply_message("Empty Score Board")
 

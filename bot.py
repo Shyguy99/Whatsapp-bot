@@ -196,7 +196,7 @@ while True:
                     else:
                         Word.wgame_start(driver, message)
 
-                elif '#join ' in str(message.content)[:7]:
+                elif '#join ' in str(message.content)[:6]:
                     if Word.start == 1:
                         if message.sender.id in Word.players:
                             message.reply_message("You are already in the game! 🤓\nSend #ans your answer to guess.")
@@ -205,7 +205,7 @@ while True:
                             if p_adding == 0 and s_adding == 0:
                                 p_adding = 1
                                 s_adding = 1
-                                Word.enter_game(message, message.content[7:])
+                                Word.enter_game(message, message.content[6:])
                                 cur.execute('CALL add_player(\'{}\',\'{}\')'.format(message.sender.id, message.content[7:]))
                                 conn.commit()
                                 p_adding = 0
@@ -619,7 +619,7 @@ while True:
     all_msg=[]
     all_get_coun_msg=[]
     all_get_tag_msg=[]
-    db=0
+
 
 
 
@@ -714,5 +714,7 @@ while True:
             if flag==1:
                 break
         if flag==0:
+            wd.quit()
+            driver.quit()
             break
 
