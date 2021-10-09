@@ -20,7 +20,7 @@ while True:
 
 
     #pre-defining varibales
-    all_cmds=["#msg_count","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans#","#enter#","#score","#nex_word","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
+    all_cmds=["#msg_count","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans ","#enter ","#score","#skip","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
 
     conn = psycopg2.connect("postgres://csqmnmlhadcckk:d2783f1d23d96549ec7f8c6aa189fc725e07f68e93407a5ddf2c883007695777@ec2-44-198-154-255.compute-1.amazonaws.com:5432/daklcdjauog639", sslmode='require')
 
@@ -131,6 +131,7 @@ while True:
         if (message.type == 'chat' or message.type == 'image' or message.type == 'video') and (
                 (hasattr(message, 'caption') and message.caption == '#sticker') or message.content[0:1] == '#'):
 
+            print(message.content[0:7])
             if message.type == 'chat' and message.content == '#on' and (
                     str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us"):
                 if message.chat_id not in group:
