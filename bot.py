@@ -69,7 +69,6 @@ while True:
 
 
     # creating all classes object
-    word_game = karma_bot.karma_word_game()
     sticker = karma_bot.karma_sticker()
     Word=karma_bot.karma_word_game(score,player)
 
