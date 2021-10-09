@@ -31,7 +31,6 @@ while True:
     group=dict()
     cur.callproc('get_chats')
     getchats=cur.fetchone()[0]
-    print(getchats)
     for i in getchats:
         i=i.replace("\"","")
         group[i]=1
@@ -131,7 +130,6 @@ while True:
         if (message.type == 'chat' or message.type == 'image' or message.type == 'video') and (
                 (hasattr(message, 'caption') and message.caption == '#sticker') or message.content[0:1] == '#'):
 
-            print(message.content[0:7])
             if message.type == 'chat' and message.content == '#on' and (
                     str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us"):
                 if message.chat_id not in group:
@@ -494,7 +492,6 @@ while True:
                             lang = s1.replace("run ", "")
 
                             code = s[idx + 1:]
-                            print(code)
                             COMP.run(driver,message, lang, code)
 
                         else:
@@ -585,7 +582,6 @@ while True:
                                 all_parti = driver.wapi_functions.getGroupParticipantIDs(message.chat_id)
                             msg=s[0]+"\n"
                             msg=msg.replace("#","")
-                            print(s)
 
                             for i in all_parti:
                                 msg += ' @{} '.format(i)

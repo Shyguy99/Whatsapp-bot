@@ -24,7 +24,7 @@ class karma_sticker:
                                                'caption') and message.caption == '#sticker':  # video and gif can't converted
             driver.reply_message(message.chat_id, message.id, "Sry can't make sticker")
         elif hasattr(message, 'caption') and message.caption == '#sticker':
-            print('caption', message.caption, message.chat_id)
+
             a = (driver.download_media(message, True))
             print(str(a))
             try:
@@ -360,7 +360,7 @@ class GFG:
                                     p += l.text + "\n"
 
                             print(to_lang[i].text)
-                            print(p)
+
                             driver.reply_message(message.chat_id, message.id, p)
                             get_code = True
                             break
@@ -689,7 +689,7 @@ class compiler:
 
             result = self.r.execute(script=self.code, language=self.lang)
             res = list(result.output)[0]
-            print(res)
+
             if "Timeout" in res:
                 message.reply_message("Program Timeout:\nCauses can be INFINITE LOOP or INPUT STATEMENTS")
             else:
