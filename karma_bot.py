@@ -44,145 +44,100 @@ class karma_sticker:
 # class for word game
 class karma_word_game:
     # initilizing some helping variables
-    def __init__(self):
-        self.wstarted = 'no'  # check whether game started or not
-        self.c = 0  # check whether 3 peoples voted or not for skiping a word
-        self.score_board = []
+    def __init__(self, s_board, players):
+        self.start = 0
+        self.c = 0  # check whether 3 people voted or not for skipping a word
+        self.already_solved = 0
+        self.score_board = s_board
+        self.players = players
+        self.skip_list_players = []
         with open('words.json', 'r+') as f:
             self.li = json.load(f)  # json file containing all words
 
+    def new_word(self, driver, message):
+        self.word = random.choice(self.li['data'])
+
+        l_word = len(self.word)
+        gap = int(3.8 / 10 * l_word)  # finding how many letters will be hidden in the word
+        gap_list = random.sample(range(0, l_word - 1),
+                                 gap)  # finding which positions of the letters will be hidden in the word
+        w = list(self.word)
+        for i in gap_list:
+            w[i] = '_ '
+        self.w_todisplay = "".join(w)  # getting the final word to display
+
+        driver.wapi_functions.sendMessage(message.chat_id,
+                                          "Guess the word:\n" + "*" + self.w_todisplay + "*")
+        self.already_solved = 0
+        self.c = 0
+        self.skip_list_players = []
+
     # function to start the game
     def wgame_start(self, driver, message):
-        print(message.sender.id)
-        if self.wstarted == 'no':
-            self.__init__()  # reinitilizing the helping variables before starting the game
-            self.score = {}
-            self.score_board = {}  # dictionary containg scorers and there score
-            driver.reply_message(message.chat_id, message.id, "Word Guessing game started!!")
-            w = random.choice(self.li['data'])
-            self.res = w[:]
-            l_word = len(w)
-            gap = int(3.8 / 10 * l_word)  # finding how many letters will be hidden in the word
-            gap_list = random.sample(range(0, l_word - 1),
-                                     gap)  # finding which positions of the letters will be hidden in the word
-            w = list(w)
-            for i in gap_list:
-                w[i] = '_ '
-            temp_w = ""
-            self.w = temp_w.join(w)  # getting the final word to display
-            driver.reply_message(message.chat_id, message.id,
-                                 "Guess the word:\n" + self.w + "\nEnter #ans#your answer here to answer ")
-            self.already_solve = 0  # variable to check whether current word is solved or not
-            self.wstarted = 'yes'
-            self.skip_list = []
-            print(self.res)
-        else:
-            driver.reply_message(message.chat_id, message.id, "Game Already started!")
+
+        message.reply_message(
+            "Word Game Started! 🎮\n\nSend #enter your name to start playing\nSend #ans your answer here to answer ")
+        self.new_word(driver, message)
+        self.start = 1
 
     # function to check answer given by user is right or not
-    def ans(self, driver, message):
-        if self.wstarted == 'yes':
-            if message.sender.id in self.score:  # checking whether user has entered in game or not
-                anss = message.content
-                anss = list(anss.split("#"))
-                if len(anss) == 3:
-                    ans = anss[2]
-                    if ans.lower() == self.res:  # checking whether answer  given is right or not
-                        if self.already_solve == 0:
-                            driver.reply_message(message.chat_id, message.id,
-                                                 "Right Answer!You got a point\n\nType #nex_word for next word\n\nType #score to check the scores ")
-                            self.already_solve = 1
-                            self.score_board[
-                                self.score[message.sender.id]] += 1  # updating user score if he/she is right
-                        else:
-                            driver.reply_message(message.chat_id, message.id,
-                                                 "Already Answered!\n\nNo point will be given\n\nType #score to check the scores \nType #nex_word for next word")
-                    else:
-                        driver.reply_message(message.chat_id, message.id,
-                                             "Wrong Answer! Think more\n\nType #currword to see current guessing word.")
-                else:
-                    driver.reply_message(message.chat_id, message.id,
-                                         "Wrong format of answering\n\nType #ans#your answer here")
+    def ans(self, driver, message, ans):
+
+        if ans.lower() == self.word:  # checking whether answer  given is right or not
+            if self.already_solved == 0:
+                self.already_solved = 1
+                message.reply_message(
+                    "Right Answer 💯! You got a point")
+
+                self.score_board[self.players[message.sender.id]] += 1  # updating user score if he/she is right
+                return 1
+
             else:
-                driver.reply_message(message.chat_id, message.id,
-                                     "First register by entering your name\n\nSend #enter#your name here")
+                message.reply_message(
+                    "Already Answered 😓!\n\nSend #score to check the scores.\nSend #cur to see current word")
+
         else:
-            driver.reply_message(message.chat_id, message.id, "No Game running at present!\n Type #wordgame to start")
+            message.reply_message("Wrong! Think more 🧠\n\nType #cur to see current guessing word.")
+        return 0
 
     # function to enter in the game
-    def enter_game(self, driver, message):
-        if self.wstarted == 'yes':
-            if message.sender.id in self.score:
-                driver.reply_message(message.chat_id, message.id,
-                                     "You are already in game!\n\nJust answer by typing #ans#your answer here")
-            else:
-                nam = list(message.content.split("#"))
-                if len(nam) == 3:
-                    name = nam[2]
-                    self.score[message.sender.id] = name  # new player added
-                    self.score_board[name] = 0  # initilizing new player score to 0
-                    driver.reply_message(message.chat_id, message.id,
-                                         "You have entered the game..\n\nAnswer by typing #ans#your answer here")
-        else:
-            driver.reply_message(message.chat_id, message.id, "No Game running at present!\n Type #wordgame to start")
+    def enter_game(self, message, name):
+
+        self.players[message.sender.id] = name  # new player added
+        self.score_board[self.players[message.sender.id]] = 0
+
+        message.reply_message(
+            "You have entered the game 👍🏽\n\nAnswer by sending #ans your answer here")
 
     # function to skip or go to next word
-    def next_word_or_skip(self, driver, message):
-        if self.wstarted == 'yes':
-            if self.already_solve == 0 and self.c < 3:  # checking if word is not guessed then 3 people vote is required to change
-                if message.sender.id in self.skip_list:  # checking whether the player is already voted or not
-                    driver.reply_message(message.chat_id, message.id, "You already voted to skip\n" + str(
-                        3 - self.c) + " votes needed now to skip this word")
+    def skip(self, driver, message):
+        if self.already_solved == 0 and self.c < 3:  # checking if word is not guessed then 3 people vote is required to change
+            if message.sender.id in self.skip_list_players:  # checking whether the player is already voted or not
+                message.reply_message("You already voted to skip\n" + str(
+                    3 - self.c) + " votes needed now to skip this word")
+            else:
+                self.c += 1
+                if self.c == 3:
+                    message.reply_message("The Right Answer is:\n" + "*" + self.word + "*")
+                    self.already_solved = 1
+                    self.new_word(driver, message)
                 else:
-                    self.c += 1
-                    driver.reply_message(message.chat_id, message.id, str(3 - self.c) + " vote needed now")
-                    self.skip_list.append(message.sender.id)
-                    if self.c == 3:
-                        driver.reply_message(message.chat_id, message.id, "The right Answer is:\n " + self.res)
-            if self.already_solve == 1 or (
-                    self.already_solve == 0 and self.c >= 3):  # if 3 persons condition fulfill word will change
-                w = random.choice(self.li['data'])
-                self.res = w[:]
-                l_word = len(w)
-                gap = int(3.8 / 10 * l_word)  # same process for choosing new word and preprocessing it
-                gap_list = random.sample(range(0, l_word - 1), gap)
-                w = list(w)
-                for i in gap_list:
-                    w[i] = '_ '
-                temp_w = ""
-                self.w = temp_w.join(w)
-                driver.reply_message(message.chat_id, message.id, "Guess the word:\n" + self.w)
-                self.already_solve = 0
-                self.c = 0
-                self.skip_list = []
-                print(self.res)
-        else:
-            driver.reply_message(message.chat_id, message.id,
-                                 "No Game running at present!\n Type #wordgame to start")
+                    message.reply_message(str(3 - self.c) + " vote needed now to skip the word")
+                    self.skip_list_players.append(message.sender.id)
 
     # function to show current word
     def current_word(self, driver, message):
-        if self.wstarted == 'yes':
-            driver.reply_message(message.chat_id, message.id, "Current word:\nGuess the word:\n" + self.w)
-        else:
-            driver.reply_message(message.chat_id, message.id, "No Game running at present!\n Type #wordgame to start")
+        driver.reply_message(message.chat_id, message.id, "Guess the word:\n" + "*" + self.w_todisplay.upper() + "*")
 
     # function to show the scoreboard
-    def show_score(self, driver, message):
+    def show_score(self, message):
         if len(self.score_board) != 0:
-            s = ""
-            score_boards = dict(sorted(self.score_board.items(), key=lambda x: x[1],
-                                       reverse=True))  # sorting the players on basis of high scores
-            for key, value in score_boards.items():
-                s += str(key) + ": " + str(value) + "\n"
-            driver.reply_message(message.chat_id, message.id, s)
+            out = ""
+            for key, value in {k: v for k, v in sorted(self.score_board.items(), key=lambda item: item[1])}.items():
+                out += str(key) + "--> " + str(value) + "\n"
+            message.reply_message("--------Score Board--------\n\n" + out)
         else:
-            driver.reply_message(message.chat_id, message.id, "Empty Score Board")
-
-    # function for ending the game(bot owner can do this only,according the conditions for this function)
-    def end_wgame(self, driver, message):
-        self.wstarted = 'no'
-        driver.reply_message(message.chat_id, message.id, "Game Ended!You can restart it by typing #wordgame")
+            message.reply_message("Empty Score Board")
 
 
 # class for tic tac toe game
