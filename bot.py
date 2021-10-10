@@ -682,16 +682,21 @@ while True:
                 except Exception as e:
                     print(e)
                 db=0
+                if flag==1:
+                    break
                 time.sleep(0.3)
 
     def add_score(pname):
         global s_adding
         while s_adding!=0:
+            if flag==1:
+                break
             continue
         s_adding=1
         cur.execute('CALL add_score(\'{}\')'.format(pname))
         conn.commit()
         s_adding=0
+
 
 
     threading.Thread(target=msg_traverse).start()
