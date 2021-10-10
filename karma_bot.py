@@ -76,7 +76,7 @@ class karma_word_game:
     def wgame_start(self, driver, message):
 
         message.reply_message(
-            "Word Game Started! \n\nSend #help_wgame to see all commands.")
+            "*Word Game Started!* \n\nSend #help_wgame to see all commands.")
         self.new_word(driver, message)
         self.start = 1
 
