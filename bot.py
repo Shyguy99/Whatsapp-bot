@@ -249,14 +249,13 @@ while True:
                         try:
                             cur.callproc('get_last_tag', ("\"" + message.chat_id + "\"", "\"" + message.sender.id + "\""))
                             out = cur.fetchone()
-                            print(out)
                             db = 0
                             if out[0] == None:
                                 message.reply_message("You don't have any tag left or your tags are updating\nTry later.")
                             else:
                                 out = out[0]
                                 msg = out
-                                driver.wapi_functions.sendMessageWithMentions(message.chat_id, msg, '')
+                                message.reply_message(msg)
                         except Exception as e:
                             print(e)
                             message.reply_message("Got some error!\nCause can be:Tagged Message Deleted")
@@ -672,8 +671,7 @@ while True:
                                 msg = msg.replace(t, "")
                             for t in tag_ids_us:
                                 s = "Tagged in a {} by {} with the message:\n\n{}".format(message.type,
-                                                                                                   "@" + message.sender.id.replace(
-                                                                                                       "@c.us", ""), msg)
+                                                                                                   message.sender.verified_name, msg)
 
                                 cur.execute('CALL add_tag_msg(\'{}\',\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"",
                                                                                             "\"" + t + "\"",
