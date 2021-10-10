@@ -684,6 +684,7 @@ while True:
         global s_adding
         while s_adding!=0:
             continue
+        s_adding=1
         cur.execute('CALL add_score(\'{}\')'.format(pname))
         conn.commit()
         s_adding=0
