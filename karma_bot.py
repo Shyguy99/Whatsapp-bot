@@ -95,10 +95,10 @@ class karma_word_game:
 
             else:
                 message.reply_message(
-                    "Already Answered 😓!\n\nSend #score to check the scores.\nSend #cur to see current word")
+                    "Already Answered 😓!\n\nSend #score to check the scores.\nSend #currword to see current word")
 
         else:
-            message.reply_message("Wrong! Think more 🧠\n\nType #cur to see current guessing word.")
+            message.reply_message("Wrong! Think more 🧠\n\nType #currword to see current guessing word.")
         return 0
 
     # function to enter in the game
