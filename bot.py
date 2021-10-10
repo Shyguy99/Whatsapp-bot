@@ -206,10 +206,10 @@ while True:
 
                 elif '#join ' in str(message.content)[:6]:
                     if Word.start == 1:
-                        if message.sender.id in Word.players:
+                        if message.sender.id in Word.players.keys():
                             message.reply_message("You are already in the game! 🤓\nSend #ans your answer to guess.")
 
-                        if message.content[7:] in Word.players.keys():
+                        if message.content[7:] in Word.players.values():
                             message.reply_message("Name already taken!")
                         else:
                             if p_adding == 0 and s_adding == 0:

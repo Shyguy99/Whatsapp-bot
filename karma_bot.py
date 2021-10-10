@@ -68,6 +68,7 @@ class karma_word_game:
 
         driver.wapi_functions.sendMessage(message.chat_id,
                                           "Guess the word:\n" + "*" + self.w_todisplay.upper() + "*")
+        print(self.word)
         self.already_solved = 0
         self.c = 0
         self.skip_list_players = []
