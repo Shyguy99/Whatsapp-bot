@@ -133,6 +133,7 @@ class karma_word_game:
     def show_score(self, message):
         if len(self.score_board) != 0:
             out = ""
+            print(self.score_board)
             for key, value in {k: v for k, v in sorted(self.score_board.items(), key=lambda item: item[1])}.items():
                 out += str(key) + "--> " + str(value) + "\n"
             message.reply_message("-----------Score Board-----------\n\n" + out)
@@ -301,7 +302,7 @@ class GFG:
                 wd.switch_to_window(win1)
                 a = wd.find_element_by_name('q')  # finding the google search box
                 a.clear()
-                a.send_keys(str(srh_title) + " gfg " + str(srh_lang))  # entering the question text
+                a.send_keys(str(srh_title) + " code gfg in " + str(srh_lang))  # entering the question text
                 a.send_keys(Keys.ENTER)  # pressing enter key to search
                 b = wd.find_elements_by_css_selector(".g a")  # selecting all the links shown in google result
                 got_it = False

@@ -20,7 +20,7 @@ while True:
 
 
     #pre-defining varibales
-    all_cmds=["#msg_count","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans ","#enter ","#score","#skip","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
+    all_cmds=["#msg_count","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans ","#join ","#score","#skip","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
 
     conn = psycopg2.connect("postgres://csqmnmlhadcckk:d2783f1d23d96549ec7f8c6aa189fc725e07f68e93407a5ddf2c883007695777@ec2-44-198-154-255.compute-1.amazonaws.com:5432/daklcdjauog639", sslmode='require')
 
@@ -48,7 +48,7 @@ while True:
         j=l
         score=dict()
         for i in range(l):
-            score[out[i]]=out[j]
+            score[out[i]]=int(out[j])
             i+=1
             j+=1
     cur.callproc('get_player')
@@ -705,10 +705,11 @@ while True:
                             break
                 else:
                     break
+                if flag==1:
+                    break
             except:
                 print("Error Trying Again")
-            if flag==1:
-                break
+
         if flag==0:
             wd.quit()
             driver.quit()
