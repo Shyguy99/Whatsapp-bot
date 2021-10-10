@@ -209,13 +209,13 @@ while True:
                         if message.sender.id in Word.players.keys():
                             message.reply_message("You are already in the game! 🤓\nSend #ans your answer to guess.")
 
-                        if message.content[7:] in Word.players.values():
+                        if message.content[6:] in Word.players.values():
                             message.reply_message("Name already taken!")
                         else:
                             if p_adding == 0 and s_adding == 0:
                                 p_adding = 1
                                 s_adding = 1
-                                cur.execute('CALL add_player(\'{}\',\'{}\')'.format(message.sender.id, message.content[7:]))
+                                cur.execute('CALL add_player(\'{}\',\'{}\')'.format(message.sender.id, message.content[6:]))
                                 conn.commit()
                                 Word.enter_game(message, message.content[6:])
 
