@@ -260,7 +260,7 @@ while True:
                         except Exception as e:
                             print(e)
                             message.reply_message("Got some error!\nCause can be:Tagged Message Deleted")
-                            db = 0
+                        db = 0
                     else:
                         message.reply_message("Wait 2 sec. Let me process last query")
 
@@ -279,7 +279,7 @@ while True:
                                 message.reply_message("Your message count from 06-10-21:\n*{}*".format(out))
                         except Exception as e:
                             print(e)
-                            db = 0
+                        db = 0
 
                     else:
 
@@ -637,10 +637,12 @@ while True:
 
 
     def msg_traverse():
+        global db
         while True:
             if len(all_msg)==0 or db==1:
                 continue
             else:
+                db=1
                 message=all_msg[0]
                 del all_msg[0]
 
@@ -679,6 +681,8 @@ while True:
                                 conn.commit()
                 except Exception as e:
                     print(e)
+                db=0
+                time.sleep(0.3)
 
     def add_score(pname):
         global s_adding
