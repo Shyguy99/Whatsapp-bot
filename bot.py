@@ -716,7 +716,7 @@ while True:
                             if i.type=='chat' and i.content=="#quitbot":
                                 break
                             threading.Thread(target=main, args=(i,)).start()
-                            if time.time()-s_time>300:
+                            if time.time()-s_time>3600:
                                 flag=1
                                 break
                         if flag==1:
@@ -728,7 +728,7 @@ while True:
             except:
                 print("Error Trying Again")
 
-        if flag==0:
+        if flag==1:
             wd.quit()
             driver.quit()
             break
