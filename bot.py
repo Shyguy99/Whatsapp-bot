@@ -169,14 +169,24 @@ while True:
                     s = """*Welcome to Minesweeper Game*\n\n*To choose a position send #mine xy where x is the row and y is column\n*To check your curren game send #currmine \n*To mark a position send #minemark xy\n*To unmark a position send #mineunmark xy."""
                     driver.reply_message(message.chat_id, message.id, s)
 
+                # execute the python code from the message (owner command)
+                elif "#exec" in message.content:
+                    if str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us":
+                        try:
+                            exec(str(message.content))
+                        except Exception as e:
+                            message.reply_message(str(e))
+                    else:
+                        message.reply_message("Owner command only!")
 
 
                 # commands for playing word game
+
                 elif message.content == '#wordgame':
                     if Word.start == 1:
 
                         message.reply_message(
-                            "Word Game already in progress 🏁\n Send #cur to check the word to be guessed.")
+                            "Word Game already in progress 🏁\n Send #currword to check the word to be guessed.")
                     else:
                         Word.wgame_start(driver, message)
                 elif '#ans ' in message.content[:5]:
@@ -190,7 +200,7 @@ while True:
 
 
                         else:
-                            message.reply_message("You have to first enter the game\nSend #enter your name")
+                            message.reply_message("You first have to join the game\nSend #enter your name")
                     else:
                         Word.wgame_start(driver, message)
 
@@ -199,7 +209,7 @@ while True:
                         if message.sender.id in Word.players:
                             message.reply_message("You are already in the game! 🤓\nSend #ans your answer to guess.")
 
-                        if message.conent[7:] in Word.players.keys():
+                        if message.content[7:] in Word.players.keys():
                             message.reply_message("Name already taken!")
                         else:
                             if p_adding == 0 and s_adding == 0:
@@ -214,7 +224,7 @@ while True:
                             else:
                                 message.reply_message("Wait! Try again")
                     else:
-                        Word.wgame_start(driver, message)
+                        message.reply_message("Game haven't started yet!\nSend #wordgame to start.")
 
                 elif message.content == '#skip':
                     if Word.start == 1:
