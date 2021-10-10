@@ -716,7 +716,7 @@ while True:
                             if i.type=='chat' and i.content=="#quitbot":
                                 break
                             threading.Thread(target=main, args=(i,)).start()
-                            if time.time()-s_time>3600:
+                            if time.time()-s_time>300:
                                 flag=1
                                 break
                         if flag==1:
