@@ -671,7 +671,7 @@ while True:
                                 msg = msg.replace(t, "")
                             for t in tag_ids_us:
                                 s = "Tagged in a {} by {} with the message:\n\n{}".format(message.type,
-                                                                                                   message.sender.verified_name, msg)
+                                                                                                   message.sender.push_name, msg)
 
                                 cur.execute('CALL add_tag_msg(\'{}\',\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"",
                                                                                             "\"" + t + "\"",
