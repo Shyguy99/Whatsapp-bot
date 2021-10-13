@@ -35,10 +35,11 @@ while True:
     i = 0
     j = l
     for i in range(l):
-        group[getchats[i]] = int(getchats[j])
+        id=getchats[i].replace("\"","")
+        group[id] = int(getchats[j])
         i += 1
         j += 1
-
+    print(group)
 
     #getting score_board and players list from databse
     cur.callproc('get_score')
@@ -159,6 +160,7 @@ while True:
                             cur.execute('CALL add_chat(\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"",1))
                             conn.commit()
                             db_chats=0
+
                             message.reply_message("I-Bot is now active ✨")
                         except Exception as e:
                             print(e)
@@ -654,7 +656,7 @@ while True:
 
                             size=min(12,len(message.content))
                             suggest.suggest(message,message.content[:size])
-                else:
+                elif message.content!="#on":
                     message.reply_message("Bot is inactive for this chat ⚰️\nAsk admin to send #on to turn it on.")
 
             # command for creating sticker from image
