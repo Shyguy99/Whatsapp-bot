@@ -135,7 +135,7 @@ class karma_word_game:
         if len(self.score_board) != 0:
             out = ""
             print(self.score_board)
-            for key, value in {k: v for k, v in sorted(self.score_board.items(), key=lambda item: item[1])}.items():
+            for key, value in {k: v for k, v in sorted(self.score_board.items(), key=lambda item: item[1],reverse=True)}.items():
                 out += str(key) + "--> " + str(value) + "\n"
             message.reply_message("-----------Score Board-----------\n\n" + out)
         else:
