@@ -657,7 +657,7 @@ while True:
                             size=min(12,len(message.content))
                             suggest.suggest(message,message.content[:size])
                 elif message.content!="#on":
-                    message.reply_message("Bot is inactive for this chat ⚰️\nAsk admin to send #on to turn it on.")
+                    message.reply_message("I-Bot is inactive for this chat ⚰️\nAsk admin to send #on to turn it on.")
 
             # command for creating sticker from image
             elif (message.type == 'image' or message.type == 'video') and message.chat_id in group and group[message.chat_id]==1 :
