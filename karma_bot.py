@@ -51,7 +51,7 @@ class karma_word_game:
         self.score_board = s_board
         self.players = players
         self.skip_list_players = []
-        with open('words.json', 'r+') as f:
+        with open('level2.json', 'r+') as f:
             self.li = json.load(f)  # json file containing all words
 
     def new_word(self, driver, message):
