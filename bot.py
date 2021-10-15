@@ -135,7 +135,7 @@ while True:
             all_msg.append(message)
 
         if (message.type == 'chat' or message.type == 'image' or message.type == 'video') and (
-                (hasattr(message, 'caption') and message.caption == '#sticker') or message.content[0:1] == '#'):
+                (hasattr(message, 'caption') and message.caption == '#sticker') or message.content[0:1] == '.'):
 
             if message.chat_id not in group and db_chats==0:
                 db_chats=1
