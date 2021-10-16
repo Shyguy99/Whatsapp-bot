@@ -124,7 +124,7 @@ If you want me to add something you are most welcome.
 
 This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp or Geeks for Geeks or any of its subsidiaries or its affiliates.  
 The official WhatsApp website can be found at [Here](https://whatsapp.com) and official geeks for geeks website can be  
-found at [Here](https://www.geeksforgeeks.org/)
+found at [here](https://www.geeksforgeeks.org/)
 
 ## :sparkles: Contact  
 For any query you can contact me via email <a href="">readytouse99@gmail.com</a> or if you have any contribution for the project you are welcome.
