@@ -14,7 +14,7 @@ Jdoodle_clientSecret=""
 
 #pre-defining varibales
 isAdmin = lambda _: driver.wapi_functions.getMe()["wid"] in driver.wapi_functions.getGroupAdmins(_)
-all_cmds=["#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#listlang","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans#","#enter#","#score","#nex_word","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
+all_cmds=["#all_cmd","#help","#resetrun","#listlang","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans#","#enter#","#score","#nex_word","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
 
 
 # creating all classes object
