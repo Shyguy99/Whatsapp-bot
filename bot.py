@@ -70,7 +70,7 @@ def main(message):
         if message.type == 'chat'  and message.content!="#on" and message.chat_id not in group:
             if message.content == '#off' and (str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us"):
 
-                group[message.chat_id] = 1
+                group[message.chat_id]=1
                 message.reply_message("Bot now OFF for this group or chat.")
 
 
