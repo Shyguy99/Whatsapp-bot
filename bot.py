@@ -135,7 +135,7 @@ while True:
             all_msg.append(message)
 
         if (message.type == 'chat' or message.type == 'image' or message.type == 'video') and (
-                (hasattr(message, 'caption') and message.caption == '#sticker') or message.content[0:1] == '.'):
+                (hasattr(message, 'caption') and message.caption == '#sticker') or message.content[0:1] == '#'):
 
             if message.chat_id not in group and db_chats==0:
                 db_chats=1
@@ -657,7 +657,8 @@ while True:
                             size=min(12,len(message.content))
                             suggest.suggest(message,message.content[:size])
                 elif message.content!="#on":
-                    message.reply_message("I-Bot is inactive for this chat ⚰️\nAsk admin to send #on to turn it on.")
+                    pass
+                    #message.reply_message("I-Bot is inactive for this chat ⚰️\nAsk admin to send #on to turn it on.")
 
             # command for creating sticker from image
             elif (message.type == 'image' or message.type == 'video') and message.chat_id in group and group[message.chat_id]==1 :
