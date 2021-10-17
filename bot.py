@@ -322,6 +322,7 @@ while True:
                                 message.reply_message("Game ended!")
                                 del ludo_game_dict[ludo_game_dict[message.sender.id].cur_player_list[0]]
                             del ludo_game_dict[message.sender.id]
+                            message.reply_message("Quitted!!")
 
                         else:
                             message.reply_message("You are not in the game.")

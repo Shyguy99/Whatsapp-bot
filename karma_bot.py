@@ -1141,7 +1141,7 @@ class ludo:
     #quit ludo
     def quit(self,driver,msg):
         self.cur_player_list.remove(msg.sender.id)
-        if self.players[msg.sender.id].chance==1:
+        if self.players[msg.sender.id].chance==1 and len(self.cur_player_list)!=1:
             self.helper(driver, msg)
 
         del self.players[msg.sender.id]
