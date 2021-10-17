@@ -2,6 +2,7 @@ import json
 import random
 
 import time
+import copy
 
 import pydoodle
 from bs4 import BeautifulSoup
@@ -704,6 +705,520 @@ class compiler:
             self.inuse = 0
         else:
             message.reply_message("Sorry!! Only Language supported are:-\n {} ".format(' ,'.join(self.languages)))
+
+
+class ludo:
+
+    def __init__(self,driver,msg,p1,p2,p3=None,p4=None):
+        self.dice_got = 0
+        self.gstart=1
+        self.six_counter=0
+        #final result
+        self.fin_res="Match ended!!\nFinal Result:\n"
+
+        #to check whether the player have thrown the dice or not
+        self.dthrow=0
+        #ludo board
+        self.ludo_board=[["⬜" for i in range(11)]for j in range(11)]
+
+        #a counter to choose whose player turn is now
+        self.idx=0
+        #filling the green color places
+        for r,c in [[0,0],[0,1],[0,2],[0,3],[1,0],[1,3],[2,0],[2,3],[3,0],[3,1],[3,2],[3,3],[4,1],[5,1],[5,2],[5,3],[5,4]]:
+            self.ludo_board[r][c]="🟩"
+
+        # filling the yellow color places
+        for r,c in [[0,7],[0,8],[0,9],[0,10],[1,5],[1,6],[1,7],[1,10],[2,5],[2,7],[2,10],[3,5],[3,7],[3,8],[3,9],[3,10],[4,5]]:
+            self.ludo_board[r][c] = "🟨"
+
+        # filling the red color places
+        for r,c in [[5,6],[5,7],[5,8],[5,9],[6,9],[7,7],[7,8],[7,9],[7,10],[8,7],[8,10],[9,7],[9,10],[10,7],[10,8],[10,9],[10,10]]:
+            self.ludo_board[r][c]="🟥"
+
+        # filling the blue color places
+        for r,c in [[6,5],[7,0],[7,1],[7,2],[7,3],[7,5],[8,0],[8,3],[8,5],[9,0],[9,3],[9,4],[9,5],[10,0],[10,1],[10,2],[10,3]]:
+            self.ludo_board[r][c] = "🟦"
+        self.ludo_board[5][5]="🏠"
+
+        #list of places which are safe/full stop
+        self.safe=[[4,1],[9,4],[1,6],[6,9]]
+        #list 1 which conains pieces if they are on same places
+        self.stoplist_1=[]
+        # list 2 which conains pieces if they are on same places
+        self.stoplist_2 = []
+        # list 3 which conains pieces if they are on same places
+        self.stoplist_3 = []
+        # list 4 which conains pieces if they are on same places
+        self.stoplist_4 = []
+        #creating ludo_player objects dict
+        self.players={p1:"",p2:""}
+        if p3!=None:
+            self.players[p3]=""
+        if p4!=None:
+            self.players[p4]=""
+
+        n = len(self.players)
+        self.li_players = random.sample(list(self.players.keys()), n)
+        self.c=['b','y','g','r']
+
+        #initilising the ludo's pieces
+        for i in range(n):
+            p=self.li_players[i]
+            if self.c[i]=='b':
+                path=[[i,4] for i in range(9,5,-1)]+\
+                     [[6,j] for j in range(3,-1,-1)]+\
+                     [[5,0],[4,0]]+\
+                     [[4,j] for j in range(1,5)]+\
+                     [[i,4] for i in range(3,-1,-1)]+\
+                     [[0,5],[0,6]]+\
+                     [[i,6] for i in range(1,5)]+\
+                     [[4,j] for j in range(7,11)]+\
+                     [[5,10],[6,10]]+\
+                     [[6,j] for j in range(9,5,-1)]+\
+                     [[i,6] for i in range(7,11)]+\
+                     [[10,5]]+\
+                     [[i,5] for i in range(9,4,-1)]
+                g1=ludo_goti(9,1,9,4,'b',1,path)
+                g2=ludo_goti(8,2,9,4,'b',2,path)
+
+                self.players[p]=ludo_player(self.c[i],0,g1,g2,1)
+            elif self.c[i]=='g':
+                path = [[4, j] for j in range(1, 5)] + \
+                       [[i, 4] for i in range(3, -1, -1)] + \
+                       [[0, 5], [0, 6]] + \
+                       [[i, 6] for i in range(1, 5)] + \
+                       [[4, j] for j in range(7, 11)] + \
+                       [[5, 10], [6, 10]] + \
+                       [[6, j] for j in range(9, 5, -1)] + \
+                       [[i, 6] for i in range(7, 11)] + \
+                       [[10, 5],[10,4]] + \
+                       [[i, 4] for i in range(9, 5, -1)] + \
+                       [[6, j] for j in range(3, -1, -1)] + \
+                       [[5, 0]]+\
+                       [[5,j] for j in range(1,6)]
+                g1 = ludo_goti(2, 1, 4, 1,'g',1,path)
+                g2 = ludo_goti(1, 2, 4, 1,'g',2,path)
+                self.players[p] = ludo_player(self.c[i], 0, g1, g2)
+            elif self.c[i]=='y':
+                path = [[i, 6] for i in range(1, 5)] + \
+                       [[4, j] for j in range(7, 11)] + \
+                       [[5, 10], [6, 10]] + \
+                       [[6, j] for j in range(9, 5, -1)] + \
+                       [[i, 6] for i in range(7, 11)] + \
+                       [[10, 5],[10,4]] + \
+                       [[i, 4] for i in range(9, 5, -1)] + \
+                       [[6, j] for j in range(3, -1, -1)] + \
+                       [[5, 0],[4,0]]+ \
+                       [[4, j] for j in range(1, 5)] + \
+                       [[i, 4] for i in range(3, -1, -1)] + \
+                       [[0, 5]]+\
+                       [[i,5] for i in range(1,6)]
+                g1 = ludo_goti(1, 8, 1, 6,'y',1,path)
+                g2 = ludo_goti(2, 9, 1, 6,'y',2,path)
+                self.players[p] = ludo_player(self.c[i], 0, g1, g2)
+            elif self.c[i]=='r':
+                path = [[6, j] for j in range(9, 5, -1)] + \
+                       [[i, 6] for i in range(7, 11)] + \
+                       [[10, 5],[10,4]] + \
+                       [[i, 4] for i in range(9, 5, -1)] + \
+                       [[6, j] for j in range(3, -1, -1)] + \
+                       [[5, 0],[4,0]]+ \
+                       [[4, j] for j in range(1, 5)] + \
+                       [[i, 4] for i in range(3, -1, -1)] + \
+                       [[0, 5],[0,6]]+ \
+                       [[i, 6] for i in range(1, 5)] + \
+                       [[4, j] for j in range(7, 11)] + \
+                       [[5, 10]] + \
+                       [[5,j] for j in range(9,4,-1)]
+                g1 = ludo_goti(8, 9, 6, 9,'r',1,path)
+                g2 = ludo_goti(9, 8, 6, 9,'r',2,path)
+                self.players[p] = ludo_player(self.c[i], 0, g1, g2)
+
+        self.temp_board=copy.deepcopy(self.ludo_board)
+
+        #placing the ludo's pieces at house of respective colour
+        self.place_pieces()
+        #drawing the board in chat
+        self.draw_board(msg)
+        out="Your pieces colour:\n"
+
+        #color to player dict
+        self.c_to_p=dict()
+        self.cur_player_list=self.li_players[:]
+        #printing which color is related to which player
+        for i in self.players.keys():
+            self.c_to_p[self.temp_board[self.players[i].g1.cur_x][self.players[i].g1.cur_y]]=i
+            out+=self.temp_board[self.players[i].g1.cur_x][self.players[i].g1.cur_y]+": "+"@"+i.replace("@c.us","")+" \n"
+        driver.wapi_functions.sendMessageWithMentions(msg.chat_id,out, '')
+        if n>2:
+            self.li_players[1],self.li_players[2]=self.li_players[2],self.li_players[1]
+        driver.wapi_functions.sendMessageWithMentions(msg.chat_id,"@"+self.li_players[0].replace("@c.us","")+" your turn.\nThrow the dice using #ldice command.",'')
+
+    #placing the ludo's pieces at their new positions
+    def place_pieces(self):
+        print(self.players)
+        self.temp_board=copy.deepcopy(self.ludo_board)
+        for value in self.players.values():
+            value.g1.draw_goti(self.temp_board)
+            value.g2.draw_goti(self.temp_board)
+
+    #function to draw the board and send it
+    def draw_board(self,msg,ext=""):
+        s=ext+"\n"
+        for i in range(len(self.temp_board)):
+            s+=''.join(self.temp_board[i])+"\n"
+        msg.reply_message(s)
+
+    #function to throw dice
+    def dice(self,driver,msg,a):
+        self.dice_got=random.choice([1,2,3,4,5,6,6,6])
+        if a!=0:
+            self.dice_got=a
+        self.dthrow=1
+        d=self.dice_got
+        if d==1:msg.reply_message("🎲1️⃣🎲")
+        if d == 2: msg.reply_message("🎲2️⃣🎲")
+        if d == 3: msg.reply_message("🎲3️⃣🎲")
+        if d == 4: msg.reply_message("🎲4️⃣🎲")
+        if d == 5: msg.reply_message("🎲5️⃣🎲")
+        if d == 6: msg.reply_message("🎲6️⃣🎲")
+        if self.dice_got==6:
+            self.six_counter+=1
+            # if self.six_counter==3:
+            #     msg.reply_message("Three six in a row\nYour chance will skip sorry")
+            #     self.helper(driver,msg)
+            #     return
+        c_pi1=self.players[msg.sender.id].g1
+        c_pi2=self.players[msg.sender.id].g2
+
+        print(self.players[msg.sender.id].g1.cur_x, self.players[msg.sender.id].g1.cur_y, "11111111111111111111111111")
+
+        #to check whether both pieces of player are at home or not
+        if self.dice_got!=6 and c_pi2.home_x==c_pi2.cur_x and c_pi2.home_y==c_pi2.cur_y and c_pi1.home_x==c_pi1.cur_x and c_pi1.home_y==c_pi1.cur_y:
+
+            driver.wapi_functions.sendMessage(msg.chat_id,"Bad Luck 😓")
+            self.helper(driver,msg)
+
+
+        elif self.dice_got==6 and c_pi2.home_x==c_pi2.cur_x and c_pi2.home_y==c_pi2.cur_y and c_pi1.home_x==c_pi1.cur_x and c_pi1.home_y==c_pi1.cur_y:
+            print(c_pi1.path[c_pi1.step][0],c_pi1.path[c_pi1.step][1],dir(c_pi1))
+
+            c_pi1.cur_x,c_pi1.cur_y=c_pi1.path[c_pi1.step][0],c_pi1.path[c_pi1.step][1]
+            self.place_safe(c_pi1)
+            self.dthrow = 0
+            self.dice_got = 0
+            # placing the ludo's pieces at house of respective colour
+            self.place_pieces()
+
+            # if safe places are filled with more than two pieces
+            self.ext = ""
+            if len(self.stoplist_1) > 1:
+                self.temp_board[self.safe[0][0]][self.safe[0][1]] = "🔥"
+                self.ext += "\n🔥 :"
+                for pe in self.stoplist_1:
+                    self.ext += " " + pe.get_piece()
+            if len(self.stoplist_2) > 1:
+                self.temp_board[self.safe[1][0]][self.safe[1][1]] = "🎃"
+                self.ext += "\n🎃 :"
+                for pe in self.stoplist_2:
+                    self.ext += " " + pe.get_piece()
+            if len(self.stoplist_3) > 1:
+                self.temp_board[self.safe[2][0]][self.safe[2][1]] = "✨"
+                self.ext += "\n✨ :"
+                for pe in self.stoplist_3:
+                    self.ext += " " + pe.get_piece()
+            if len(self.stoplist_4) > 1:
+                self.temp_board[self.safe[3][0]][self.safe[3][1]] = "🌎"
+                self.ext += "\n🌎 :"
+                for pe in self.stoplist_4:
+                    self.ext += " " + pe.get_piece()
+            # drawing the board in chat
+            self.draw_board(msg,self.ext)
+            driver.wapi_functions.sendMessageWithMentions(msg.chat_id, "@" + self.cur_player_list[
+                self.idx % len(self.cur_player_list)].replace("@c.us",
+                                                              "") + " your turn", '')
+
+        else:
+            if c_pi1.cur_x==-1 or c_pi2.cur_x==-1:
+                if c_pi1.cur_x==-1:
+                    self.move_piece_helper(driver,msg,c_pi2)
+                else:
+                    self.move_piece_helper(driver,msg,c_pi1)
+            elif c_pi2.home_x==c_pi2.cur_x and c_pi2.home_y==c_pi2.cur_y and self.dice_got!=6:
+                self.move_piece_helper(driver,msg,c_pi1)
+            elif c_pi1.home_x==c_pi1.cur_x and c_pi1.home_y==c_pi1.cur_y and self.dice_got!=6:
+                self.move_piece_helper(driver,msg,c_pi2)
+            else:
+                driver.wapi_functions.sendMessage(msg.chat_id,"Choose your piece to move!")
+
+    #second helper function when dice throw 6
+    def helper2(self,driver,msg):
+
+        self.dthrow = 0
+        self.dice_got = 0
+        # placing the ludo's pieces at house of respective colour
+        self.place_pieces()
+
+        #if safe places are filled with more than two pieces
+        self.ext=""
+        if len(self.stoplist_1)>1:
+            self.temp_board[self.safe[0][0]][self.safe[0][1]]="🔥"
+            self.ext+="\n🔥 :"
+            for pe in self.stoplist_1:
+                self.ext+=" "+pe.get_piece()
+        if len(self.stoplist_2) > 1:
+            self.temp_board[self.safe[1][0]][self.safe[1][1]] = "🎃"
+            self.ext += "\n🎃 :"
+            for pe in self.stoplist_2:
+                self.ext += " " + pe.get_piece()
+        if len(self.stoplist_3)>1:
+            self.temp_board[self.safe[2][0]][self.safe[2][1]]="✨"
+            self.ext+="\n✨ :"
+            for pe in self.stoplist_3:
+                self.ext+=" "+pe.get_piece()
+        if len(self.stoplist_4)>1:
+            self.temp_board[self.safe[3][0]][self.safe[3][1]]="🌎"
+            self.ext+="\n🌎 :"
+            for pe in self.stoplist_4:
+                self.ext+=" "+pe.get_piece()
+        # drawing the board in chat
+        self.draw_board(msg,self.ext)
+        driver.wapi_functions.sendMessageWithMentions(msg.chat_id, "@" + self.cur_player_list[
+            self.idx % len(self.cur_player_list)].replace("@c.us",
+                                                          "") + " your turn", '')
+
+    #helper function to move forward
+    def helper(self,driver,msg):
+        self.players[msg.sender.id].chance = 0
+        self.idx += 1
+        self.players[self.cur_player_list[self.idx % len(self.cur_player_list)]].chance = 1
+        self.dthrow = 0
+        self.dice_got=0
+        self.six_counter=0
+        # placing the ludo's pieces at house of respective colour
+        self.place_pieces()
+        # if safe places are filled with more than two pieces
+        self.ext = ""
+        if len(self.stoplist_1) > 1:
+            self.temp_board[self.safe[0][0]][self.safe[0][1]] = "🔥"
+            self.ext += "\n🔥 :"
+            for pe in self.stoplist_1:
+                self.ext += " " + pe.get_piece()
+        if len(self.stoplist_2) > 1:
+            self.temp_board[self.safe[1][0]][self.safe[1][1]] = "🎃"
+            self.ext += "\n🎃 :"
+            for pe in self.stoplist_2:
+                self.ext += " " + pe.get_piece()
+        if len(self.stoplist_3) > 1:
+            self.temp_board[self.safe[2][0]][self.safe[2][1]] = "✨"
+            self.ext += "\n✨ :"
+            for pe in self.stoplist_3:
+                self.ext += " " + pe.get_piece()
+        if len(self.stoplist_4) > 1:
+            self.temp_board[self.safe[3][0]][self.safe[3][1]] = "🌎"
+            self.ext += "\n🌎 :"
+            for pe in self.stoplist_4:
+                self.ext += " " + pe.get_piece()
+
+        # drawing the board in chat
+        self.draw_board(msg,self.ext)
+        driver.wapi_functions.sendMessageWithMentions(msg.chat_id, "@" + self.cur_player_list[
+            self.idx % len(self.cur_player_list)].replace("@c.us",
+                                                          "") + " your turn", '')
+
+    def piece_present(self, pie, msg):
+        co = [pie.cur_x, pie.cur_y]
+        r = []
+        for pl in self.cur_player_list:
+            if pl != msg.sender.id:
+                if [self.players[pl].g1.cur_x, self.players[pl].g1.cur_y] == co:
+                    r.append(self.players[pl].g1)
+                if [self.players[pl].g2.cur_x, self.players[pl].g2.cur_y] == co:
+                    r.append(self.players[pl].g2)
+        if len(r) != 0:
+            return r
+        return None
+
+
+    def move_piece_helper(self,driver,msg,c_piece):
+
+        if c_piece.cur_x==c_piece.home_x and c_piece.cur_y==c_piece.home_y :
+            if self.dice_got==6:
+                c_piece.cur_x,c_piece.cur_y=c_piece.path[c_piece.step][0],c_piece.path[c_piece.step][1]
+                self.place_safe(c_piece)
+                self.helper2(driver,msg)
+
+            else:
+                msg.reply_message("This piece is not open yet 🙄.Choose other one")
+        elif self.dice_got>len(c_piece.path)-c_piece.step-1:
+            msg.reply_message("Can't move 😅 \nYou require {} or less".format(len(c_piece.path)-c_piece.step+1))
+            self.helper(driver,msg)
+        else:
+            print(self.dice_got , len(c_piece.path) ,c_piece.step + 1)
+            c_piece.step+=self.dice_got
+
+            c_piece.cur_x, c_piece.cur_y = c_piece.path[c_piece.step][0], c_piece.path[c_piece.step][1]
+            self.place_safe(c_piece)
+
+
+            if [c_piece.cur_x, c_piece.cur_y] not in self.safe:
+                present= self.piece_present(c_piece,msg)
+
+                if present!=None:
+                    for p in present:
+                        p.cur_x,p.cur_y=p.home_x,p.home_y
+                        p.step=0
+
+                    driver.wapi_functions.sendMessage(msg.chat_id,"You got a kill!!")
+                    self.helper2(driver, msg)
+                else:
+                    if c_piece.step==len(c_piece.path)-1:
+                        c_piece.win=1
+                        c_piece.cur_x=-1
+                        c_piece.cur_y=-1
+                        if self.players[msg.sender.id].g1.win==1 and self.players[msg.sender.id].g2.win==1:
+                            self.cur_player_list.remove(msg.sender.id)
+                            msg.reply_message("Congo 🎉 You got rank {}".format(len(self.li_players)-len(self.cur_player_list)))
+                            self.fin_res+="@{} : Rank {}\n".format(msg.sender.id.replace("@c.us",""),len(self.li_players)-len(self.cur_player_list))
+                            if len(self.cur_player_list)==1:
+                                self.fin_res+="@{} : Rank {}\n".format(self.cur_player_list[0].replace("@c.us",""),len(self.li_players)-len(self.cur_player_list)+1)
+                                self.cur_player_list=[]
+
+                                driver.wapi_functions.sendMessageWithMentions(msg.chat_id,self.fin_res,'')
+                            else:
+                                self.helper(driver,msg)
+                        else:
+                            self.helper2(driver,msg)
+                    else:
+                        if self.dice_got==6:
+                            self.helper2(driver,msg)
+                        else:
+                            self.helper(driver,msg)
+            else:
+                if self.dice_got == 6:
+                    self.helper2(driver, msg)
+                else:
+                    self.helper(driver, msg)
+
+    def place_safe(self, c_piece):
+        if [c_piece.cur_x, c_piece.cur_y] in self.safe:
+            print("safe yess")
+            if self.safe[0] == [c_piece.cur_x, c_piece.cur_y]:
+                self.stoplist_1.append(c_piece)
+
+            elif self.safe[1] == [c_piece.cur_x, c_piece.cur_y]:
+                self.stoplist_2.append(c_piece)
+            elif self.safe[2] == [c_piece.cur_x, c_piece.cur_y]:
+                self.stoplist_3.append(c_piece)
+            else:
+                self.stoplist_4.append(c_piece)
+            print(self.stoplist_1, self.stoplist_2, self.stoplist_3, self.stoplist_4)
+
+        else:
+            if c_piece in self.stoplist_1: self.stoplist_1.remove(c_piece)
+            if c_piece in self.stoplist_2: self.stoplist_2.remove(c_piece)
+            if c_piece in self.stoplist_3: self.stoplist_3.remove(c_piece)
+            if c_piece in self.stoplist_4: self.stoplist_4.remove(c_piece)
+
+
+    #function to move the piece
+    def move_piece(self,driver,msg,pi):
+        if pi=='h':
+
+            c_piece=self.players[msg.sender.id].g2
+        else:
+            c_piece=self.players[msg.sender.id].g1
+
+        if c_piece.cur_x<0:
+            msg.reply_message("This piece is already in the house.Choose other")
+        else:
+            self.move_piece_helper(driver,msg,c_piece)
+
+    #function to send current ludo board
+    def current_board(self,msg):
+        self.draw_board(msg,self.ext)
+
+    #quit ludo
+    def quit(self,driver,msg):
+        self.cur_player_list.remove(msg.sender.id)
+        del self.players[msg.sender.id]
+        self.helper(driver,msg)
+
+
+
+
+
+
+class ludo_goti:
+    def __init__(self,home_x,home_y,start_x,start_y,colour,p,path):
+        self.p=p
+        self.path=path
+        self.step=0
+        self.home_x=home_x
+        self.home_y=home_y
+        self.start_x=start_x
+        self.start_y=start_y
+        self.cur_x=self.home_x
+        self.cur_y=self.home_y
+        self.start=0
+        self.win=0
+        self.colour=colour
+    def draw_goti(self,board):
+        c=self.colour
+        if self.cur_x<0:
+            return
+        if c=='b':
+            if self.p==1:
+                board[self.cur_x][self.cur_y]="🔵"
+            else:
+                board[self.cur_x][self.cur_y] = "💙"
+        elif c=='y':
+            if self.p==1:
+                board[self.cur_x][self.cur_y]="🟡"
+            else:
+                board[self.cur_x][self.cur_y] = "💛"
+        elif c=='g':
+            if self.p==1:
+                board[self.cur_x][self.cur_y]="🟢"
+            else:
+                board[self.cur_x][self.cur_y]="💚"
+
+        elif c=='r':
+            if self.p==1:
+                board[self.cur_x][self.cur_y]="🔴"
+            else:
+                board[self.cur_x][self.cur_y]="❤️"
+    def get_piece(self):
+        c = self.colour
+        if c == 'b':
+            if self.p == 1:
+                return( "🔵")
+            else:
+                return("💙")
+        elif c == 'y':
+            if self.p == 1:
+                return "🟡"
+            else:
+                return "💛"
+        elif c == 'g':
+            if self.p == 1:
+                return "🟢"
+            else:
+               return "💚"
+
+        elif c == 'r':
+            if self.p == 1:
+                return "🔴"
+            else:
+                return "❤️"
+class ludo_player:
+    def __init__(self,colour,status,g1,g2,chance=0):
+        self.colour=colour
+        self.status=status
+        self.g1=g1
+        self.g2=g2
+        self.chance=chance
+
 
 
 class cmd_suggesstion:
