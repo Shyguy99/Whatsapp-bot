@@ -132,6 +132,7 @@ while True:
         global db_chats
         global s_adding
         global p_adding
+        global s_time
 
         if message.chat_id in group:
             all_msg.append(message)
@@ -238,6 +239,7 @@ while True:
                             if len(fin_s) < 2 or len(fin_s) > 4:
                                 message.reply_message("Number of players must be between 2 to 4.\nCurrent number of players- {}").format(str(len(fin_s)))
                             else:
+
                                 if len(set(fin_s).intersection(set(ludo_game_dict.keys()))) == 0:
 
                                     all_parti = set(driver.wapi_functions.getGroupParticipantIDs(message.chat_id))
@@ -252,6 +254,7 @@ while True:
                                             p3 = fin_s[2]
                                         if len(fin_s) > 3:
                                             p4 = fin_s[3]
+                                        s_time=s_time-1800
                                         ludo_game_dict[message.sender.id] = karma_bot.ludo(driver, message, p1, p2, p3,
                                                                                            p4)
                                         for i in fin_s:
