@@ -22,3 +22,4 @@ requests
 wikipedia
 pydoodle
 psycopg2
+PyDictionary

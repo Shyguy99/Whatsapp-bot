@@ -3,7 +3,7 @@ import random
 
 import time
 import copy
-
+from PyDictionary import PyDictionary
 import pydoodle
 from bs4 import BeautifulSoup
 from selenium.webdriver.common.keys import Keys
@@ -47,6 +47,7 @@ class karma_word_game:
     # initilizing some helping variables
     def __init__(self, s_board, players):
         self.start = 0
+        self.mean_dict=PyDictionary()
         self.c = 0  # check whether 3 people voted or not for skipping a word
         self.already_solved = 0
         self.score_board = s_board
@@ -88,8 +89,13 @@ class karma_word_game:
         if ans.lower() == self.word:  # checking whether answer  given is right or not
             if self.already_solved == 0:
                 self.already_solved = 1
+                d = self.mean_dict.meaning(self.word)
+                out = ""
+                if d != None:
+                    for key, value in d.items():
+                        out += "~" + key + " :" + value[0] + "\n"
                 message.reply_message(
-                    "Right Answer 💯! You got a point")
+                    "Right Answer 💯!\n\nWord Definition:\n{}".format(out))
 
                 self.score_board[self.players[message.sender.id]] += 1  # updating user score if he/she is right
                 return 1
@@ -116,11 +122,16 @@ class karma_word_game:
         if self.already_solved == 0 and self.c < 3:  # checking if word is not guessed then 3 people vote is required to change
             if message.sender.id in self.skip_list_players:  # checking whether the player is already voted or not
                 message.reply_message("You already voted to skip\n" + str(
-                    3 - self.c) + " votes needed now to skip this word")
+                    3 - self.c) + " vote needed now to skip this word")
             else:
                 self.c += 1
                 if self.c == 3:
-                    message.reply_message("The Right Answer is:\n" + "*" + self.word + "*")
+                    d = self.mean_dict.meaning(self.word)
+                    out = ""
+                    if d != None:
+                        for key, value in d.items():
+                            out += "~"+key + " :" + value[0] + "\n"
+                    message.reply_message("The Right Answer is:\n" + "*" + self.word + "*\n\nWord Definition:\n"+out)
                     self.already_solved = 1
                     self.new_word(driver, message)
                 else:
