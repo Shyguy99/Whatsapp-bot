@@ -254,7 +254,7 @@ while True:
                                             p3 = fin_s[2]
                                         if len(fin_s) > 3:
                                             p4 = fin_s[3]
-                                        s_time=s_time-1800
+                                        s_time=s_time+1800
                                         ludo_game_dict[message.sender.id] = karma_bot.ludo(driver, message, p1, p2, p3,
                                                                                            p4)
                                         for i in fin_s:
