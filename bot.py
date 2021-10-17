@@ -288,15 +288,18 @@ while True:
                                 if ludo_game_dict[message.sender.id].dthrow == 1:
                                     s = message.content.replace("#lmove", "").lower()
                                     s = s.strip()
-                                    if s == "h" or s == "c":
+                                    if len(s)!=0:
+                                        if s == "h" or s == "c":
 
-                                        ludo_game_dict[message.sender.id].move_piece(driver, message, s)
-                                        if len(ludo_game_dict[message.sender.id].cur_player_list) == 0:
-                                            t = ludo_game_dict[message.sender.id].li_players[:]
-                                            for pl in t:
-                                                del ludo_game_dict[pl]
+                                            ludo_game_dict[message.sender.id].move_piece(driver, message, s)
+                                            if len(ludo_game_dict[message.sender.id].cur_player_list) == 0:
+                                                t = ludo_game_dict[message.sender.id].li_players[:]
+                                                for pl in t:
+                                                    del ludo_game_dict[pl]
+                                        else:
+                                            message.reply_message("Wrong piece!! Choose c or h")
                                     else:
-                                        message.reply_message("Wrong piece!! Choose c or h")
+                                        message.reply_message("Empty parameter! Choose a piece h or c\nExample:- #lmove c")
                                 else:
                                     message.reply_message("First you have to throw the dice by sending #ldice")
                             else:
@@ -314,7 +317,8 @@ while True:
                     elif message.content == "#quitludo":
                         if message.sender.id in ludo_game_dict:
                             ludo_game_dict[message.sender.id].quit(driver, message)
-                            if (ludo_game_dict[message.sender.id].cur_player_list)==1:
+                            print(ludo_game_dict[message.sender.id].cur_player_list)
+                            if len(ludo_game_dict[message.sender.id].cur_player_list)==1:
                                 message.reply_message("Game ended!")
                                 del ludo_game_dict[ludo_game_dict[message.sender.id].cur_player_list[0]]
                             del ludo_game_dict[message.sender.id]

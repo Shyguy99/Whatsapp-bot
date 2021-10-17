@@ -884,10 +884,10 @@ class ludo:
         if d == 6: msg.reply_message("🎲6️⃣🎲")
         if self.dice_got==6:
             self.six_counter+=1
-            # if self.six_counter==3:
-            #     msg.reply_message("Three six in a row\nYour chance will skip sorry")
-            #     self.helper(driver,msg)
-            #     return
+            if self.six_counter==3:
+                msg.reply_message("Three six in a row\nSorry! Your chance will skip")
+                self.helper(driver,msg)
+                return
         c_pi1=self.players[msg.sender.id].g1
         c_pi2=self.players[msg.sender.id].g2
 
