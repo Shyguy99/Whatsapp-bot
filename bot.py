@@ -20,7 +20,7 @@ while True:
 
 
     #pre-defining varibales
-    all_cmds=["#msg_count","#ludo","#ldice","#lmove","quitludo","#currludo","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans ","#join ","#score","#skip","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
+    all_cmds=["#msg_count","#help_ludo","#ludo","#rdice","#pmove","#quitludo","#currludo","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans ","#join ","#score","#skip","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
 
     conn = psycopg2.connect("postgres://csqmnmlhadcckk:d2783f1d23d96549ec7f8c6aa189fc725e07f68e93407a5ddf2c883007695777@ec2-44-198-154-255.compute-1.amazonaws.com:5432/daklcdjauog639", sslmode='require')
 
@@ -199,7 +199,7 @@ while True:
                         s = """*Welcome to the I-Bot*\n\n*Features*\n\n*1. Compiler*✅ \n-Run any language code by sending \n*#run* _language_name_# \nWrite your code here from next line\n\n-Put language name as  cpp,python3, c, java, etc\nNote-: Don't give runtime input statements or try to run infinite loop,it will give error.\n\n--------------------------------------------------\n*2. Ludo*✅ \n-Play Ludo with your friends on whatsapp. \nSend *#help_ludo* to know how to play.\n\n--------------------------------------------------\n*3. Tic Tac Toe Game*✅\n-To play send *#ticgame* _tag the number you want to play with_\n-To end the game early send *#quit_tic*\nType #help_tic for controls\n\n--------------------------------------------------\n*4. Word game*✅\n-To start send #wordgame\n-Type #help_wgame for controls\n\n--------------------------------------------------\n*5.Geeks for Geeks code extractor*✅\n-Get the code from geeks for geeks site according to the asked question.\n-To get the code for particular problem, type \n\n*#gfg#*_Your question_*#*_the language in which you want the code_\n\nEx-: ->*#gfg#merge sort#python*\n     ->*#gfg #kadane algorithm#c++*\n\n--------------------------------------------------\n*6.Match Emoji Game*✅\n\n-To start the game send *#matchgame*\n-For setting level add 2 or 4 or 6 after *#matchgame* with a space\n-For more detail send *#help_match*\n\n--------------------------------------------------\n*7.Minesweeper Game*✅.*\n\n-To start the game send *#minegame* and to chosse a pair send *#mine* _xy_ where x is row and y is column.\n-For more commands of this game use #help_mine.\n-To know how to play visit-https://www.instructables.com/How-to-play-minesweeper/\n\n--------------------------------------------------\n*8.Wikipedia Search*✅.*\n\n-Search anything on wikipedia by sending *#wiki* _title_\n\nEx. *#wiki monkey*\n\n--------------------------------------------------\n*9.Tagger and Counter*✅\n\n-Now you will not miss the tags\nCheck where you were tagged by using *#last_tag* command.\n-Use it again to check second last tag and so on.\n-You can check upto last 50 tags.\n\n-You can also check the total number of messages you have sent by using *#msg_count*\n\n--------------------------------------------------\n*Some admin commands*\n\n- *#add* _919876543210_\n- *#kick* _tag the person you want to remove_\n- *#link* for getting the link of the group\n- *#tagall* \n- *#tagadmins* \n-Note-: You can also add some text after #tagall and #tagadmins.\n\nBot created by *_Karma_*\nGithub link-:https://github.com/Shyguy99/Whatsapp-bot"""
                         driver.reply_message(message.chat_id, message.id, s)
                     elif message.content=="#help_ludo":
-                        s = """*Welcome to the I-Bot Ludo*\n\nTo start the game send \n*#ludo*  _and tag the members you want to play with_\n\nTo roll the dice send\n*#ldice*\n\nTo move your _heart_ piece send\n*#lmove h*\n\nTo move your circle piece send \n*#lmove c*\n\nTo see current ludo board send\n*#currludo*\n\nTo quit your game send\n*#quitludo*"""
+                        s = """*Welcome to the I-Bot Ludo*\n\nTo start the game send \n*#ludo*  _and tag the members you want to play with_\n\nTo roll the dice send\n*#rdice*\n\nTo move your _heart_ piece send\n*#pmove h*\n\nTo move your circle piece send \n*#pmove c*\n\nTo see current ludo board send\n*#currludo*\n\nTo quit your game send\n*#quitludo*"""
                         driver.reply_message(message.chat_id, message.id, s)
 
                     elif message.content == '#help_wgame':
@@ -264,11 +264,11 @@ while True:
                                 else:
                                     message.reply_message("One or more player is already in a game.")
 
-                    elif "#ldice" in message.content:
+                    elif "#rdice" in message.content:
                         if message.sender.id in ludo_game_dict:
                             if ludo_game_dict[message.sender.id].players[message.sender.id].chance == 1:
                                 if ludo_game_dict[message.sender.id].dthrow == 0:
-                                    s = message.content.replace("#ldice", "")
+                                    s = message.content.replace("#rdice", "")
                                     if len(s) == 1:
                                         s = int(s)
                                     else:
@@ -276,17 +276,17 @@ while True:
                                     ludo_game_dict[message.sender.id].dice(driver, message, s)
                                 else:
                                     message.reply_message(
-                                        "You have already threw the dice.Move your dice by sending #lmove#h or #lmove#c")
+                                        "You have already threw the dice.Move your dice by sending #pmove#h or #pmove#c")
                             else:
                                 message.reply_message("Not your chance")
                         else:
                             message.reply_message("You are not in the game")
 
-                    elif "#lmove" in message.content:
+                    elif "#pmove" in message.content:
                         if message.sender.id in ludo_game_dict:
                             if ludo_game_dict[message.sender.id].players[message.sender.id].chance == 1:
                                 if ludo_game_dict[message.sender.id].dthrow == 1:
-                                    s = message.content.replace("#lmove", "").lower()
+                                    s = message.content.replace("#pmove", "").lower()
                                     s = s.strip()
                                     if len(s)!=0:
                                         if s == "h" or s == "c":
@@ -299,9 +299,9 @@ while True:
                                         else:
                                             message.reply_message("Wrong piece!! Choose c or h")
                                     else:
-                                        message.reply_message("Empty parameter! Choose a piece h or c\nExample:- #lmove c")
+                                        message.reply_message("Empty parameter! Choose a piece h or c\nExample:- #pmove c")
                                 else:
-                                    message.reply_message("First you have to throw the dice by sending #ldice")
+                                    message.reply_message("First you have to throw the dice by sending #rdice")
                             else:
                                 message.reply_message("Not your chance")
                         else:
@@ -559,10 +559,10 @@ while True:
                                         del match_player_dict[message.sender.id]
 
                                 else:
-                                    driver.reply_message(message.chat_id, message.id, "Wrong input! Please check\n You have choose two pairs Example:- #m 12 34")
+                                    driver.reply_message(message.chat_id, message.id, "Wrong input! Please check\n You have to choose two pairs Example:- #m 12 34")
                             else:
                                 message.reply_message(
-                                                     "Wrong input! Please check\n You have choose two pairs \nExample:- #m 12 34")
+                                                     "Wrong input! Please check\n You have to choose two pairs \nExample:- #m 12 34")
 
                         else:
                             driver.reply_message(message.chat_id, message.id, "Your game haven't started yet!!\nStart it by sending #matchgame")

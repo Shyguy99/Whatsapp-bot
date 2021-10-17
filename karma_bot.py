@@ -852,7 +852,7 @@ class ludo:
         driver.wapi_functions.sendMessageWithMentions(msg.chat_id,out, '')
         if n>2:
             self.li_players[1],self.li_players[2]=self.li_players[2],self.li_players[1]
-        driver.wapi_functions.sendMessageWithMentions(msg.chat_id,"@"+self.li_players[0].replace("@c.us","")+" your turn.\nThrow the dice using #ldice command.",'')
+        driver.wapi_functions.sendMessageWithMentions(msg.chat_id,"@"+self.li_players[0].replace("@c.us","")+" your turn.\nThrow the dice using #rdice command.",'')
 
     #placing the ludo's pieces at their new positions
     def place_pieces(self):
@@ -995,6 +995,7 @@ class ludo:
         driver.wapi_functions.sendMessageWithMentions(msg.chat_id, "@" + self.cur_player_list[
             self.idx % len(self.cur_player_list)].replace("@c.us",
                                                           "") + " your turn", '')
+
 
     def piece_present(self, pie, msg):
         co = [pie.cur_x, pie.cur_y]
