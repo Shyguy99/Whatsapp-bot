@@ -278,7 +278,7 @@ while True:
                                     message.reply_message(
                                         "You have already threw the dice.Move your dice by sending #lmove#h or #lmove#c")
                             else:
-                                message.reply_message("Not your chance boi")
+                                message.reply_message("Not your chance")
                         else:
                             message.reply_message("You are not in the game")
 
@@ -303,7 +303,7 @@ while True:
                                 else:
                                     message.reply_message("First you have to throw the dice by sending #ldice")
                             else:
-                                message.reply_message("Not your chance boi")
+                                message.reply_message("Not your chance")
                         else:
                             message.reply_message("You are not in the game")
 

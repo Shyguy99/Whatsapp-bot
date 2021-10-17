@@ -869,6 +869,16 @@ class ludo:
             s+=''.join(self.temp_board[i])+"\n"
         msg.reply_message(s)
 
+
+    #function to check piece can move or not
+    def can_move(self,piece):
+        if self.dice_got!=6 and  piece.cur_x==piece.home_x and piece.cur_y==piece.home_y:
+            return False
+        if self.dice_got>len(piece.path)-piece.step-1:
+            return False
+        return True
+
+
     #function to throw dice
     def dice(self,driver,msg,a):
         self.dice_got=random.choice([1,2,3,4,5,6,6,6])
@@ -894,62 +904,24 @@ class ludo:
         print(self.players[msg.sender.id].g1.cur_x, self.players[msg.sender.id].g1.cur_y, "11111111111111111111111111")
 
         #to check whether both pieces of player are at home or not
-        if self.dice_got!=6 and c_pi2.home_x==c_pi2.cur_x and c_pi2.home_y==c_pi2.cur_y and c_pi1.home_x==c_pi1.cur_x and c_pi1.home_y==c_pi1.cur_y:
+        if not self.can_move(c_pi1) and not self.can_move(c_pi2):
 
             driver.wapi_functions.sendMessage(msg.chat_id,"Bad Luck 😓")
             self.helper(driver,msg)
 
 
-        elif self.dice_got==6 and c_pi2.home_x==c_pi2.cur_x and c_pi2.home_y==c_pi2.cur_y and c_pi1.home_x==c_pi1.cur_x and c_pi1.home_y==c_pi1.cur_y:
+        elif self.can_move(c_pi1) and self.can_move(c_pi2):
+            driver.wapi_functions.sendMessage(msg.chat_id, "Choose your piece to move!")
+        else:
             print(c_pi1.path[c_pi1.step][0],c_pi1.path[c_pi1.step][1],dir(c_pi1))
 
-            c_pi1.cur_x,c_pi1.cur_y=c_pi1.path[c_pi1.step][0],c_pi1.path[c_pi1.step][1]
-            self.place_safe(c_pi1)
-            self.dthrow = 0
-            self.dice_got = 0
-            # placing the ludo's pieces at house of respective colour
-            self.place_pieces()
-
-            # if safe places are filled with more than two pieces
-            self.ext = ""
-            if len(self.stoplist_1) > 1:
-                self.temp_board[self.safe[0][0]][self.safe[0][1]] = "🔥"
-                self.ext += "\n🔥 :"
-                for pe in self.stoplist_1:
-                    self.ext += " " + pe.get_piece()
-            if len(self.stoplist_2) > 1:
-                self.temp_board[self.safe[1][0]][self.safe[1][1]] = "🎃"
-                self.ext += "\n🎃 :"
-                for pe in self.stoplist_2:
-                    self.ext += " " + pe.get_piece()
-            if len(self.stoplist_3) > 1:
-                self.temp_board[self.safe[2][0]][self.safe[2][1]] = "✨"
-                self.ext += "\n✨ :"
-                for pe in self.stoplist_3:
-                    self.ext += " " + pe.get_piece()
-            if len(self.stoplist_4) > 1:
-                self.temp_board[self.safe[3][0]][self.safe[3][1]] = "🌎"
-                self.ext += "\n🌎 :"
-                for pe in self.stoplist_4:
-                    self.ext += " " + pe.get_piece()
-            # drawing the board in chat
-            self.draw_board(msg,self.ext)
-            driver.wapi_functions.sendMessageWithMentions(msg.chat_id, "@" + self.cur_player_list[
-                self.idx % len(self.cur_player_list)].replace("@c.us",
-                                                              "") + " your turn", '')
-
-        else:
-            if c_pi1.cur_x==-1 or c_pi2.cur_x==-1:
-                if c_pi1.cur_x==-1:
-                    self.move_piece_helper(driver,msg,c_pi2)
-                else:
-                    self.move_piece_helper(driver,msg,c_pi1)
-            elif c_pi2.home_x==c_pi2.cur_x and c_pi2.home_y==c_pi2.cur_y and self.dice_got!=6:
+            if self.can_move(c_pi1):
                 self.move_piece_helper(driver,msg,c_pi1)
-            elif c_pi1.home_x==c_pi1.cur_x and c_pi1.home_y==c_pi1.cur_y and self.dice_got!=6:
-                self.move_piece_helper(driver,msg,c_pi2)
             else:
-                driver.wapi_functions.sendMessage(msg.chat_id,"Choose your piece to move!")
+                self.move_piece_helper(driver,msg,c_pi2)
+
+
+
 
     #second helper function when dice throw 6
     def helper2(self,driver,msg):
@@ -1051,8 +1023,8 @@ class ludo:
             else:
                 msg.reply_message("This piece is not open yet 🙄.Choose other one")
         elif self.dice_got>len(c_piece.path)-c_piece.step-1:
-            msg.reply_message("Can't move 😅 \nYou require {} or less".format(len(c_piece.path)-c_piece.step+1))
-            self.helper(driver,msg)
+            msg.reply_message("Can't move 😅 \nYou require {} or less for this piece.\nMove the other piece".format(len(c_piece.path)-c_piece.step-1))
+
         else:
             print(self.dice_got , len(c_piece.path) ,c_piece.step + 1)
             c_piece.step+=self.dice_got
