@@ -20,7 +20,7 @@ while True:
 
 
     #pre-defining varibales
-    all_cmds=["#msg_count","#ludo","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans ","#join ","#score","#skip","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
+    all_cmds=["#msg_count","#ludo","#ldice","#lmove","quitludo","#currludo","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans ","#join ","#score","#skip","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
 
     conn = psycopg2.connect("postgres://csqmnmlhadcckk:d2783f1d23d96549ec7f8c6aa189fc725e07f68e93407a5ddf2c883007695777@ec2-44-198-154-255.compute-1.amazonaws.com:5432/daklcdjauog639", sslmode='require')
 
@@ -482,13 +482,13 @@ while True:
                             pl.remove(message.sender.id)
                             del tic_player_dict[message.sender.id]
                             del tic_player_dict[pl[0]]
-                            out1 = "Match quitted by {}\n{} you won!!".format("@" + str(message.sender.id).replace("@c.us", ""),
+                            out1 = "Match quit by {}\n{} you won!!".format("@" + str(message.sender.id).replace("@c.us", ""),
                                                                               "@" + str(pl[0]).replace("@c.us", ""))
                             driver.wapi_functions.sendMessageWithMentions(message.chat_id, out1,"")
 
                         else:
                             driver.reply_message(message.chat_id, message.id,
-                                                 "You don't have any ongoing match!\nType #ticgame tag the person to play with. to start the game.")
+                                                 "You don't have any ongoing match!\nType #ticgame tag the person to play with to start the game.")
 
                     elif message.content == "#currtic":
                         if message.sender.id in tic_player_dict:
