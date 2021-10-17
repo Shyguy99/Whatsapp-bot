@@ -314,6 +314,9 @@ while True:
                     elif message.content == "#quitludo":
                         if message.sender.id in ludo_game_dict:
                             ludo_game_dict[message.sender.id].quit(driver, message)
+                            if (ludo_game_dict[message.sender.id].cur_player_list)==1:
+                                message.reply_message("Game ended!")
+                                del ludo_game_dict[ludo_game_dict[message.sender.id].cur_player_list[0]]
                             del ludo_game_dict[message.sender.id]
 
                         else:
