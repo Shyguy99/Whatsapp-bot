@@ -901,7 +901,6 @@ class ludo:
         c_pi1=self.players[msg.sender.id].g1
         c_pi2=self.players[msg.sender.id].g2
 
-        print(self.players[msg.sender.id].g1.cur_x, self.players[msg.sender.id].g1.cur_y, "11111111111111111111111111")
 
         #to check whether both pieces of player are at home or not
         if not self.can_move(c_pi1) and not self.can_move(c_pi2):
@@ -913,7 +912,6 @@ class ludo:
         elif self.can_move(c_pi1) and self.can_move(c_pi2):
             driver.wapi_functions.sendMessage(msg.chat_id, "Choose your piece to move!")
         else:
-            print(c_pi1.path[c_pi1.step][0],c_pi1.path[c_pi1.step][1],dir(c_pi1))
 
             if self.can_move(c_pi1):
                 self.move_piece_helper(driver,msg,c_pi1)
