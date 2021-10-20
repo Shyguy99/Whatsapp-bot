@@ -14,7 +14,7 @@ while True:
     s_time=time.time()
 
     #Change these variable before running the bot
-    YOUR_MOBILE_NUMBER = "17207416585"                    # Ex-:   918273627374
+    YOUR_MOBILE_NUMBER = os.environ.get("MOB_NUMBER")                   # Ex-:   918273627374
     Jdoodle_clientId="f4024ff5ac6b07c27fe236582c7c5331"
     Jdoodle_clientSecret="55e17e9e99239d105df4f5e9014f08b554d007c3ed044ea798b5e66b3b49e664"
 
