@@ -19,7 +19,7 @@ while True:
     Jdoodle_clientSecret=os.environ.get("JDOODLE_SID")
 
 
-    #pre-defining varibales
+    #pre-defining varibale
     all_cmds=["#msg_count","#help_ludo","#ludo","#rdice","#pmove","#quitludo","#currludo","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans ","#join ","#score","#skip","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
 
     conn = psycopg2.connect(os.environ.get("PGSQL_SERVER"), sslmode='require')
