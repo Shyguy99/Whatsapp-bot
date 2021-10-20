@@ -15,14 +15,14 @@ while True:
 
     #Change these variable before running the bot
     YOUR_MOBILE_NUMBER = os.environ.get("MOB_NUMBER")                     # Ex-:   918273627374
-    Jdoodle_clientId="f4024ff5ac6b07c27fe236582c7c5331"
-    Jdoodle_clientSecret="55e17e9e99239d105df4f5e9014f08b554d007c3ed044ea798b5e66b3b49e664"
+    Jdoodle_clientId=os.environ.get("JDOODLE_CLID")
+    Jdoodle_clientSecret=os.environ.get("JDOODLE_SID")
 
 
     #pre-defining varibales
     all_cmds=["#msg_count","#help_ludo","#ludo","#rdice","#pmove","#quitludo","#currludo","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans ","#join ","#score","#skip","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
 
-    conn = psycopg2.connect("postgres://csqmnmlhadcckk:d2783f1d23d96549ec7f8c6aa189fc725e07f68e93407a5ddf2c883007695777@ec2-44-198-154-255.compute-1.amazonaws.com:5432/daklcdjauog639", sslmode='require')
+    conn = psycopg2.connect(os.environ.get("PGSQL_SERVER"), sslmode='require')
 
     cur = conn.cursor()
 
