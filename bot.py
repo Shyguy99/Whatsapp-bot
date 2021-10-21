@@ -664,7 +664,7 @@ while True:
                         if len(s)>2:
 
                             try:
-                                out=wikipedia.page(s[1])
+                                out=wikipedia.page(s)
                                 message.reply_message('*Title* :{}\n*Source* : {}\n{}'.format(out.title,out.url,out.content))
                             except:
                                 message.reply_message("Can't find anything!!")
