@@ -3,6 +3,8 @@ import random
 
 import time
 import copy
+
+import requests
 from PyDictionary import PyDictionary
 import pydoodle
 from bs4 import BeautifulSoup
@@ -1204,7 +1206,64 @@ class ludo_player:
         self.g2=g2
         self.chance=chance
 
+#class for crypto commands
+class crypto:
 
+    def __init__(self):
+        self.crypto_com_base_url="https://min-api.cryptocompare.com/data"
+        self.coingecko_base_url='https://api.coingecko.com/api/v3/'
+        self.cyptopanic_base_url='https://cryptopanic.com/api/v1/posts/?'
+
+        self.coin_dict=dict()
+        coin_list=requests.get('{}/coins/list'.format(self.coingecko_base_url)).json()
+        for c in coin_list:
+            self.coin_dict[c['symbol']]=c['id']
+
+    def price(self,msg,coin):
+
+        if coin in self.coin_dict:
+            try:
+                data=requests.get(self.coingecko_base_url+'simple/price/?ids={}&vs_currencies=inr,usd,btc'.format(self.coin_dict[coin])).json()
+                out=""
+                for curr,price in data[self.coin_dict[coin]].items():
+                    out+="*{}{}* = {}\n\n".format(coin.upper(),curr.upper(),price)
+                msg.reply_message(out)
+            except Exception as e:
+                print(e)
+                msg.reply_message("Some error occured!!")
+        else:
+            msg.reply_message("*Coin not found!!*")
+
+    def news(self,msg,api,topic):
+        try:
+            if topic!='':
+                data=requests.get(self.cyptopanic_base_url+'auth_token={}&public=true&kind=news&currencies={}'.format(api,topic)).json()
+            else:
+                data=requests.get(self.cyptopanic_base_url+'auth_token={}&public=true&kind=news'.format(api)).json()
+            out="*Latest Crypto News*\n\n"
+            for news in data['results']:
+                out+="🌟 "+news['slug'].replace("-"," ")+"\n\n"
+            if out=='':
+                msg.reply_message("*No Data Found!!*")
+            else:
+                msg.reply_message(out)
+
+        except Exception as e:
+            print(e)
+            msg.reply_message("Sry!!Some error occurred")
+
+    def detail(self,msg,coin):
+        if coin in self.coin_dict:
+            data=requests.get(self.coingecko_base_url+'coins/markets?vs_currency=usd&ids={}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=1h'.format(self.coin_dict[coin])).json()
+            if len(data)==0:
+                msg.reply_message("*No Data Found*")
+            else:
+                out="----------------- *{}* ---------------------\n\n".format(self.coin_dict[coin].upper())
+                data=data[0]
+                out+='*Name:* {}\n\n*Current Price:* {}\n\n*Market Cap:* {}\n\n*Market Cap Rank:* {}\n\n*Total Volume:* {}\n\n*24h High:* {}\n\n*24h Low:* {}\n\n*24h Price Change:* {}\n\n*24h Price Change%:* {}\n\n*1h Price Change%:* {}\n\n*24h Market Cap Change:* {}\n\n*24h Market Cap Change%:* {}\n\n*Circulating Supply:* {}\n\n*Total Supply:* {}\n\n*Max Supply:* {}\n\n*ATH Value:* {}\n'.format(data['name'],data['current_price'],data['market_cap'],data['market_cap_rank'],data['total_volume'],data['high_24h'],data['low_24h'],data['price_change_24h'],data['price_change_percentage_24h'],data['price_change_percentage_1h_in_currency'],data['market_cap_change_24h'],data['market_cap_change_percentage_24h'],data['circulating_supply'],data['total_supply'],data['max_supply'],data['ath'])
+                msg.reply_message(out)
+        else:
+            msg.reply_message("*Coin not found!!*")
 
 class cmd_suggesstion:
     def __init__(self, allcmds):

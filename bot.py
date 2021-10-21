@@ -17,10 +17,10 @@ while True:
     YOUR_MOBILE_NUMBER = os.environ.get("MOB_NUMBER")                     # Ex-:   918273627374
     Jdoodle_clientId=os.environ.get("JDOODLE_CLID")
     Jdoodle_clientSecret=os.environ.get("JDOODLE_SID")
-
+    CRYPTOPANIC_API = os.environ.get('CRYPTOPANIC_API')
 
     #pre-defining varibale
-    all_cmds=["#msg_count","#help_ludo","#ludo","#rdice","#pmove","#quitludo","#currludo","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans ","#join ","#score","#skip","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
+    all_cmds=["#cnews","#cdetail","#cprice","#msg_count","#help_ludo","#ludo","#rdice","#pmove","#quitludo","#currludo","#last_tag","#all_cmd","#help","#run python3#","#run cpp#","#resetrun","#ticgame","#currtic","#quit_tic","#help_tic","#wordgame","#currword","#ans ","#join ","#score","#skip","#help_wgame","#gfg#","#matchgame","#help_match","#currmatch","#quitmatch","#m","#minegame","#mine ","#currmine","#minemark","#mineunmark","#help_mine","#wiki ","#add","#kick","#link","#tagall","#tagadmins","#source"]
 
     conn = psycopg2.connect(os.environ.get("PGSQL_SERVER"), sslmode='require')
 
@@ -75,6 +75,7 @@ while True:
     # creating all classes object
     sticker = karma_bot.karma_sticker()
     Word=karma_bot.karma_word_game(score,player)
+    Crypto = karma_bot.crypto()
 
     GFG = karma_bot.GFG()
     COMP=karma_bot.compiler(Jdoodle_clientId,Jdoodle_clientSecret)
@@ -711,6 +712,28 @@ while True:
                     elif message.content=="#resetrun":
                         COMP.inuse=0
                         message.reply_message("Program Terminated!!")
+
+                    # crypto commands
+                    elif "#cprice" in message.content[:8]:
+                        s = message.content.replace("#cprice", "")
+                        s = s.strip()
+                        if s != '':
+                            Crypto.price(message, s)
+                        else:
+                            message.reply_message("Empty Parameter! Type the coin symbol\nExample:- #cprice btc")
+                    elif "#cnews" in message.content[:7]:
+                        s = message.content.replace("#cnews", "")
+                        s = s.strip()
+
+                        Crypto.news(message, CRYPTOPANIC_API, s)
+                    elif "#cdetail" in message.content[:10]:
+                        s = message.content.replace("#cdetail", "")
+                        s = s.strip()
+                        if s != '':
+                            Crypto.detail(message, s)
+                        else:
+                            message.reply_message("Empty Parameter! Type the coin symbol\nExample:- #cdetail btc")
+
 
 
 
