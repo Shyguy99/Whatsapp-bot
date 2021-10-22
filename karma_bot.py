@@ -1228,7 +1228,7 @@ class crypto:
                 symbol=["₹","$",""]
                 i=0
                 for curr,price in data[self.coin_dict[coin]].items():
-                    out+="*{}{}* = *{}{}* \n\n".format(coin.upper(),curr.upper(),symbol[i],('%.17f'%float(price)).rstrip('0').rstrip('.'))
+                    out+="*{}{}* = *{}{}* \n\n".format(coin.upper(),curr.upper(),symbol[i],('%.14f'%float(price)).rstrip('0').rstrip('.'))
                     i+=1
                 msg.reply_message(out)
             except Exception as e:
