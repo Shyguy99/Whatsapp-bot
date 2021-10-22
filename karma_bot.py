@@ -1225,8 +1225,11 @@ class crypto:
             try:
                 data=requests.get(self.coingecko_base_url+'simple/price/?ids={}&vs_currencies=inr,usd,btc'.format(self.coin_dict[coin])).json()
                 out=""
+                symbol=["₹","$",""]
+                i=0
                 for curr,price in data[self.coin_dict[coin]].items():
-                    out+="*{}{}* = {}\n\n".format(coin.upper(),curr.upper(),price)
+                    out+="*{}{}* = *{}{}* \n\n".format(coin.upper(),curr.upper(),symbol[i],('%.17f'%float(price)).rstrip('0').rstrip('.'))
+                    i+=1
                 msg.reply_message(out)
             except Exception as e:
                 print(e)
