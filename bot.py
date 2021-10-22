@@ -925,6 +925,8 @@ while True:
             try:
                 if driver.is_logged_in():
 
+                    #updating cryto grp with latest news
+
                     for contact in driver.get_unread(include_me=True):
                         for i in contact.messages:
                             if i.type=='chat' and i.content=="#quitbot":
