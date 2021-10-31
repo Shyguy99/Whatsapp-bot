@@ -1220,7 +1220,7 @@ class crypto:
             self.coin_dict[c['symbol']]=c['id']
 
     def price(self,msg,coin):
-
+        coin=coin.lower()
         if coin in self.coin_dict:
             try:
                 data=requests.get(self.coingecko_base_url+'simple/price/?ids={}&vs_currencies=inr,usd,btc'.format(self.coin_dict[coin])).json()
