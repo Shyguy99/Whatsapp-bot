@@ -1346,7 +1346,7 @@ class cmd_suggesstion:
 
 # class for quiting the program (admin only according to calling if condition)
 class quit_bot:
-    def quit(self, driver, wd):
+    def quit(self, driver, wd ):
         wd.quit()  # quiting chrome driver
         driver.quit()  # quiting WhatsappApi driver
 
