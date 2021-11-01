@@ -3,6 +3,7 @@ import random
 
 import time
 import copy
+from time import time
 
 import requests
 from PyDictionary import PyDictionary
@@ -1267,6 +1268,25 @@ class crypto:
                 msg.reply_message(out)
         else:
             msg.reply_message("*Coin not found!!*")
+
+    def mmi(self,driver,msg):
+        response = requests.get("https://alternative.me/crypto/fear-and-greed-index.png")
+        file = open("mmi.png", "wb")
+        file.write(response.content)
+        file.close()
+        driver.send_media("/app/mmi.png",msg.chat_id,"")
+
+
+#class for calculator
+class Calculator:
+
+        def calc(self,driver,msg,s):
+            try:
+                a = eval(s)
+                msg.reply_message(str(a))
+            except Exception as e:
+                msg.reply_message(str(e))
+
 
 class cmd_suggesstion:
     def __init__(self, allcmds):

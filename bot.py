@@ -20,7 +20,7 @@ while True:
     CRYPTOPANIC_API = os.environ.get('CRYPTOPANIC_API')
 
     # pre-defining varibale
-    all_cmds = ["#cnews", "#cdetail", "#cprice", "#msg_count", "#help_ludo", "#ludo", "#rdice", "#pmove", "#quitludo",
+    all_cmds = ["#calc","#cnews", "#cdetail", "#cprice", "#msg_count", "#help_ludo", "#ludo", "#rdice", "#pmove", "#quitludo",
                 "#currludo", "#last_tag", "#all_cmd", "#help", "#run python3#", "#run cpp#", "#resetrun", "#ticgame",
                 "#currtic", "#quit_tic", "#help_tic", "#wordgame", "#currword", "#ans ", "#join ", "#score", "#skip",
                 "#help_wgame", "#gfg#", "#matchgame", "#help_match", "#currmatch", "#quitmatch", "#m", "#minegame",
@@ -137,15 +137,17 @@ while True:
 
             if message.chat_id not in group and db_chats == 0:
                 db_chats = 1
-                group[message.chat_id] = 1
+
                 try:
                     cur.execute('CALL add_chat(\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"", 1))
                     conn.commit()
                     db_chats = 0
+                    group[message.chat_id] = 1
+
                     message.reply_message("Send #help to check out all the features of bot ✨")
                 except Exception as e:
                     print(e)
-                    message.reply_message("Bot failed to start for this chat!")
+                    message.reply_message("I-Bot failed to start for this chat!")
                     db_chats = 0
 
             if message.type == 'chat' and message.content == '#on' and db_chats == 0:
@@ -153,22 +155,23 @@ while True:
                 if str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us" or message.sender.id in driver.wapi_functions.getGroupAdmins(
                         message.chat_id):
                     if group[message.chat_id] == 0:
-                        group[message.chat_id] = 1
+
                         try:
                             cur.execute('CALL add_chat(\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"", 1))
                             conn.commit()
                             db_chats = 0
-
+                            group[message.chat_id] = 1
                             message.reply_message("I-Bot is now active ✨")
                         except Exception as e:
                             print(e)
+                            db_chats=0
                             message.reply_message("I-Bot failed to start for this chat!")
 
                     else:
                         message.reply_message("I-Bot is already ON for this group")
                 else:
                     message.reply_message("Command only for admins!")
-                db_chats = 0
+
             if message.type == 'chat':
                 if message.content != "#on" and message.chat_id in group and group[message.chat_id] == 1:
                     if message.content == '#off' and db_chats == 0 and ((
@@ -189,12 +192,26 @@ while True:
 
 
 
-
+                    elif message.content=="#ping":
+                        message.reply_message("Pong!!")
 
                     # commands for help and controls
                     elif (message.content == '#help' or message.content == '#command'):
-                        s = """*Welcome to the I-Bot*\n\n*Features*\n\n*Crypto*✅ \n-Check the price of crypto coin by sending \n*#cprice* _coin_ \n\n-Check latest crypto news by sending *#cnews* \nFor specific topic send *#cnews* _topic or coin name_\n\n-Check detail of a coin by sending *#cdetail* _coin_ .\n\n--------------------------------------------------\n*Compiler*✅ \n-Run any language code by sending \n*#run* _language_name_# \nWrite your code here from next line\n\n-Put language name as  cpp,python3, c, java, etc\nNote-: Don't give runtime input statements or try to run infinite loop,it will give error.\n\n--------------------------------------------------\n*Ludo*✅ \n-Play Ludo with your friends on whatsapp. \nSend *#help_ludo* to know how to play.\n\n--------------------------------------------------\n*Tic Tac Toe Game*✅\n-To play send *#ticgame* _tag the number you want to play with_\n-To end the game early send *#quit_tic*\nType #help_tic for controls\n\n--------------------------------------------------\n*Word game*✅\n-To start send #wordgame\n-Type #help_wgame for controls\n\n--------------------------------------------------\n*Geeks for Geeks code extractor*✅\n-Get the code from geeks for geeks site according to the asked question.\n-To get the code for particular problem, type \n\n*#gfg#*_Your question_*#*_the language in which you want the code_\n\nEx-: ->*#gfg#merge sort#python*\n     ->*#gfg #kadane algorithm#c++*\n\n--------------------------------------------------\n*Match Emoji Game*✅\n\n-To start the game send *#matchgame*\n-For setting level add 2 or 4 or 6 after *#matchgame* with a space\n-For more detail send *#help_match*\n\n--------------------------------------------------\n*Minesweeper Game*✅.*\n\n-To start the game send *#minegame* and to chosse a pair send *#mine* _xy_ where x is row and y is column.\n-For more commands of this game use #help_mine.\n-To know how to play visit-https://www.instructables.com/How-to-play-minesweeper/\n\n--------------------------------------------------\n*Wikipedia Search*✅.*\n\n-Search anything on wikipedia by sending *#wiki* _title_\n\nEx. *#wiki monkey*\n\n--------------------------------------------------\n*Tagger and Counter*✅\n\n-Now you will not miss the tags\nCheck where you were tagged by using *#last_tag* command.\n-Use it again to check second last tag and so on.\n-You can check upto last 50 tags.\n\n-You can also check the total number of messages you have sent by using *#msg_count*\n\n--------------------------------------------------\n*Some admin commands*\n\n- *#add* _919876543210_\n- *#kick* _tag the person you want to remove_\n- *#link* for getting the link of the group\n- *#tagall* \n- *#tagadmins* \n-Note-: You can also add some text after #tagall and #tagadmins.\n\nBot created by *_Karma_*\nGithub link-:https://github.com/Shyguy99/Whatsapp-bot"""
-                        driver.reply_message(message.chat_id, message.id, s)
+                        s=[]
+                        s.append("*Welcome to the I-Bot*\n\n*Features*\n\n*Crypto*✅ \n-Check the price of crypto coin by sending \n*#cprice* _coin_ \n\n-Check latest crypto news by sending *#cnews* \nFor specific topic send *#cnews* _topic or coin name_\n\n-Check detail of a coin by sending *#cdetail* _coin_ .\n\n--------------------------------------------------\n")
+                        s.append("*Compiler*✅ \n-Run any language code by sending \n*#run* _language_name_# \nWrite your code here from next line\n\n-Put language name as  cpp,python3, c, java, etc\nNote-: Don't give runtime input statements or try to run infinite loop,it will give error.\n\n--------------------------------------------------\n")
+                        s.append("*Ludo*✅ \n-Play Ludo with your friends on whatsapp. \nSend *#help_ludo* to know how to play.\n\n--------------------------------------------------\n")
+                        s.append("*Tic Tac Toe Game*✅\n-To play send *#ticgame* _tag the number you want to play with_\n-To end the game early send *#quit_tic*\nType #help_tic for controls.\n\n--------------------------------------------------\n")
+                        s.append("*Word game*✅\n-To start send #wordgame\n-Type #help_wgame for controls.\n\n--------------------------------------------------\n")
+                        s.append("*Geeks for Geeks code extractor*✅\n-Get the code from geeks for geeks site according to the asked question.\n-To get the code for particular problem, type \n\n*#gfg#*_Your question_*#*_the language in which you want the code_\n\nEx-: ->*#gfg#merge sort#python*\n     ->*#gfg #kadane algorithm#c++*.\n\n--------------------------------------------------\n")
+                        s.append("*Match Emoji Game*✅\n\n-To start the game send *#matchgame*\n-For setting level add 2 or 4 or 6 after *#matchgame* with a space\n-For more detail send *#help_match*.\n\n--------------------------------------------------\n")
+                        s.append("*Minesweeper Game*✅.*\n\n-To start the game send *#minegame* and to chosse a pair send *#mine* _xy_ where x is row and y is column.\n-For more commands of this game use #help_mine.\n-To know how to play visit-https://www.instructables.com/How-to-play-minesweeper/ \n\n--------------------------------------------------\n")
+                        s.append("*Wikipedia Search*✅.*\n\n-Search anything on wikipedia by sending *#wiki* _title_\n\nEx. *#wiki monkey*.\n\n--------------------------------------------------\n")
+                        s.append("*Tagger and Counter*✅\n\n-Now you will not miss the tags\nCheck where you were tagged by using *#last_tag* command.\n-Use it again to check second last tag and so on.\n-You can check upto last 50 tags.\n\n-You can also check the total number of messages you have sent by using *#msg_count* .\n\n--------------------------------------------------\n")
+                        s.append("*Some admin commands*\n\n- *#add* _919876543210_\n- *#kick* _tag the person you want to remove_\n- *#link* for getting the link of the group\n- *#tagall* \n- *#tagadmins* \n-Note-: You can also add some text after #tagall and #tagadmins.\n\nBot created by *_Karma_*\nGithub link-:https://github.com/Shyguy99/Whatsapp-bot")
+                        out=''.join(s)
+                        driver.reply_message(message.chat_id, message.id, out)
+
                     elif message.content == "#help_ludo":
                         s = """*Welcome to the I-Bot Ludo*\n\nTo start the game send \n*#ludo*  _and tag the members you want to play with_\n\nTo roll the dice send\n*#rdice*\n\nTo move your _heart_ piece send\n*#pmove h*\n\nTo move your circle piece send \n*#pmove c*\n\nTo see current ludo board send\n*#currludo*\n\nTo quit your game send\n*#quitludo*"""
                         driver.reply_message(message.chat_id, message.id, s)
@@ -212,6 +229,8 @@ while True:
                         s = """*Welcome to Minesweeper Game*\n\n*To choose a position send #mine xy where x is the row and y is column\n*To check your curren game send #currmine \n*To mark a position send #minemark xy\n*To unmark a position send #mineunmark xy."""
                         driver.reply_message(message.chat_id, message.id, s)
 
+
+
                     # execute the python code from the message (owner command)
                     elif "#exec" in message.content:
                         if str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us":
@@ -222,30 +241,43 @@ while True:
                         else:
                             message.reply_message("Owner command only!")
 
+                    #reply something directly from code
+                    elif "#reply" in message.content[:6]:
+                        if str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us":
+                            k=message.content.replace("#reply","").strip()
+                            try:
+                                exec("message.reply_message(str({}))".format(k))
+                            except Exception as e:
+                                message.reply_message(str(e))
+                        else:
+                            message.reply_message("Owner command only!")
 
                     # to get all people message count
                     elif message.content == "#mcount":
-                        if message.sender.id in driver.wapi_functions.getGroupAdmins(message.chat_id):
+                        if message.sender.id in driver.wapi_functions.getGroupAdmins(message.chat_id) or str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us" :
                             while db_members == 1:
                                 continue
                             db_members = 1
                             all_count = dict()
-                            cur.callproc('get_all_msg_count', ("\"" + message.chat_id + "\"",))
-                            getcount = cur.fetchone()[0]
-                            print(getcount)
-                            db_members=0
-                            l = len(getcount) // 2
-                            j = l
-                            for i in range(l):
-                                id = getcount[i].replace("\"", "").replace("@c.us","")
-                                all_count[id] = int(getcount[j])
+                            try:
+                                cur.callproc('get_all_msg_count', ("\"" + message.chat_id + "\"", ))
+                                getcount = cur.fetchone()[0]
+                                print(getcount)
+                                db_members=0
+                                l = len(getcount) // 2
+                                j = l
+                                for i in range(l):
+                                    id = getcount[i].replace("\"", "").replace("@c.us","")
+                                    all_count[id] = int(getcount[j])
 
-                                j += 1
-                            out = ""
-                            for key, value in all_count.items():
-                                out += str(value) + "--> " + str(key) + "\n"
-                            driver.wapi_functions.sendMessage(message.chat_id,"----Count of messages of all members----\n\n" + out
-                                                                          )
+                                    j += 1
+                                out = ""
+                                for key, value in all_count.items():
+                                    out += str(value) + "--> " + str(key) + "\n"
+                                driver.wapi_functions.sendMessage(message.chat_id,"--Count of messages of all members--\n\n" + out)
+                            except Exception as e:
+                                print(e)
+                                db_members = 0
                         else:
                             message.reply_message("Admin Command!!")
 
@@ -434,6 +466,8 @@ while True:
                     elif message.content == '#score':
                         Word.show_score(message)
 
+
+
                     # to get tagged msg
                     elif message.content == "#last_tag":
                         all_get_tag_msg.append(message)
@@ -454,9 +488,9 @@ while True:
                             except Exception as e:
                                 print(e)
                                 message.reply_message("Got some error!\nCause can be:Tagged Message Deleted")
-                            db_members = 0
+                                db_members = 0
                         else:
-                            message.reply_message("Wait 2 sec. Let me process last query")
+                            message.reply_message("Try again in 2 sec. Let me process last query")
 
                     # to get msg_count
                     elif message.content == "#msg_count":
@@ -474,7 +508,7 @@ while True:
                                     message.reply_message("Your message count from 06-10-21:\n*{}*".format(out))
                             except Exception as e:
                                 print(e)
-                            db_members = 0
+                                db_members = 0
 
                         else:
 
@@ -500,7 +534,7 @@ while True:
                                                          "The person you are trying to play with is already in a game 😐")
                             else:
                                 driver.reply_message(message.chat_id, message.id,
-                                                     "Wrong Command 🤐!\nType #ticgame tag the person to play with.")
+                                                     "Wrong Command 🤐!\nType #ticgame <tag the person>.")
 
                         else:
                             driver.reply_message(message.chat_id, message.id,
@@ -544,6 +578,13 @@ while True:
                                                  "You don't have any ongoing match!\nType #ticgame tag the person to play with. to start the game.")
 
 
+                    #calculator command
+                    elif "#calc" in message.content[:5]:
+                        s=message.content.replace("#calc","").strip()
+                        if s!="":
+                            karma_bot.Calculator().calc(driver,message,s)
+                        else:
+                            message.reply_message("Empty expression. Write some exp after *#calc* \nExample:- #calc 2+12")
 
 
                     # command for getting code from Geeks For Geeks
@@ -576,7 +617,7 @@ while True:
                                                  "You are not in the game!\n Send #matchgame to start.")
 
                     # command for guessing pairs in match game
-                    elif "#m" in message.content[:3]:
+                    elif "#m " in message.content[:4]:
                         if message.sender.id in match_player_dict:
                             s = message.content.replace("#m", "")
                             s = s.strip()
@@ -777,7 +818,8 @@ while True:
                         else:
                             message.reply_message("Empty Parameter! Type the coin symbol\nExample:- #cdetail btc")
 
-
+                    elif message.content=="#mmi":
+                        Crypto.mmi(driver,message)
 
 
                     # kick and add member command
@@ -966,11 +1008,10 @@ while True:
 
                     for contact in driver.get_unread(include_me=True):
                         for i in contact.messages:
-                            if i.type == 'chat' and i.content == "#quitbot":
-                                break
+
                             threading.Thread(target=main, args=(i,)).start()
                             if time.time() - s_time > 3600:
-                                flag = 1
+                                flag=1
                                 break
                         if flag == 1:
                             break
@@ -978,8 +1019,8 @@ while True:
                     break
                 if flag == 1:
                     break
-            except:
-                print("Error Trying Again")
+            except Exception as e:
+                print("Error Trying Again\n"+str(e))
 
         if flag == 1:
             wd.quit()
