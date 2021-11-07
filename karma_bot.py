@@ -33,11 +33,12 @@ class karma_sticker:
             print(str(a))
             try:
                 if message.chat_id == '919675642959-1606755119@g.us' or message.chat_id == '919557666582-1580308963@g.us':  # custom setting you can ignore it
-                    driver.driver.switch_to_window(driver.driver.window_handles[0])
+                    driver.driver.switch_to.window(driver.driver.window_handles[0])
                     driver.send_image_as_sticker(a, '919675642959-1606756367@g.us')
                 else:
                     print("Sending sticker")
-                    driver.driver.switch_to_window(driver.driver.window_handles[0])
+
+                    driver.driver.switch_to.window(driver.driver.window_handles[0])
                     driver.send_image_as_sticker(a, message.chat_id)  # sending converted sticker
                     print("Sticker sent")
             except Exception as ex:
@@ -315,7 +316,7 @@ class GFG:
                 driver.reply_message(message.chat_id, message.id, "Wrong syntax")
                 ch = 1
             if ch == 0:
-                wd.switch_to_window(win1)
+                wd.switch_to.window(win1)
                 a = wd.find_element_by_name('q')  # finding the google search box
                 a.clear()
                 a.send_keys(str(srh_title) + " code gfg in " + str(srh_lang))  # entering the question text
@@ -329,7 +330,7 @@ class GFG:
                         got_it = True
                         break
                 if got_it == True:
-                    wd.switch_to_window(win2)
+                    wd.switch_to.window(win2)
                     page = wd.get(str(link))  # opening the link in second tab if we got it
 
                     soup = BeautifulSoup(wd.page_source, 'html.parser')
@@ -1346,7 +1347,7 @@ class cmd_suggesstion:
 
 # class for quiting the program (admin only according to calling if condition)
 class quit_bot:
-    def quit(self, driver, wd ):
+    def quit(self, driver, wd):
         wd.quit()  # quiting chrome driver
         driver.quit()  # quiting WhatsappApi driver
 

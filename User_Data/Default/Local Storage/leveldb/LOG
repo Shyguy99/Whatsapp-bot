@@ -1,3 +1,2 @@
-2021/10/05-20:20:06.323 27a4 Reusing MANIFEST D:\Giga\python file\bot\wp bot pc\User_Data\Default\Local Storage\leveldb/MANIFEST-000001
-2021/10/05-20:20:06.325 27a4 Recovering log #3
-2021/10/05-20:20:06.326 27a4 Reusing old log D:\Giga\python file\bot\wp bot pc\User_Data\Default\Local Storage\leveldb/000003.log 
+2021/11/05-14:07:04.081 22c0 Creating DB D:\Giga\python file\bot\wp bot pc\User_Data\Default\Local Storage\leveldb since it was missing.
+2021/11/05-14:07:04.096 22c0 Reusing MANIFEST D:\Giga\python file\bot\wp bot pc\User_Data\Default\Local Storage\leveldb/MANIFEST-000001

@@ -9,7 +9,7 @@ import wikipedia
 import psycopg2
 
 while True:
-    flag =  0
+    flag = 0
     # time to noted after which whole bot restart
     s_time = time.time()
 
@@ -35,11 +35,11 @@ while True:
     group = dict()
     cur.callproc('get_chats')
     getchats = cur.fetchone()[0]
-    l = len(getchats) // 2
+    l = len(getchats)//2
     i = 0
     j = l
     for i in range(l):
-        id = getchats[i].replace("\"", "")
+        id = getchats[i].replace("\"", "" )
         group[id] = int(getchats[j])
         i += 1
         j += 1
@@ -141,14 +141,14 @@ while True:
                 try:
                     cur.execute('CALL add_chat(\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"", 1))
                     conn.commit()
-                    db_chats = 0
                     group[message.chat_id] = 1
 
                     message.reply_message("Send #help to check out all the features of bot ✨")
                 except Exception as e:
-                    print(e)
+                    print("Starting bot for group failed"+str(e))
+                    driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us","Starting bot for group failed"+str(e))
                     message.reply_message("I-Bot failed to start for this chat!")
-                    db_chats = 0
+                db_chats = 0
 
             if message.type == 'chat' and message.content == '#on' and db_chats == 0:
                 db_chats = 1
@@ -159,19 +159,22 @@ while True:
                         try:
                             cur.execute('CALL add_chat(\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"", 1))
                             conn.commit()
-                            db_chats = 0
+
                             group[message.chat_id] = 1
                             message.reply_message("I-Bot is now active ✨")
                         except Exception as e:
-                            print(e)
-                            db_chats=0
+                            driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us",
+                                                     "Starting bot for group failed" + str(e))
+
+                            print("Starting bot for group failed"+str(e))
+
                             message.reply_message("I-Bot failed to start for this chat!")
 
                     else:
                         message.reply_message("I-Bot is already ON for this group")
                 else:
                     message.reply_message("Command only for admins!")
-
+                db_chats=0
             if message.type == 'chat':
                 if message.content != "#on" and message.chat_id in group and group[message.chat_id] == 1:
                     if message.content == '#off' and db_chats == 0 and ((
@@ -181,14 +184,13 @@ while True:
                         try:
                             cur.execute('CALL add_chat(\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"", 0))
                             conn.commit()
-                            db_chats = 0
                             group[message.chat_id] = 0
                             message.reply_message("I-Bot is now inactive for this chat 🥺")
 
                         except Exception as e:
                             print(e)
                             message.reply_message("I-Bot failed to start for this chat!")
-                            db_chats = 0
+                        db_chats = 0
 
 
 
@@ -263,7 +265,6 @@ while True:
                                 cur.callproc('get_all_msg_count', ("\"" + message.chat_id + "\"", ))
                                 getcount = cur.fetchone()[0]
                                 print(getcount)
-                                db_members=0
                                 l = len(getcount) // 2
                                 j = l
                                 for i in range(l):
@@ -276,8 +277,11 @@ while True:
                                     out += str(value) + "--> " + str(key) + "\n"
                                 driver.wapi_functions.sendMessage(message.chat_id,"--Count of messages of all members--\n\n" + out)
                             except Exception as e:
-                                print(e)
-                                db_members = 0
+                                driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us",
+                                                         "Getting all counts got error"+str(e))
+
+                                print("Getting all counts got error"+str(e))
+                            db_members = 0
                         else:
                             message.reply_message("Admin Command!!")
 
@@ -477,7 +481,6 @@ while True:
                                 cur.callproc('get_last_tag',
                                              ("\"" + message.chat_id + "\"", "\"" + message.sender.id + "\""))
                                 out = cur.fetchone()
-                                db_members = 0
                                 if out[0] == None:
                                     message.reply_message(
                                         "You don't have any tag left or your tags are updating\nTry later.")
@@ -486,9 +489,11 @@ while True:
                                     msg = out
                                     message.reply_message(msg)
                             except Exception as e:
-                                print(e)
+                                driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us",
+                                                         "Getting last tag got error:"+ str(e))
+                                print("Getting last tag got error:"+ str(e))
                                 message.reply_message("Got some error!\nCause can be:Tagged Message Deleted")
-                                db_members = 0
+                            db_members = 0
                         else:
                             message.reply_message("Try again in 2 sec. Let me process last query")
 
@@ -500,15 +505,16 @@ while True:
                                 cur.callproc('get_msg_count',
                                              ("\"" + message.chat_id + "\"", "\"" + message.sender.id + "\""))
                                 out = cur.fetchone()
-                                db_members = 0
                                 if out[0] == None:
                                     message.reply_message("Your message count:\n*1*.")
                                 else:
                                     out = out[0]
                                     message.reply_message("Your message count from 06-10-21:\n*{}*".format(out))
                             except Exception as e:
-                                print(e)
-                                db_members = 0
+                                driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us",
+                                                         "Getting msg count got error:"+str(e))
+                                print("Getting msg count got error:"+str(e))
+                            db_members = 0
 
                         else:
 
@@ -869,7 +875,7 @@ while True:
 
                     # to get source code
                     elif message.content == "#source":
-                        message.reply_message("https://github.com/Shyguy99/Whatsapp-bot")
+                        message.reply_message("https://github.com/Shyguy99/Whatsapp-bot\n\n")
 
 
                     elif "#tagall" in message.content or "#tagadmins" in message.content:
@@ -957,7 +963,7 @@ while True:
                                     tag_ids_us.add(t)
                             for t in tag_ids_us:
                                 t = "@" + t.replace("@c.us", "")
-                                msg = msg.replace(t, "")
+                                msg = msg.replace(t, "").replace('\'',"").replace("\""," ")
                             for t in tag_ids_us:
                                 s = "Tagged in a {} by {} with the message:\n\n{}".format( message.type,
                                                                                           str(message.sender.push_name), msg)
@@ -968,11 +974,14 @@ while True:
                                                                                     s,str(message.sender.push_name)))
                                 conn.commit()
                 except Exception as e:
-                    print(e)
-                db_members = 0
+
+                    driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us",
+                                             "Adding msg count got error"+str(e))
+                    print("Adding msg count got error"+str(e))
+                db_members=0
                 if flag == 1:
                     break
-                time.sleep(0.3)
+                time.sleep(0.8)
 
 
     def add_score(pname):
@@ -1004,7 +1013,6 @@ while True:
             try:
                 if driver.is_logged_in():
 
-                    # updating cryto grp with latest news
 
                     for contact in driver.get_unread(include_me=True):
                         for i in contact.messages:
@@ -1020,7 +1028,7 @@ while True:
                 if flag == 1:
                     break
             except Exception as e:
-                print("Error Trying Again\n"+str(e))
+                print("Error Trying Again:\n"+ str(e))
 
         if flag == 1:
             wd.quit()

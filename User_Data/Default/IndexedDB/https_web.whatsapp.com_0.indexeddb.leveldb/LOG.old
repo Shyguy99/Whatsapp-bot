@@ -1,7 +1,0 @@
-2021/10/05-20:14:05.137 3818 Reusing MANIFEST D:\Giga\python file\bot\wp bot pc\User_Data\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2021/10/05-20:14:05.139 3818 Recovering log #3
-2021/10/05-20:14:05.166 3818 Reusing old log D:\Giga\python file\bot\wp bot pc\User_Data\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/000003.log 
-2021/10/05-20:14:16.493 366c Level-0 table #5: started
-2021/10/05-20:14:16.511 366c Level-0 table #5: 407655 bytes OK
-2021/10/05-20:14:16.514 366c Delete type=0 #3
-2021/10/05-20:14:16.514 366c Manual compaction at level-0 from '\x00\x04\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x05\x00\x00\x00' @ 0 : 0; will stop at (end)
