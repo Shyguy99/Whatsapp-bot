@@ -26,7 +26,7 @@ class karma_sticker:
 
         if message.type == 'video' and hasattr(message,
                                                'caption') and message.caption == '#sticker':  # video and gif can't converted
-            driver.reply_message(message.chat_id, message.id, "Sry can't make sticker")
+            driver.chat_send_message(message.chat_id, "Sry can't make sticker")
         elif hasattr(message, 'caption') and message.caption == '#sticker':
 
             a = (driver.download_media(message, True))
@@ -43,7 +43,7 @@ class karma_sticker:
                     print("Sticker sent")
             except Exception as ex:
                 print(ex)
-                driver.reply_message(message.chat_id, message.id, "Sry can't make sticker")
+                driver.chat_send_message(message.chat_id, "Sry can't make sticker")
 
 
 # class for word game
@@ -82,7 +82,7 @@ class karma_word_game:
     # function to start the game
     def wgame_start(self, driver, message):
 
-        message.reply_message(
+        driver.chat_send_message(message.chat_id,
             "*Word Game Started!* \n\nSend #help_wgame to see all commands.")
         self.new_word(driver, message)
         self.start = 1
@@ -98,34 +98,34 @@ class karma_word_game:
                 if d != None:
                     for key, value in d.items():
                         out += "~" + key + " :" + value[0] + "\n"
-                message.reply_message(
+                driver.chat_send_message(message.chat_id,
                     "Right Answer 💯!\n\nWord Definition:\n{}".format(out))
 
                 self.score_board[self.players[message.sender.id]] += 1  # updating user score if he/she is right
                 return 1
 
             else:
-                message.reply_message(
+                driver.chat_send_message(message.chat_id,
                     "Already Answered 😓!\n\nSend #score to check the scores.\nSend #currword to see current word")
 
         else:
-            message.reply_message("Wrong! Think more 🧠\n\nType #currword to see current guessing word.")
+            driver.chat_send_message(message.chat_id,"Wrong! Think more 🧠\n\nType #currword to see current guessing word.")
         return 0
 
     # function to enter in the game
-    def enter_game(self, message, name):
+    def enter_game(self,driver, message, name):
 
         self.players[message.sender.id] = name  # new player added
         self.score_board[self.players[message.sender.id]] = 0
 
-        message.reply_message(
+        driver.chat_send_message(message.chat_id,
             "You have entered the game 👍🏽\n\nAnswer by sending #ans your answer here")
 
     # function to skip or go to next word
     def skip(self, driver, message):
         if self.already_solved == 0 and self.c < 3:  # checking if word is not guessed then 3 people vote is required to change
             if message.sender.id in self.skip_list_players:  # checking whether the player is already voted or not
-                message.reply_message("You already voted to skip\n" + str(
+                driver.chat_send_message(message.chat_id,"You already voted to skip\n" + str(
                     3 - self.c) + " vote needed now to skip this word")
             else:
                 self.c += 1
@@ -135,27 +135,27 @@ class karma_word_game:
                     if d != None:
                         for key, value in d.items():
                             out += "~"+key + " :" + value[0] + "\n"
-                    message.reply_message("The Right Answer is:\n" + "*" + self.word + "*\n\nWord Definition:\n"+out)
+                    driver.chat_send_message(message.chat_id,"The Right Answer is:\n" + "*" + self.word + "*\n\nWord Definition:\n"+out)
                     self.already_solved = 1
                     self.new_word(driver, message)
                 else:
-                    message.reply_message(str(3 - self.c) + " vote needed now to skip the word")
+                    driver.chat_send_message(message.chat_id,str(3 - self.c) + " vote needed now to skip the word")
                     self.skip_list_players.append(message.sender.id)
 
     # function to show current word
     def current_word(self, driver, message):
-        driver.reply_message(message.chat_id, message.id, "Guess the word:\n" + "*" + self.w_todisplay.upper() + "*")
+        driver.chat_send_message(message.chat_id, "Guess the word:\n" + "*" + self.w_todisplay.upper() + "*")
 
     # function to show the scoreboard
-    def show_score(self, message):
+    def show_score(self, driver,message):
         if len(self.score_board) != 0:
             out = ""
             print(self.score_board)
             for key, value in {k: v for k, v in sorted(self.score_board.items(), key=lambda item: item[1],reverse=True)}.items():
                 out += str(value) + "--> " + str(key) + "\n"
-            message.reply_message("-----------Score Board-----------\n\n" + out)
+            driver.chat_send_message(message.chat_id,"-----------Score Board-----------\n\n" + out)
         else:
-            message.reply_message("Empty Score Board")
+            driver.chat_send_message(message.chat_id,"Empty Score Board")
 
 
 # class for tic tac toe game
@@ -179,12 +179,12 @@ class tic_tac_game:
 
         # sending empty game board
         out = self.list_to_string(self.g_map)
-        out2 = "Game started {} vs {} ⚔️".format("@" + self.players[0].replace("@c.us", ""),
-                                                 "@" + self.players[1].replace("@c.us", ""))
+        out2 = "Game started {} vs {} ⚔️".format(str(driver.get_contact_from_id(self.players[0]).push_name),
+                                                 str(driver.get_contact_from_id(self.players[1]).push_name))
         out3 = "First {} your turn \nSend #(box number) to place your mark on board.".format(
-            "@" + str(self.players[self.chance]).replace("@c.us", ""))
-        driver.wapi_functions.sendMessageWithMentions(message.chat_id, out + "\n" + out2, "")
-        driver.wapi_functions.sendMessageWithMentions(message.chat_id, out3)
+            str(driver.get_contact_from_id(self.players[self.chance]).push_name))
+        driver.chat_send_message(message.chat_id, out + "\n" + out2)
+        driver.chat_send_message(message.chat_id, out3)
 
     def list_to_string(self, li):
         s = []
@@ -222,25 +222,25 @@ class tic_tac_game:
                 if self.status != "":
                     if self.status == "draw":
                         out1 = self.list_to_string(self.g_map)
-                        out2 = "Its a Draw 🤕 \n{} {}".format("@" + self.players[0].replace("@c.us", ""),
-                                                              "@" + self.players[1].replace("@c.us", ""))
-                        driver.wapi_functions.sendMessageWithMentions(message.chat_id, out1 + "\n" + out2, "")
+                        out2 = "Its a Draw 🤕 \n{} {}".format(str(driver.get_contact_from_id(self.players[0]).push_name),
+                                                              str(driver.get_contact_from_id(self.players[1]).push_name))
+                        driver.chat_send_message(message.chat_id, out1 + "\n" + out2)
                     else:
                         out1 = self.list_to_string(self.g_map)
-                        out2 = "{} won the match 🎉🎉".format("@" + self.status.replace("@c.us", ""))
-                        driver.wapi_functions.sendMessageWithMentions(message.chat_id, out1 + "\n" + out2, "")
+                        out2 = "{} won the match 🎉🎉".format(str(driver.get_contact_from_id(self.status).push_name))
+                        driver.chat_send_message(message.chat_id, out1 + "\n" + out2)
                 else:
                     # shifting the chance
                     self.chance = abs(self.chance - 1)
 
                     out1 = self.list_to_string(self.g_map)
-                    out2 = "{} your turn now.".format("@" + str(self.players[self.chance]).replace("@c.us", ""))
-                    driver.wapi_functions.sendMessageWithMentions(message.chat_id, out1 + "\n" + out2, "")
+                    out2 = "{} your turn now.".format(str(driver.get_contact_from_id(self.players[self.chance]).push_name))
+                    driver.chat_send_message(message.chat_id, out1 + "\n" + out2)
 
             else:
-                driver.reply_message(message.chat_id, message.id, "Place is already marked or invalid!")
+                driver.chat_send_message(message.chat_id, "Place is already marked or invalid!")
         else:
-            driver.reply_message(message.chat_id, message.id, "Not your chance boi 🤧")
+            driver.chat_send_message(message.chat_id, "Not your chance boi 🤧")
 
     def win_or_not(self, l):
         if l[0][0] == l[0][1] and l[0][0] == l[0][2] and l[0][0] != "⬜":
@@ -293,8 +293,8 @@ class tic_tac_game:
 
     def current_match(self, driver, message):
         out1 = self.list_to_string(self.g_map)
-        out2 = "{} your turn now.".format("@" + str(self.players[self.chance]).replace("@c.us", ""))
-        driver.wapi_functions.sendMessageWithMentions(message.chat_id, out1 + "\n" + out2, "")
+        out2 = "{} your turn now.".format(str(driver.get_contact_from_id(self.players[self.chance]).push_name))
+        driver.chat_send_message(message.chat_id, out1 + "\n" + out2)
 
 
 class GFG:
@@ -313,7 +313,7 @@ class GFG:
                 srh_title = srh[2]
                 srh_lang = ""
             else:
-                driver.reply_message(message.chat_id, message.id, "Wrong syntax")
+                driver.chat_send_message(message.chat_id, "Wrong syntax")
                 ch = 1
             if ch == 0:
                 wd.switch_to.window(win1)
@@ -346,7 +346,7 @@ class GFG:
                     if len(to_lang) == 0 and len(k) != 0:  # if code is there but without language label
                         p = k[0].text
                         get_code = True
-                        driver.reply_message(message.chat_id, message.id, p)
+                        driver.chat_send_message(message.chat_id, p)
 
                     for i in range(
                             len(to_lang)):  # getting the required code in given language if it is there on the page
@@ -366,7 +366,7 @@ class GFG:
                                 for l in j:
                                     p += l.text + "\n"
 
-                            driver.reply_message(message.chat_id, message.id, p)
+                            driver.chat_send_message(message.chat_id, p)
                             get_code = True
                             break
                         if str(srh_lang) in str(to_lang[i].text):
@@ -379,14 +379,14 @@ class GFG:
 
                             print(to_lang[i].text)
 
-                            driver.reply_message(message.chat_id, message.id, p)
+                            driver.chat_send_message(message.chat_id, p)
                             get_code = True
                             break
                     if get_code == False:
-                        driver.reply_message(message.chat_id, message.id,
+                        driver.chat_send_message(message.chat_id,
                                              "Code not in {} language or code not found".format(srh_lang) + "\n" + p)
                 else:
-                    driver.reply_message(message.chat_id, message.id, "No data in GFG")
+                    driver.chat_send_message(message.chat_id, "No data in GFG")
         except Exception as ex:
             print(ex)
 
@@ -446,7 +446,7 @@ class matcher:
             ram.remove(ran_pos2)
 
         out2 = self.list_to_string(self.map_cov)
-        driver.reply_message(message.chat_id, message.id, "Game Started!!" + "\n" + out2+"\nSend #help_match see the controls.")
+        driver.chat_send_message(message.chat_id, "Game Started!!" + "\n" + out2+"\nSend #help_match see the controls.")
 
     def list_to_string(self, li):
         p = []
@@ -458,7 +458,7 @@ class matcher:
 
     def guess(self, driver, message, v1, v2):
         if v1 not in self.match_numbers or v2 not in self.match_numbers:
-            driver.reply_message(message.chat_id, message.id, "Wrong input or pairs already chosen! Check again")
+            driver.chat_send_message(message.chat_id, "Wrong input or pairs already chosen! Check again")
 
         else:
 
@@ -473,7 +473,7 @@ class matcher:
                 if self.corr == self.diff * self.diff:
                     t_taken = str((time.time() - self.tim) // 60) + " minutes\n"
                     out = self.list_to_string(self.map)
-                    driver.reply_message(message.chat_id, message.id,
+                    driver.chat_send_message(message.chat_id,
                                          "*Wow! You won!!!*" + "\nin " + t_taken + "\n" + out)
 
 
@@ -482,21 +482,21 @@ class matcher:
                     self.map_cov[l2[0]][l2[1]] = self.map[l2[0]][l2[1]]
 
                     out = self.list_to_string(self.map_cov)
-                    driver.reply_message(message.chat_id, message.id, "Right! Continue\n" + out)
+                    driver.chat_send_message(message.chat_id, "Right! Continue\n" + out)
             else:
                 self.map_cov[l1[0]][l1[1]] = self.map[l1[0]][l1[1]]
                 self.map_cov[l2[0]][l2[1]] = self.map[l2[0]][l2[1]]
                 out = self.list_to_string(self.map_cov)
-                driver.reply_message(message.chat_id, message.id, "Nope! Wrong Pair" + "\n" + out)
+                driver.chat_send_message(message.chat_id, "Nope! Wrong Pair" + "\n" + out)
 
                 self.map_cov[l1[0]][l1[1]] = "📦"
                 self.map_cov[l2[0]][l2[1]] = "📦"
                 out = self.list_to_string(self.map_cov)
-                driver.reply_message(message.chat_id, message.id, "Try Again!" + "\n" + out)
+                driver.chat_send_message(message.chat_id, "Try Again!" + "\n" + out)
 
     def current_game(self, driver, message):
         out = self.list_to_string(self.map_cov)
-        driver.reply_message(message.chat_id, message.id, "Your current game!\n" + out)
+        driver.chat_send_message(message.chat_id, "Your current game!\n" + out)
 
 
 # class for minesweeper game
@@ -544,14 +544,14 @@ class mine:
         for i in self.ran_pos:
             self.bomb_map[i[0]][i[1]] = "💣"
         out = self.listtostring(self.mine_cov_map)
-        driver.reply_message(message.chat_id, message.id, "Game started! Best of luck 😁\n\n" + out)
+        driver.chat_send_message(message.chat_id, "Game started! Best of luck 😁\n\n" + out)
 
     def choose(self, driver, message, ch):
         print(ch, "chhhh")
 
         if ch not in self.to_be_chosen:
 
-            driver.reply_message(message.chat_id, message.id, "You have already chosen this box or it is invalid! 😐")
+            driver.chat_send_message(message.chat_id, "You have already chosen this box or it is invalid! 😐")
 
         else:
 
@@ -563,7 +563,7 @@ class mine:
                 for i in self.ran_pos:
                     self.mine_cov_map[i[0]][i[1]] = "💣"
                 out = self.listtostring(self.mine_cov_map)
-                driver.reply_message(message.chat_id, message.id, "Oops! You lose the game ☹\n" + out)
+                driver.chat_send_message(message.chat_id, "Oops! You lose the game ☹\n" + out)
                 self.status = "Lose"
 
             else:
@@ -629,11 +629,11 @@ class mine:
                     for i in self.ran_pos:
                         self.mine_cov_map[i[0]][i[1]] = "🚩"
                     out = self.listtostring(self.mine_cov_map)
-                    driver.reply_message(message.chat_id, message.id, "Wow! You have won 🎉🎉\n\n" + out)
+                    driver.chat_send_message(message.chat_id, "Wow! You have won 🎉🎉\n\n" + out)
                     self.status = "Won"
                 else:
                     out = self.listtostring(self.mine_cov_map)
-                    driver.reply_message(message.chat_id, message.id, "Good, Continue 🤫 \n\n" + out)
+                    driver.chat_send_message(message.chat_id, "Good, Continue 🤫 \n\n" + out)
 
     def mark_pos(self, driver, message, ch, m):
         if ch in self.to_be_chosen:
@@ -644,9 +644,9 @@ class mine:
             elif m == 0:
                 self.mine_cov_map[ch[0]][ch[1]] = "🔳"
         else:
-            driver.reply_message(message.chat_id, message.id, "It's already mined")
+            driver.chat_send_message(message.chat_id, "It's already mined")
         out = self.listtostring(self.mine_cov_map)
-        driver.reply_message(message.chat_id, message.id, "Marked/Unmarked\n\n" + out)
+        driver.chat_send_message(message.chat_id, "Marked/Unmarked\n\n" + out)
 
     def check_adjacent_bomb(self, p1, p2, que, flag):
         if self.check_notout_bound_pos(p1, p2):
@@ -709,17 +709,17 @@ class compiler:
             res = list(result.output)[0]
 
             if "Timeout" in res:
-                message.reply_message("Program Timeout:\nCauses can be INFINITE LOOP or INPUT STATEMENTS")
+                driver.chat_send_message(message.chat_id,"Program Timeout:\nCauses can be INFINITE LOOP or INPUT STATEMENTS")
             else:
                 try:
                     driver.wapi_functions.sendMessageWithMentions(message.chat_id, "Output-:\n" + res + "\n\n" + str(
                         result.cpuTime) + " s", "")
                 except:
-                    message.reply_message("Output-:\n" + res + "\n\n" + str(result.cpuTime) + " s")
+                    driver.chat_send_message(message.chat_id,"Output-:\n" + res + "\n\n" + str(result.cpuTime) + " s")
 
             self.inuse = 0
         else:
-            message.reply_message("Sorry!! Only Language supported are:-\n {} ".format(' ,'.join(self.languages)))
+            driver.chat_send_message(message.chat_id,"Sorry!! Only Language supported are:-\n {} ".format(' ,'.join(self.languages)))
 
 
 class ludo:
@@ -854,7 +854,7 @@ class ludo:
         #placing the ludo's pieces at house of respective colour
         self.place_pieces()
         #drawing the board in chat
-        self.draw_board(msg)
+        self.draw_board(driver,msg)
         out="Your pieces colour:\n"
 
         #color to player dict
@@ -863,11 +863,11 @@ class ludo:
         #printing which color is related to which player
         for i in self.players.keys():
             self.c_to_p[self.temp_board[self.players[i].g1.cur_x][self.players[i].g1.cur_y]]=i
-            out+=self.temp_board[self.players[i].g1.cur_x][self.players[i].g1.cur_y]+": "+"@"+i.replace("@c.us","")+" \n"
-        driver.wapi_functions.sendMessageWithMentions(msg.chat_id,out, '')
+            out+=self.temp_board[self.players[i].g1.cur_x][self.players[i].g1.cur_y]+": "+str(driver.get_contact_from_id(i).push_name)+" \n"
+        driver.chat_send_message(msg.chat_id,out)
         if n>2:
             self.li_players[1],self.li_players[2]=self.li_players[2],self.li_players[1]
-        driver.wapi_functions.sendMessageWithMentions(msg.chat_id,"@"+self.li_players[0].replace("@c.us","")+" your turn.\nThrow the dice using #rdice command.",'')
+        driver.chat_send_message(msg.chat_id,str(driver.get_contact_from_id(self.li_players[0]).push_name)+" your turn.\nThrow the dice using #rdice command.")
 
     #placing the ludo's pieces at their new positions
     def place_pieces(self):
@@ -878,11 +878,11 @@ class ludo:
             value.g2.draw_goti(self.temp_board)
 
     #function to draw the board and send it
-    def draw_board(self,msg,ext=""):
+    def draw_board(self,driver,msg,ext=""):
         s=ext+"\n"
         for i in range(len(self.temp_board)):
             s+=''.join(self.temp_board[i])+"\n"
-        msg.reply_message(s)
+        driver.chat_send_message(msg.chat_id,s)
 
 
     #function to check piece can move or not
@@ -901,16 +901,16 @@ class ludo:
             self.dice_got=a
         self.dthrow=1
         d=self.dice_got
-        if d==1:msg.reply_message("🎲1️⃣🎲")
-        if d == 2: msg.reply_message("🎲2️⃣🎲")
-        if d == 3: msg.reply_message("🎲3️⃣🎲")
-        if d == 4: msg.reply_message("🎲4️⃣🎲")
-        if d == 5: msg.reply_message("🎲5️⃣🎲")
-        if d == 6: msg.reply_message("🎲6️⃣🎲")
+        if d==1:driver.chat_send_message(msg.chat_id,"🎲1️⃣🎲")
+        if d == 2: driver.chat_send_message(msg.chat_id,"🎲2️⃣🎲")
+        if d == 3: driver.chat_send_message(msg.chat_id,"🎲3️⃣🎲")
+        if d == 4: driver.chat_send_message(msg.chat_id,"🎲4️⃣🎲")
+        if d == 5: driver.chat_send_message(msg.chat_id,"🎲5️⃣🎲")
+        if d == 6: driver.chat_send_message(msg.chat_id,"🎲6️⃣🎲")
         if self.dice_got==6:
             self.six_counter+=1
             if self.six_counter==3:
-                msg.reply_message("Three six in a row\nSorry! Your chance will skip")
+                driver.chat_send_message(msg.chat_id,"Three six in a row\nSorry! Your chance will skip")
                 self.helper(driver,msg)
                 return
         c_pi1=self.players[msg.sender.id].g1
@@ -967,10 +967,9 @@ class ludo:
             for pe in self.stoplist_4:
                 self.ext+=" "+pe.get_piece()
         # drawing the board in chat
-        self.draw_board(msg,self.ext)
-        driver.wapi_functions.sendMessageWithMentions(msg.chat_id, "@" + self.cur_player_list[
-            self.idx % len(self.cur_player_list)].replace("@c.us",
-                                                          "") + " your turn", '')
+        self.draw_board(driver,msg,self.ext)
+        driver.chat_send_message(msg.chat_id, str(driver.get_contact_from_id(self.cur_player_list[
+            self.idx % len(self.cur_player_list)]).push_name) + " your turn")
 
     #helper function to move forward
     def helper(self,driver,msg):
@@ -1006,10 +1005,10 @@ class ludo:
                 self.ext += " " + pe.get_piece()
 
         # drawing the board in chat
-        self.draw_board(msg,self.ext)
-        driver.wapi_functions.sendMessageWithMentions(msg.chat_id, "@" + self.cur_player_list[
-            self.idx % len(self.cur_player_list)].replace("@c.us",
-                                                          "") + " your turn", '')
+        self.draw_board(driver,msg,self.ext)
+        driver.chat_send_message(msg.chat_id, str(driver.get_contact_from_id(self.cur_player_list[
+                                                                                            self.idx % len(
+                                                                                                self.cur_player_list)]).push_name) + " your turn")
 
 
     def piece_present(self, pie, msg):
@@ -1035,9 +1034,9 @@ class ludo:
                 self.helper2(driver,msg)
 
             else:
-                msg.reply_message("This piece is not open yet 🙄.Choose other one")
+                driver.chat_send_message(msg.chat_id,"This piece is not open yet 🙄.Choose other one")
         elif self.dice_got>len(c_piece.path)-c_piece.step-1:
-            msg.reply_message("Can't move 😅 \nYou require {} or less for this piece.\nMove the other piece".format(len(c_piece.path)-c_piece.step-1))
+            driver.chat_send_message(msg.chat_id,"Can't move 😅 \nYou require {} or less for this piece.\nMove the other piece".format(len(c_piece.path)-c_piece.step-1))
 
         else:
             print(self.dice_got , len(c_piece.path) ,c_piece.step + 1)
@@ -1064,13 +1063,13 @@ class ludo:
                         c_piece.cur_y=-1
                         if self.players[msg.sender.id].g1.win==1 and self.players[msg.sender.id].g2.win==1:
                             self.cur_player_list.remove(msg.sender.id)
-                            msg.reply_message("Congo 🎉 You got rank {}".format(len(self.li_players)-len(self.cur_player_list)))
-                            self.fin_res+="@{} : Rank {}\n".format(msg.sender.id.replace("@c.us",""),len(self.li_players)-len(self.cur_player_list))
+                            driver.chat_send_message(msg.chat_id,"Congo 🎉 You got rank {}".format(len(self.li_players)-len(self.cur_player_list)))
+                            self.fin_res+="{} : Rank {}\n".format(str(driver.get_contact_from_id(msg.sender.id).push_name),len(self.li_players)-len(self.cur_player_list))
                             if len(self.cur_player_list)==1:
-                                self.fin_res+="@{} : Rank {}\n".format(self.cur_player_list[0].replace("@c.us",""),len(self.li_players)-len(self.cur_player_list)+1)
+                                self.fin_res+="{} : Rank {}\n".format(str(driver.get_contact_from_id(self.cur_player_list[0]).push_name),len(self.li_players)-len(self.cur_player_list)+1)
                                 self.cur_player_list=[]
 
-                                driver.wapi_functions.sendMessageWithMentions(msg.chat_id,self.fin_res,'')
+                                driver.chat_send_message(msg.chat_id,self.fin_res)
                             else:
                                 self.helper(driver,msg)
                         else:
@@ -1116,13 +1115,13 @@ class ludo:
             c_piece=self.players[msg.sender.id].g1
 
         if c_piece.cur_x<0:
-            msg.reply_message("This piece is already in the house.Choose other")
+            driver.chat_send_message(msg.chat_id,"This piece is already in the house.Choose other")
         else:
             self.move_piece_helper(driver,msg,c_piece)
 
     #function to send current ludo board
-    def current_board(self,msg):
-        self.draw_board(msg,self.ext)
+    def current_board(self,driver,msg):
+        self.draw_board(driver,msg,self.ext)
 
     #quit ludo
     def quit(self,driver,msg):
@@ -1221,7 +1220,7 @@ class crypto:
         for c in coin_list:
             self.coin_dict[c['symbol']]=c['id']
 
-    def price(self,msg,coin):
+    def price(self,driver,msg,coin):
         coin=coin.lower()
         if coin in self.coin_dict:
             try:
@@ -1232,14 +1231,14 @@ class crypto:
                 for curr,price in data[self.coin_dict[coin]].items():
                     out+="*{}{}* = *{}{}* \n\n".format(coin.upper(),curr.upper(),symbol[i],('%.14f'%float(price)).rstrip('0').rstrip('.'))
                     i+=1
-                msg.reply_message(out)
+                driver.chat_send_message(msg.chat_id,out)
             except Exception as e:
                 print(e)
-                msg.reply_message("Some error occured!!")
+                driver.chat_send_message(msg.chat_id,"Some error occured!!")
         else:
-            msg.reply_message("*Coin not found!!*")
+            driver.chat_send_message(msg.chat_id,"*Coin not found!!*")
 
-    def news(self,msg,api,topic):
+    def news(self,driver,chat_id,api,topic):
         try:
             if topic!='':
                 data=requests.get(self.cyptopanic_base_url+'auth_token={}&public=true&kind=news&currencies={}'.format(api,topic)).json()
@@ -1249,26 +1248,26 @@ class crypto:
             for news in data['results']:
                 out+="🌟 "+news['slug'].replace("-"," ")+"\n\n"
             if out=='':
-                msg.reply_message("*No Data Found!!*")
+                driver.chat_send_message(chat_id,"*No Data Found!!*")
             else:
-                msg.reply_message(out)
+                driver.chat_send_message(chat_id,out)
 
         except Exception as e:
             print(e)
-            msg.reply_message("Sry!!Some error occurred")
+            driver.chat_send_message(chat_id,"Sry!!Some error occurred")
 
-    def detail(self,msg,coin):
+    def detail(self,driver,msg,coin):
         if coin in self.coin_dict:
             data=requests.get(self.coingecko_base_url+'coins/markets?vs_currency=usd&ids={}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=1h'.format(self.coin_dict[coin])).json()
             if len(data)==0:
-                msg.reply_message("*No Data Found*")
+                driver.chat_send_message(msg.chat_id,"*No Data Found*")
             else:
                 out="----------------- *{}* ---------------------\n\n".format(self.coin_dict[coin].upper())
                 data=data[0]
                 out+='*Name:* {}\n\n*Current Price:* {}\n\n*Market Cap:* {}\n\n*Market Cap Rank:* {}\n\n*Total Volume:* {}\n\n*24h High:* {}\n\n*24h Low:* {}\n\n*24h Price Change:* {}\n\n*24h Price Change%:* {}\n\n*1h Price Change%:* {}\n\n*24h Market Cap Change:* {}\n\n*24h Market Cap Change%:* {}\n\n*Circulating Supply:* {}\n\n*Total Supply:* {}\n\n*Max Supply:* {}\n\n*ATH Value:* {}\n'.format(data['name'],data['current_price'],data['market_cap'],data['market_cap_rank'],data['total_volume'],data['high_24h'],data['low_24h'],data['price_change_24h'],data['price_change_percentage_24h'],data['price_change_percentage_1h_in_currency'],data['market_cap_change_24h'],data['market_cap_change_percentage_24h'],data['circulating_supply'],data['total_supply'],data['max_supply'],data['ath'])
-                msg.reply_message(out)
+                driver.chat_send_message(msg.chat_id,out)
         else:
-            msg.reply_message("*Coin not found!!*")
+            driver.chat_send_message(msg.chat_id,"*Coin not found!!*")
 
     def mmi(self,driver,msg):
         response = requests.get("https://alternative.me/crypto/fear-and-greed-index.png")
@@ -1284,16 +1283,37 @@ class Calculator:
         def calc(self,driver,msg,s):
             try:
                 a = eval(s)
-                msg.reply_message(str(a))
+                driver.chat_send_message(msg.chat_id,str(a))
             except Exception as e:
-                msg.reply_message(str(e))
+                driver.chat_send_message(msg.chat_id,str(e))
 
+class db_data_to_dictionary:
+
+    def get(self,out,n,k):
+        if out[0] == None:
+            d = dict()
+        else:
+            out = out[0]
+            l = len(out) // n
+            i = 0
+            j = l*k
+            d = dict()
+            for i in range(l):
+                id=out[i].replace("\"","")
+                if out[j].isnumeric():
+                    val=int(out[j])
+                else:
+                    val=out[j]
+                d[id] = val
+                i += 1
+                j += 1
+        return d
 
 class cmd_suggesstion:
     def __init__(self, allcmds):
         self.all_cmd = allcmds
 
-    def suggest(self, message, cmd):
+    def suggest(self, driver,message, cmd):
 
         cmd_len = len(cmd)
 
@@ -1339,7 +1359,7 @@ class cmd_suggesstion:
         fin_list= {lcs_list[-1][1], lcs_list[-2][1], comman_chr_list[-1][1], comman_chr_list[-2][1]}
         out=",".join(fin_list)
 
-        message.reply_message("Wrong Command!!\nI think you mean one of the following:\n"+out+"\nFor more commands use #help")
+        driver.chat_send_message(message.chat_id,"Wrong Command!!\nI think you mean one of the following:\n"+out+"\nFor more commands use #help")
 
 
 

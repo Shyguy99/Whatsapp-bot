@@ -1,6 +1,7 @@
 import threading
 from itertools import count
 import karma_bot
+from datetime import date
 from selenium import webdriver
 from openwa import WhatsAPIDriver
 import time
@@ -25,55 +26,33 @@ while True:
                 "#currtic", "#quit_tic", "#help_tic", "#wordgame", "#currword", "#ans ", "#join ", "#score", "#skip",
                 "#help_wgame", "#gfg#", "#matchgame", "#help_match", "#currmatch", "#quitmatch", "#m", "#minegame",
                 "#mine ", "#currmine", "#minemark", "#mineunmark", "#help_mine", "#wiki ", "#add", "#kick", "#link",
-                "#tagall", "#tagadmins", "#source"]
+                 "#source"]
 
     conn = psycopg2.connect(os.environ.get("PGSQL_SERVER"), sslmode='require')
 
     cur = conn.cursor()
 
-    # dict of groups
-    group = dict()
+    # dict of group where bot can run
     cur.callproc('get_chats')
-    getchats = cur.fetchone()[0]
-    l = len(getchats)//2
-    i = 0
-    j = l
-    for i in range(l):
-        id = getchats[i].replace("\"", "" )
-        group[id] = int(getchats[j])
-        i += 1
-        j += 1
-    print(group)
+    out = cur.fetchone()
+    group = karma_bot.db_data_to_dictionary().get(out, 3, 1)
+    print(group,(len(group)))
 
-    # getting score_board and players list from databse
+    # getting all_chats bot added date
+    bot_added = karma_bot.db_data_to_dictionary().get(out, 3, 2)
+    print(bot_added)
+
+    # getting score_board and players list from database
     cur.callproc('get_score')
     out = cur.fetchone()
-    if out[0] == None:
-        score = dict()
-    else:
-        out = out[0]
-        l = len(out) // 2
-        i = 0
-        j = l
-        score = dict()
-        for i in range(l):
-            score[out[i]] = int(out[j])
-            i += 1
-            j += 1
+    score = karma_bot.db_data_to_dictionary().get(out, 2, 1)
+
+    #getting players
     cur.callproc('get_player')
     out = cur.fetchone()
-    if out[0] == None:
-        player = dict()
-    else:
-        out = out[0]
-        l = len(out) // 2
-        i = 0
-        j = l
-        player = dict()
-        for i in range(l):
-            player[out[i]] = out[j]
-            i += 1
-            j += 1
+    player = karma_bot.db_data_to_dictionary().get(out, 2, 1)
+
+    #getting names of al
 
     # creating all classes object
     sticker = karma_bot.karma_sticker()
@@ -128,6 +107,7 @@ while True:
         global s_adding
         global p_adding
         global s_time
+        global flag
 
         if message.chat_id in group:
             all_msg.append(message)
@@ -139,15 +119,17 @@ while True:
                 db_chats = 1
 
                 try:
-                    cur.execute('CALL add_chat(\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"", 1))
+                    cur.execute('CALL add_chat(\'{}\',\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"", 1,str(date.today().strftime("%Y-%m-%d")
+)))
                     conn.commit()
                     group[message.chat_id] = 1
+                    bot_added[message.chat_id]=str(date.today().strftime("%Y-%m-%d"))
 
-                    message.reply_message("Send #help to check out all the features of bot ✨")
+                    driver.chat_send_message(message.chat_id,"Send #help to check out all the features of bot ✨")
                 except Exception as e:
                     print("Starting bot for group failed"+str(e))
                     driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us","Starting bot for group failed"+str(e))
-                    message.reply_message("I-Bot failed to start for this chat!")
+                    driver.chat_send_message(message.chat_id,"I-Bot failed to start for this chat!")
                 db_chats = 0
 
             if message.type == 'chat' and message.content == '#on' and db_chats == 0:
@@ -157,23 +139,26 @@ while True:
                     if group[message.chat_id] == 0:
 
                         try:
-                            cur.execute('CALL add_chat(\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"", 1))
+                            cur.execute('CALL add_chat(\'{}\',\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"", 1,str(date.today().strftime("%Y-%m-%d")
+)))
                             conn.commit()
 
                             group[message.chat_id] = 1
-                            message.reply_message("I-Bot is now active ✨")
+                            bot_added[message.chat_id] = str(date.today().strftime("%Y-%m-%d"))
+
+                            driver.chat_send_message(message.chat_id,"I-Bot is now active ✨")
                         except Exception as e:
                             driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us",
                                                      "Starting bot for group failed" + str(e))
 
                             print("Starting bot for group failed"+str(e))
 
-                            message.reply_message("I-Bot failed to start for this chat!")
+                            driver.chat_send_message(message.chat_id,"I-Bot failed to start for this chat!")
 
                     else:
-                        message.reply_message("I-Bot is already ON for this group")
+                        driver.chat_send_message(message.chat_id,"I-Bot is already ON for this group")
                 else:
-                    message.reply_message("Command only for admins!")
+                    driver.chat_send_message(message.chat_id,"Command only for admins!")
                 db_chats=0
             if message.type == 'chat':
                 if message.content != "#on" and message.chat_id in group and group[message.chat_id] == 1:
@@ -182,20 +167,22 @@ while True:
                             message.chat_id)):
                         db_chats = 1
                         try:
-                            cur.execute('CALL add_chat(\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"", 0))
+                            cur.execute('CALL add_chat(\'{}\',\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"", 0,str(date.today().strftime("%Y-%m-%d")
+)))
                             conn.commit()
                             group[message.chat_id] = 0
-                            message.reply_message("I-Bot is now inactive for this chat 🥺")
+
+                            driver.chat_send_message(message.chat_id,"I-Bot is now inactive for this chat 🥺")
 
                         except Exception as e:
                             print(e)
-                            message.reply_message("I-Bot failed to start for this chat!")
+                            driver.chat_send_message(message.chat_id,"I-Bot failed to start for this chat!")
                         db_chats = 0
 
 
 
                     elif message.content=="#ping":
-                        message.reply_message("Pong!!")
+                        driver.chat_send_message(message.chat_id,"Pong!!")
 
                     # commands for help and controls
                     elif (message.content == '#help' or message.content == '#command'):
@@ -212,24 +199,24 @@ while True:
                         s.append("*Tagger and Counter*✅\n\n-Now you will not miss the tags\nCheck where you were tagged by using *#last_tag* command.\n-Use it again to check second last tag and so on.\n-You can check upto last 50 tags.\n\n-You can also check the total number of messages you have sent by using *#msg_count* .\n\n--------------------------------------------------\n")
                         s.append("*Some admin commands*\n\n- *#add* _919876543210_\n- *#kick* _tag the person you want to remove_\n- *#link* for getting the link of the group\n- *#tagall* \n- *#tagadmins* \n-Note-: You can also add some text after #tagall and #tagadmins.\n\nBot created by *_Karma_*\nGithub link-:https://github.com/Shyguy99/Whatsapp-bot")
                         out=''.join(s)
-                        driver.reply_message(message.chat_id, message.id, out)
+                        driver.chat_send_message(message.chat_id, out)
 
                     elif message.content == "#help_ludo":
                         s = """*Welcome to the I-Bot Ludo*\n\nTo start the game send \n*#ludo*  _and tag the members you want to play with_\n\nTo roll the dice send\n*#rdice*\n\nTo move your _heart_ piece send\n*#pmove h*\n\nTo move your circle piece send \n*#pmove c*\n\nTo see current ludo board send\n*#currludo*\n\nTo quit your game send\n*#quitludo*"""
-                        driver.reply_message(message.chat_id, message.id, s)
+                        driver.chat_send_message(message.chat_id, s)
 
                     elif message.content == '#help_wgame':
                         s = """*Welcome to the Word Game*\n\n*First join by entering your name send*\n#join _your name_\n\n*To guess the word send*\n#ans _your answer_\n\n*To check the score send*\n#score\n\n*To see the current word enter*\n#currword\n\n*If unable to guess and want to skip to the next word send*\n#skip\n\n*NOTE- IT'LL REQUIRE 3 PEOPLE TO SKIP CURRENT WORD*"""
-                        driver.reply_message(message.chat_id, message.id, s)
+                        driver.chat_send_message(message.chat_id, s)
                     elif message.content == '#help_tic':
                         s = """*Welcome to Tic Tac Toe Game*\n\n*Instructions*\n\nSend the corresponding number to the block where you want to place your symbol*\n\n#1 | #2 | #3\n#4 | #5 | #6\n#7 | #8 | #9\n*To end the game early send *#quit_tic*\n*To see your current game board uses #currtic"""
-                        driver.reply_message(message.chat_id, message.id, s)
+                        driver.chat_send_message(message.chat_id, s)
                     elif message.content == "#help_match":
                         s = """*Welcome to Match Emoji Game*\n\n*To end your current game send #quitmatch\n\n*To guess the pairs send #m with two pairs which you want to try matching\n*Ex. #m xy qr means xth row and yth column match with qth row and rth column\n*To check your curren game send #currmatch"""
-                        driver.reply_message(message.chat_id, message.id, s)
+                        driver.chat_send_message(message.chat_id, s)
                     elif message.content == "#help_mine":
                         s = """*Welcome to Minesweeper Game*\n\n*To choose a position send #mine xy where x is the row and y is column\n*To check your curren game send #currmine \n*To mark a position send #minemark xy\n*To unmark a position send #mineunmark xy."""
-                        driver.reply_message(message.chat_id, message.id, s)
+                        driver.chat_send_message(message.chat_id, s)
 
 
 
@@ -239,20 +226,20 @@ while True:
                             try:
                                 exec(str(message.content))
                             except Exception as e:
-                                message.reply_message(str(e))
+                                driver.chat_send_message(message.chat_id,str(e))
                         else:
-                            message.reply_message("Owner command only!")
+                            driver.chat_send_message(message.chat_id,"Owner command only!")
 
                     #reply something directly from code
                     elif "#reply" in message.content[:6]:
                         if str(message.sender.id) == YOUR_MOBILE_NUMBER + "@c.us":
                             k=message.content.replace("#reply","").strip()
                             try:
-                                exec("message.reply_message(str({}))".format(k))
+                                exec("driver.chat_send_message(message.chat_id,str({}))".format(k))
                             except Exception as e:
-                                message.reply_message(str(e))
+                                driver.chat_send_message(message.chat_id,str(e))
                         else:
-                            message.reply_message("Owner command only!")
+                            driver.chat_send_message(message.chat_id,"Owner command only!")
 
                     # to get all people message count
                     elif message.content == "#mcount":
@@ -275,15 +262,15 @@ while True:
                                 out = ""
                                 for key, value in all_count.items():
                                     out += str(value) + "--> " + str(key) + "\n"
-                                driver.wapi_functions.sendMessage(message.chat_id,"--Count of messages of all members--\n\n" + out)
+                                driver.wapi_functions.sendMessage(message.chat_id,"Count of messages of all members\n(From {})\n\n".format(bot_added[message.chat_id]) + out)
                             except Exception as e:
                                 driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us",
-                                                         "Getting all counts got error"+str(e))
+                                                         "Getting all counts got error:\n"+str(e))
 
-                                print("Getting all counts got error"+str(e))
+                                print("Getting all counts got error:\n"+str(e))
                             db_members = 0
                         else:
-                            message.reply_message("Admin Command!!")
+                            driver.chat_send_message(message.chat_id,"Admin Command!!")
 
                     # ludo game
                     elif "#ludo" in message.content:
@@ -297,7 +284,7 @@ while True:
                         fin_s = set(fin_s)
                         print(fin_s)
                         if len(fin_s) < 2 or len(fin_s) > 4:
-                            message.reply_message(
+                            driver.chat_send_message(message.chat_id,
                                 "Number of players must be between 2 to 4.\nCurrent number of players- {}").format(
                                 str(len(fin_s)))
                         else:
@@ -322,9 +309,9 @@ while True:
                                     for i in fin_s:
                                         ludo_game_dict[i] = ludo_game_dict[message.sender.id]
                                 else:
-                                    message.reply_message("Invalid Players")
+                                    driver.chat_send_message(message.chat_id,"Invalid Players")
                             else:
-                                message.reply_message("One or more player is already in a game.")
+                                driver.chat_send_message(message.chat_id,"One or more player is already in a game.")
 
                     elif "#rdice" in message.content:
                         if message.sender.id in ludo_game_dict:
@@ -337,12 +324,12 @@ while True:
                                         s = 0
                                     ludo_game_dict[message.sender.id].dice(driver, message, s)
                                 else:
-                                    message.reply_message(
+                                    driver.chat_send_message(message.chat_id,
                                         "You have already threw the dice.Move your dice by sending #pmove h or #pmove c")
                             else:
-                                message.reply_message("Not your chance")
+                                driver.chat_send_message(message.chat_id,"Not your chance")
                         else:
-                            message.reply_message("You are not in the game")
+                            driver.chat_send_message(message.chat_id,"You are not in the game")
 
                     elif "#pmove" in message.content:
                         if message.sender.id in ludo_game_dict:
@@ -359,36 +346,36 @@ while True:
                                                 for pl in t:
                                                     del ludo_game_dict[pl]
                                         else:
-                                            message.reply_message("Wrong piece!! Choose c or h")
+                                            driver.chat_send_message(message.chat_id,"Wrong piece!! Choose c or h")
                                     else:
-                                        message.reply_message(
+                                        driver.chat_send_message(message.chat_id,
                                             "Empty parameter! Choose a piece h or c\nExample:- #pmove c")
                                 else:
-                                    message.reply_message("First you have to throw the dice by sending #rdice")
+                                    driver.chat_send_message(message.chat_id,"First you have to throw the dice by sending #rdice")
                             else:
-                                message.reply_message("Not your chance")
+                                driver.chat_send_message(message.chat_id,"Not your chance")
                         else:
-                            message.reply_message("You are not in the game")
+                            driver.chat_send_message(message.chat_id,"You are not in the game")
 
                     elif message.content == "#currludo":
                         if message.sender.id in ludo_game_dict:
-                            ludo_game_dict[message.sender.id].current_board(message)
+                            ludo_game_dict[message.sender.id].current_board(driver,message)
 
                         else:
-                            message.reply_message("You are not in the game.")
+                            driver.chat_send_message(message.chat_id,"You are not in the game.")
 
                     elif message.content == "#quitludo":
                         if message.sender.id in ludo_game_dict:
                             ludo_game_dict[message.sender.id].quit(driver, message)
                             print(ludo_game_dict[message.sender.id].cur_player_list)
                             if len(ludo_game_dict[message.sender.id].cur_player_list) == 1:
-                                message.reply_message("Game ended!")
+                                driver.chat_send_message(message.chat_id,"Game ended!")
                                 del ludo_game_dict[ludo_game_dict[message.sender.id].cur_player_list[0]]
                             del ludo_game_dict[message.sender.id]
-                            message.reply_message("Quitted!!")
+                            driver.chat_send_message(message.chat_id,"Quitted!!")
 
                         else:
-                            message.reply_message("You are not in the game.")
+                            driver.chat_send_message(message.chat_id,"You are not in the game.")
 
 
 
@@ -402,7 +389,7 @@ while True:
                     elif message.content == '#wordgame':
                         if Word.start == 1:
 
-                            message.reply_message(
+                            driver.chat_send_message(message.chat_id,
                                 "Word Game already in progress 🏁\n Send #currword to check the word to be guessed.")
                         else:
                             Word.wgame_start(driver, message)
@@ -418,12 +405,12 @@ while True:
 
                                         Word.new_word(driver, message)
                                 else:
-                                    message.reply_message(
+                                    driver.chat_send_message(message.chat_id,
                                         "Empty Answer.Write your answer after #ans\nCheck current word by sending #currword")
 
 
                             else:
-                                message.reply_message("You first have to join the game\nSend #join your name")
+                                driver.chat_send_message(message.chat_id,"You first have to join the game\nSend #join your name")
                         else:
                             Word.wgame_start(driver, message)
 
@@ -433,33 +420,33 @@ while True:
                             s = s.strip()
                             if len(s) != 0:
                                 if message.sender.id in Word.players.keys():
-                                    message.reply_message(
+                                    driver.chat_send_message(message.chat_id,
                                         "You are already in the game! 🤓\nSend #ans your answer to guess.")
 
                                 elif s in Word.players.values():
-                                    message.reply_message("Name already taken!")
+                                    driver.chat_send_message(message.chat_id,"Name already taken!")
                                 else:
                                     if p_adding == 0 and s_adding == 0:
                                         p_adding = 1
                                         s_adding = 1
                                         cur.execute('CALL add_player(\'{}\',\'{}\')'.format(message.sender.id, s))
                                         conn.commit()
-                                        Word.enter_game(message, s)
+                                        Word.enter_game(driver,message, s)
 
                                         p_adding = 0
                                         s_adding = 0
                                     else:
-                                        message.reply_message("Wait! Try again")
+                                        driver.chat_send_message(message.chat_id,"Wait! Try again")
                             else:
-                                message.reply_message("Empty Name!!Write your name after #join.")
+                                driver.chat_send_message(message.chat_id,"Empty Name!!Write your name after #join.")
                         else:
-                            message.reply_message("Game haven't started yet!\nSend #wordgame to start.")
+                            driver.chat_send_message(message.chat_id,"Game haven't started yet!\nSend #wordgame to start.")
 
                     elif message.content == '#skip':
                         if Word.start == 1:
                             Word.skip(driver, message)
                         else:
-                            message.reply_message("Game not started yet!\nSend #wordgame to start")
+                            driver.chat_send_message(message.chat_id,"Game not started yet!\nSend #wordgame to start")
 
                     elif message.content == '#currword':
                         if Word.start == 1:
@@ -468,7 +455,7 @@ while True:
                             Word.wgame_start(driver, message)
 
                     elif message.content == '#score':
-                        Word.show_score(message)
+                        Word.show_score(driver,message)
 
 
 
@@ -482,20 +469,20 @@ while True:
                                              ("\"" + message.chat_id + "\"", "\"" + message.sender.id + "\""))
                                 out = cur.fetchone()
                                 if out[0] == None:
-                                    message.reply_message(
+                                    driver.chat_send_message(message.chat_id,
                                         "You don't have any tag left or your tags are updating\nTry later.")
                                 else:
                                     out = out[0]
                                     msg = out
-                                    message.reply_message(msg)
+                                    driver.chat_send_message(message.chat_id,msg)
                             except Exception as e:
                                 driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us",
-                                                         "Getting last tag got error:"+ str(e))
-                                print("Getting last tag got error:"+ str(e))
-                                message.reply_message("Got some error!\nCause can be:Tagged Message Deleted")
+                                                         "Getting last tag got error:\n"+ str(e))
+                                print("Getting last tag got error:\n"+ str(e))
+                                driver.chat_send_message(message.chat_id,"Got some error!\nCause can be:Tagged Message Deleted")
                             db_members = 0
                         else:
-                            message.reply_message("Try again in 2 sec. Let me process last query")
+                            driver.chat_send_message(message.chat_id,"Try again in 2 sec. Let me process last query")
 
                     # to get msg_count
                     elif message.content == "#msg_count":
@@ -506,19 +493,19 @@ while True:
                                              ("\"" + message.chat_id + "\"", "\"" + message.sender.id + "\""))
                                 out = cur.fetchone()
                                 if out[0] == None:
-                                    message.reply_message("Your message count:\n*1*.")
+                                    driver.chat_send_message(message.chat_id,"Your message count:\n\n*1*.")
                                 else:
                                     out = out[0]
-                                    message.reply_message("Your message count from 06-10-21:\n*{}*".format(out))
+                                    driver.chat_send_message(message.chat_id,"Your message count from {}:\n\n*{}*".format(bot_added[message.chat_id],out))
                             except Exception as e:
                                 driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us",
-                                                         "Getting msg count got error:"+str(e))
-                                print("Getting msg count got error:"+str(e))
+                                                         "Getting msg count got error:\n"+str(e))
+                                print("Getting msg count got error:\n"+str(e))
                             db_members = 0
 
                         else:
 
-                            message.reply_message("Try again in 2 sec. Let me process last query")
+                            driver.chat_send_message(message.chat_id,"Try again in 2 sec. Let me process last query")
 
 
 
@@ -536,14 +523,14 @@ while True:
                                     tic_player_dict[p2] = tic_player_dict[message.sender.id]
 
                                 else:
-                                    driver.reply_message(message.chat_id, message.id,
+                                    driver.chat_send_message(message.chat_id,
                                                          "The person you are trying to play with is already in a game 😐")
                             else:
-                                driver.reply_message(message.chat_id, message.id,
+                                driver.chat_send_message(message.chat_id,
                                                      "Wrong Command 🤐!\nType #ticgame <tag the person>.")
 
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You are already in a game!\nQuit it by sending #quit_tic")
 
                     elif "#" in message.content and len(message.content) == 2 and str(message.content)[1].isdigit():
@@ -556,7 +543,7 @@ while True:
                                 del tic_player_dict[pl[0]]
                                 del tic_player_dict[pl[1]]
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You don't have any match!\nType #ticgame tag the person to play with. to start the game.")
 
                     elif message.content == "#quit_tic":
@@ -572,7 +559,7 @@ while True:
                             driver.wapi_functions.sendMessageWithMentions(message.chat_id, out1, "")
 
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You don't have any ongoing match!\nType #ticgame tag the person to play with to start the game.")
 
                     elif message.content == "#currtic":
@@ -580,7 +567,7 @@ while True:
                             tic_player_dict[message.sender.id].current_match()
 
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You don't have any ongoing match!\nType #ticgame tag the person to play with. to start the game.")
 
 
@@ -590,7 +577,7 @@ while True:
                         if s!="":
                             karma_bot.Calculator().calc(driver,message,s)
                         else:
-                            message.reply_message("Empty expression. Write some exp after *#calc* \nExample:- #calc 2+12")
+                            driver.chat_send_message(message.chat_id,"Empty expression. Write some exp after *#calc* \nExample:- #calc 2+12")
 
 
                     # command for getting code from Geeks For Geeks
@@ -610,16 +597,16 @@ while True:
                             else:
                                 match_player_dict[message.sender.id] = (karma_bot.matcher(driver, message))
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You already started the game!\n Send #quitmatch to end ur game")
 
                     # command for quiting match game
                     elif message.content == "#quitmatch":
                         if message.sender.id in match_player_dict:
                             del match_player_dict[message.sender.id]
-                            driver.reply_message(message.chat_id, message.id, "Your game deleted!")
+                            driver.chat_send_message(message.chat_id, "Your game deleted!")
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You are not in the game!\n Send #matchgame to start.")
 
                     # command for guessing pairs in match game
@@ -632,7 +619,7 @@ while True:
                                 s1 = s[0]
                                 s2 = s[1]
                                 if s1 == s2:
-                                    driver.reply_message(message.chat_id, message.id, "Don't choose same pairs")
+                                    driver.chat_send_message(message.chat_id, "Don't choose same pairs")
 
                                 elif s1.isdigit() and s2.isdigit():
                                     match_player_dict[message.sender.id].guess(driver, message, s1, s2)
@@ -642,14 +629,14 @@ while True:
                                         del match_player_dict[message.sender.id]
 
                                 else:
-                                    driver.reply_message(message.chat_id, message.id,
+                                    driver.chat_send_message(message.chat_id,
                                                          "Wrong input! Please check\n You have to choose two pairs Example:- #m 12 34")
                             else:
-                                message.reply_message(
+                                driver.chat_send_message(message.chat_id,
                                     "Wrong input! Please check\n You have to choose two pairs \nExample:- #m 12 34")
 
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "Your game haven't started yet!!\nStart it by sending #matchgame")
 
                     # command for checking current match game
@@ -657,7 +644,7 @@ while True:
                         if message.sender.id in match_player_dict:
                             match_player_dict[message.sender.id].current_game(driver, message)
                         else:
-                            driver.reply_message(message.chat_id, message.id, "Your game haven't started yet!!")
+                            driver.chat_send_message(message.chat_id, "Your game haven't started yet!!")
 
 
 
@@ -675,9 +662,9 @@ while True:
                             elif len(s) == 1:
                                 mine_player_dict[message.sender.id] = karma_bot.mine(driver, message)
                             else:
-                                driver.reply_message(message.chat_id, message.id, "Wrong input 😐")
+                                driver.chat_send_message(message.chat_id, "Wrong input 😐")
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You have already started the game!🤐\nQuit previous game to start again")
 
                     # command to choose position in mine map to mine
@@ -692,15 +679,15 @@ while True:
                                         message.sender.id].status == "Won":
                                         del mine_player_dict[message.sender.id]
                                 else:
-                                    driver.reply_message(message.chat_id, message.id,
+                                    driver.chat_send_message(message.chat_id,
                                                          "Invalid command!\n Check valid command using #help_mine")
                             else:
-                                message.reply_message(
+                                driver.chat_send_message(message.chat_id,
                                     "Empty parameter!You have to choose the box using row and column\nExample:-#mine 23")
 
 
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You haven't started your game yet 😅\nStart it by sending #minegame")
 
 
@@ -716,34 +703,39 @@ while True:
                                     else:
                                         mine_player_dict[message.sender.id].mark_pos(driver, message, s[1], 1)
                                 else:
-                                    driver.reply_message(message.chat_id, message.id,
+                                    driver.chat_send_message(message.chat_id,
                                                          "Invalid command!\n Check valid command using #help_mine")
                             else:
-                                message.reply_message(
+                                driver.chat_send_message(message.chat_id,
                                     "Empty parameter!You have to choose the box\nExample:-#minemark 34")
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You haven't started your game yet 😅\nStart it by sending #minegame")
 
                     elif message.content == "#currmine":
                         if message.sender.id in mine_player_dict:
                             s = mine_player_dict[message.sender.id].mine_cov_map
                             s = mine_player_dict[message.sender.id].listtostring(s)
-                            driver.reply_message(message.chat_id, message.id, "Your ongoing game!\n\n" + s)
+                            driver.chat_send_message(message.chat_id, "Your ongoing game!\n\n" + s)
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You haven't started your game yet 😅\nStart it by sending #minegame")
 
                     elif message.content == "#quitmine":
                         if message.sender.id in mine_player_dict:
                             del mine_player_dict[message.sender.id]
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You have quit your game in middle!🤭\n*LOSER!!*")
                         else:
-                            driver.reply_message(message.chat_id, message.id,
+                            driver.chat_send_message(message.chat_id,
                                                  "You haven't started your game yet 😅\nStart it by sending #minegame")
 
 
+                    elif "current transaction is aborted, commands ignored until end of transaction block" in message.content:
+                        flag=1
+
+
+                    #wikipedia command
                     elif "#wiki" in message.content[:6]:
                         s = message.content.replace("#wiki", "")
                         s = s.strip()
@@ -751,12 +743,12 @@ while True:
 
                             try:
                                 out = wikipedia.page(s)
-                                message.reply_message(
+                                driver.chat_send_message(message.chat_id,
                                     '*Title* :{}\n*Source* : {}\n{}'.format(out.title, out.url, out.content))
                             except:
-                                message.reply_message("Can't find anything!!")
+                                driver.chat_send_message(message.chat_id,"Can't find anything!!")
                         else:
-                            message.reply_message(
+                            driver.chat_send_message(message.chat_id,
                                 "Empty parameter!!You have give some word to be searched\nExample:-#wiki money")
 
                     elif len(message.content) > 5 and "#run " in message.content[0:5]:
@@ -778,51 +770,52 @@ while True:
 
                                     COMP.run(driver, message, lang, code)
                                 else:
-                                    message.reply_message(
+                                    driver.chat_send_message(message.chat_id,
                                         "Empty Code!!Write some code after the command\Example:-\n#run python3#\nprint(\"Hello World\")")
                             else:
 
-                                message.reply_message(
+                                driver.chat_send_message(message.chat_id,
                                     "Someone using the compiler.\nLet him/her finish or use #resetrun to terminate")
 
                         except Exception as e:
 
                             print(e)
 
-                            message.reply_message("Some Error Occured")
+                            driver.chat_send_message(message.chat_id,"Some Error Occured")
                             COMP.inuse = 0
 
 
                     elif message.content == "#runlimit":
-                        message.reply_message("Limit Left: " + str(200 - int(COMP.r.usage())))
+                        driver.chat_send_message(message.chat_id,"Limit Left: " + str(200 - int(COMP.r.usage())))
                     elif message.content == "#listlang":
                         s = ','.join(COMP.languages)
-                        message.reply_message("Languages supported by compiler:-\n" + s)
+                        driver.chat_send_message(message.chat_id,"Languages supported by compiler:-\n" + s)
 
                     elif message.content == "#resetrun":
                         COMP.inuse = 0
-                        message.reply_message("Program Terminated!!")
+                        driver.chat_send_message(message.chat_id,"Program Terminated!!")
 
                     # crypto commands
                     elif "#cprice" in message.content[:8]:
                         s = message.content.replace("#cprice", "")
                         s = s.strip()
                         if s != '':
-                            Crypto.price(message, s)
+                            Crypto.price(driver,message, s)
                         else:
-                            message.reply_message("Empty Parameter! Type the coin symbol\nExample:- #cprice btc")
+                            driver.chat_send_message(message.chat_id,"Empty Parameter! Type the coin symbol\nExample:- #cprice btc")
+
                     elif "#cnews" in message.content[:7]:
                         s = message.content.replace("#cnews", "")
                         s = s.strip()
 
-                        Crypto.news(message, CRYPTOPANIC_API, s)
+                        Crypto.news(driver,message.chat_id, CRYPTOPANIC_API, s)
                     elif "#cdetail" in message.content[:10]:
                         s = message.content.replace("#cdetail", "")
                         s = s.strip()
                         if s != '':
-                            Crypto.detail(message, s)
+                            Crypto.detail(driver,message, s)
                         else:
-                            message.reply_message("Empty Parameter! Type the coin symbol\nExample:- #cdetail btc")
+                            driver.chat_send_message(message.chat_id,"Empty Parameter! Type the coin symbol\nExample:- #cdetail btc")
 
                     elif message.content=="#mmi":
                         Crypto.mmi(driver,message)
@@ -843,42 +836,42 @@ while True:
                                                                                s.replace("@", "") + "@c.us"):
                                                 print("Participant Removed")
                                             else:
-                                                message.reply_message("Can't remove")
+                                                driver.chat_send_message(message.chat_id,"Can't remove")
 
                                         else:
                                             if driver.add_participant_group(message.chat_id, s + '@c.us'):
                                                 print("Participant added")
                                             else:
-                                                message.reply_message(
+                                                driver.chat_send_message(message.chat_id,
                                                     "Fail!!\n Number is invalid or Format for adding number is:\n#add 918888888888")
 
                                     else:
                                         driver.wapi_functions.sendMessage(message.chat_id, "Bot not admin yet")
                                 else:
-                                    message.reply_message('Sorry!! Admin command')
+                                    driver.chat_send_message(message.chat_id,'Sorry!! Admin command')
                             except Exception as e:
                                 print(f"Error -> {str(e)}")
-                                message.reply_message("Fail!!")
+                                driver.chat_send_message(message.chat_id,"Fail!!")
                         else:
-                            message.reply_message("No person/number tagged!!")
+                            driver.chat_send_message(message.chat_id,"No person/number tagged!!")
 
                     # for getting group link
                     elif message.content == "#link":
                         try:
 
-                            message.reply_message(driver.wapi_functions.getGroupInviteLink(message.chat_id))
+                            driver.send_message_with_auto_preview(message.chat_id,driver.wapi_functions.getGroupInviteLink(message.chat_id),"")
 
 
                         except Exception as e:
                             print(f"Error -> {str(e)}")
-                            message.reply_message("Fail!!")
+                            driver.chat_send_message(message.chat_id,"Fail!!")
 
                     # to get source code
                     elif message.content == "#source":
-                        message.reply_message("https://github.com/Shyguy99/Whatsapp-bot\n\n")
+                        driver.send_message_with_auto_preview(message.chat_id,"https://github.com/Shyguy99/Whatsapp-bot","")
 
 
-                    elif "#tagall" in message.content or "#tagadmins" in message.content:
+                    elif "#tagalll" in message.content or "#tagadminss" in message.content:
 
                         if message.sender.id in driver.wapi_functions.getGroupAdmins(message.chat_id):
                             if "#tagadmins" in message.content:
@@ -897,7 +890,7 @@ while True:
                             driver.wapi_functions.sendMessageWithMentions(message.chat_id, msg, '')
 
                         else:
-                            message.reply_message('Sorry!! Admin command only')
+                            driver.chat_send_message(message.chat_id,'Sorry!! Admin command only')
 
 
 
@@ -906,16 +899,16 @@ while True:
                     elif message.content == "#all_cmd":
                         out = " ,".join(suggest.all_cmd)
 
-                        message.reply_message("All commands :\n" + out)
+                        driver.chat_send_message(message.chat_id,"All commands :\n" + out)
 
                     # for wrong command
                     elif message.content != "#on" and message.content != "#off":
 
                         size = min(12, len(message.content))
-                        suggest.suggest(message, message.content[:size])
+                        suggest.suggest(driver,message, message.content[:size])
                 elif message.content != "#on":
                     pass
-                    # message.reply_message("I-Bot is inactive for this chat ⚰️\nAsk admin to send #on to turn it on.")
+                    # driver.chat_send_message(message.chat_id,"I-Bot is inactive for this chat ⚰️\nAsk admin to send #on to turn it on.")
 
             # command for creating sticker from image
             elif (message.type == 'image' or message.type == 'video') and message.chat_id in group and group[
@@ -934,11 +927,12 @@ while True:
             if len(all_msg) == 0 or db_members == 1:
                 continue
             else:
-                db_members = 1
-                message = all_msg[0]
-                del all_msg[0]
-
                 try:
+                    db_members = 1
+                    message = all_msg[0]
+                    del all_msg[0]
+
+
 
                     cur.execute(
                         'CALL add_count(\'{}\',\'{}\',\'{}\')'.format("\"" + message.chat_id + "\"",
@@ -976,13 +970,25 @@ while True:
                 except Exception as e:
 
                     driver.chat_send_message(YOUR_MOBILE_NUMBER + "@c.us",
-                                             "Adding msg count got error"+str(e))
-                    print("Adding msg count got error"+str(e))
+                                             "Adding msg count got error:\n"+str(e))
+                    print("Adding msg count got error:\n"+str(e))
                 db_members=0
                 if flag == 1:
                     break
                 time.sleep(0.8)
 
+
+
+
+    def crypto_news_brodcaster():
+        while True:
+            if flag == 1:
+                break
+            if (time.strftime("%H:%M:%S", time.localtime()) == '06:00:00' or time.strftime("%H:%M:%S",
+                                                                                           time.localtime()) == '21:00:00'):
+                Crypto.news(driver, "918329198682-1614096949@g.us", CRYPTOPANIC_API, "")
+                Crypto.news(driver, "918329198682-1612849199@g.us", CRYPTOPANIC_API, "")
+                time.sleep(28800)
 
     def add_score(pname):
         global s_adding
@@ -999,6 +1005,7 @@ while True:
     threading.Thread(target=msg_traverse).start()
 
     while True:
+
         try:
             print("Waiting for QR")
             while not driver.wait_for_login():
@@ -1009,6 +1016,12 @@ while True:
         except:
             print("Can't login trying again")
             continue
+
+
+
+
+
+        threading.Thread(target=crypto_news_brodcaster).start()
         while True:
             try:
                 if driver.is_logged_in():
@@ -1018,7 +1031,8 @@ while True:
                         for i in contact.messages:
 
                             threading.Thread(target=main, args=(i,)).start()
-                            if time.time() - s_time > 3600:
+
+                            if time.time() - s_time > 3600*2:
                                 flag=1
                                 break
                         if flag == 1:
