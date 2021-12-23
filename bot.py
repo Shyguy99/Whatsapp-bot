@@ -15,7 +15,7 @@ import psycopg2
 while True:
     flag = 0
     # time to noted after which whole bot restart
-    s_time = time.time()
+    s_time =  time.time()
 
 
 
