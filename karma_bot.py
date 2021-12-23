@@ -1218,23 +1218,29 @@ class crypto:
         self.coin_dict=dict()
         coin_list=requests.get('{}/coins/list'.format(self.coingecko_base_url)).json()
         for c in coin_list:
-            self.coin_dict[c['symbol']]=c['id']
-
+            if c['symbol'] not in self.coin_dict:
+                self.coin_dict[c['symbol']]=[c['id']]
+            else:
+                self.coin_dict[c['symbol']].append(c['id'])
     def price(self,driver,msg,coin):
         coin=coin.lower()
         if coin in self.coin_dict:
-            try:
-                data=requests.get(self.coingecko_base_url+'simple/price/?ids={}&vs_currencies=inr,usd,btc'.format(self.coin_dict[coin])).json()
-                out=""
-                symbol=["₹","$",""]
-                i=0
-                for curr,price in data[self.coin_dict[coin]].items():
-                    out+="*{}{}* = *{}{}* \n\n".format(coin.upper(),curr.upper(),symbol[i],('%.14f'%float(price)).rstrip('0').rstrip('.'))
-                    i+=1
-                driver.chat_send_message(msg.chat_id,out)
-            except Exception as e:
-                print(e)
-                driver.chat_send_message(msg.chat_id,"Some error occured!!")
+            out = ""
+            for j in range(len(self.coin_dict[coin])):
+                try:
+                    data=requests.get(self.coingecko_base_url+'simple/price/?ids={}&vs_currencies=usd,inr,btc'.format(self.coin_dict[coin][j])).json()
+                    out+="*_" +self.coin_dict[coin][j].upper()+"_*"+"\n\n"
+                    symbol=["$","₹",""]
+                    i=0
+                    for curr,price in data[self.coin_dict[coin][j]].items():
+                        out+="*{}{}* = *{}{}* \n\n".format(coin.upper(),curr.upper(),symbol[i],('%.14f'%float(price)).rstrip('0').rstrip('.'))
+                        i+=1
+                    out+="\n\n"
+                except Exception as e:
+                    print(e)
+                    driver.chat_send_message(msg.chat_id,"Some error occurred!!")
+            out=out.strip()
+            driver.chat_send_message(msg.chat_id, out)
         else:
             driver.chat_send_message(msg.chat_id,"*Coin not found!!*")
 
@@ -1258,11 +1264,11 @@ class crypto:
 
     def detail(self,driver,msg,coin):
         if coin in self.coin_dict:
-            data=requests.get(self.coingecko_base_url+'coins/markets?vs_currency=usd&ids={}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=1h'.format(self.coin_dict[coin])).json()
+            data=requests.get(self.coingecko_base_url+'coins/markets?vs_currency=usd&ids={}&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=1h'.format(self.coin_dict[coin][0])).json()
             if len(data)==0:
                 driver.chat_send_message(msg.chat_id,"*No Data Found*")
             else:
-                out="----------------- *{}* ---------------------\n\n".format(self.coin_dict[coin].upper())
+                out="----------------- *{}* ---------------------\n\n".format(self.coin_dict[coin][0].upper())
                 data=data[0]
                 out+='*Name:* {}\n\n*Current Price:* {}\n\n*Market Cap:* {}\n\n*Market Cap Rank:* {}\n\n*Total Volume:* {}\n\n*24h High:* {}\n\n*24h Low:* {}\n\n*24h Price Change:* {}\n\n*24h Price Change%:* {}\n\n*1h Price Change%:* {}\n\n*24h Market Cap Change:* {}\n\n*24h Market Cap Change%:* {}\n\n*Circulating Supply:* {}\n\n*Total Supply:* {}\n\n*Max Supply:* {}\n\n*ATH Value:* {}\n'.format(data['name'],data['current_price'],data['market_cap'],data['market_cap_rank'],data['total_volume'],data['high_24h'],data['low_24h'],data['price_change_24h'],data['price_change_percentage_24h'],data['price_change_percentage_1h_in_currency'],data['market_cap_change_24h'],data['market_cap_change_percentage_24h'],data['circulating_supply'],data['total_supply'],data['max_supply'],data['ath'])
                 driver.chat_send_message(msg.chat_id,out)
@@ -1274,7 +1280,7 @@ class crypto:
         file = open("mmi.png", "wb")
         file.write(response.content)
         file.close()
-        driver.send_media("/app/mmi.png",msg.chat_id,"")
+        driver.send_media("mmi.png",msg.chat_id,"")
 
 
 #class for calculator
@@ -1308,6 +1314,7 @@ class db_data_to_dictionary:
                 i += 1
                 j += 1
         return d
+
 
 class cmd_suggesstion:
     def __init__(self, allcmds):
