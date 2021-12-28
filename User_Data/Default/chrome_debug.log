@@ -1,4 +1,0 @@
-[1128/124101.230:INFO:CONSOLE(0)] "The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy.", source: https://web.whatsapp.com/ (0)
-[1128/124102.150:INFO:CONSOLE(1)] "<link rel=preload> has an invalid `href` value", source: https://web.whatsapp.com/ (1)
-[1128/124112.558:INFO:CONSOLE(0)] "The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy.", source:  (0)
-[1128/124113.291:INFO:CONSOLE(0)] "The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy.", source: https://web.whatsapp.com/ (0)
