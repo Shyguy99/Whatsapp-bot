@@ -248,7 +248,8 @@ while True:
                         driver.chat_send_message(message.chat_id, s)
 
                     # add people to ignore list
-                    elif message.content == "#ignore" and message.sender.id == YOUR_MOBILE_NUMBER + "@c.us":
+                    elif message.content == "#ignore" and (message.sender.id == YOUR_MOBILE_NUMBER + "@c.us" or message.sender.id in driver.wapi_functions.getGroupAdmins(
+                        message.chat_id)):
                         if message._js_obj["quotedMsgObj"]["sender"]["id"] not in ignore_list:
                             id = message._js_obj["quotedMsgObj"]["sender"]["id"]
                             cur.execute(
@@ -259,7 +260,7 @@ while True:
                             driver.chat_send_message(message.chat_id, "Done!!")
                         else:
                             driver.chat_send_message(message.chat_id, "He is already in ignore list!")
-                    elif message.content == "#noignore" and message.sender.id == YOUR_MOBILE_NUMBER + "@c.us":
+                    elif message.content == "#ignore" and (message.sender.id == YOUR_MOBILE_NUMBER + "@c.us" or message.sender.id in driver.wapi_functions.getGroupAdmins(message.chat_id)):
                         if message._js_obj["quotedMsgObj"]["sender"]["id"] in ignore_list:
                             id = message._js_obj["quotedMsgObj"]["sender"]["id"]
                             cur.execute(
