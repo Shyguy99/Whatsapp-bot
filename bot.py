@@ -229,8 +229,6 @@ while True:
                             "*Some admin/extra commands*\n\n- *#delete* to delete the bot message.\n-*#add* _919876543210_\n- *#kick* _tag the person you want to remove_\n- *#link* for getting the link of the group\n- *#tagall* \n- *#tagadmins* \n-Note-: You can also add some text after #tagall and #tagadmins.\n\nBot created by *_Karma_*\nGithub link-:https://github.com/Shyguy99/Whatsapp-bot")
                         out = ''.join(s)
                         driver.chat_send_message(message.chat_id, out)
-
-
                     elif message.content == "#help_ludo":
                         s = """*Welcome to the I-Bot Ludo*\n\nTo start the game send \n*#ludo*  _and tag the members you want to play with_\n\nTo roll the dice send\n*#rdice*\n\nTo move your _heart_ piece send\n*#pmove h*\n\nTo move your circle piece send \n*#pmove c*\n\nTo see current ludo board send\n*#currludo*\n\nTo quit your game send\n*#quitludo*"""
                         driver.chat_send_message(message.chat_id, s)
