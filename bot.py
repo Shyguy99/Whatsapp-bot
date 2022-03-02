@@ -230,6 +230,7 @@ while True:
                         out = ''.join(s)
                         driver.chat_send_message(message.chat_id, out)
 
+
                     elif message.content == "#help_ludo":
                         s = """*Welcome to the I-Bot Ludo*\n\nTo start the game send \n*#ludo*  _and tag the members you want to play with_\n\nTo roll the dice send\n*#rdice*\n\nTo move your _heart_ piece send\n*#pmove h*\n\nTo move your circle piece send \n*#pmove c*\n\nTo see current ludo board send\n*#currludo*\n\nTo quit your game send\n*#quitludo*"""
                         driver.chat_send_message(message.chat_id, s)
