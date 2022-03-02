@@ -267,6 +267,7 @@ while True:
                                 'CALL update_ignore_list(\'{}\',\'{}\')'.format("\"" + id + "\"", 0))
 
                             conn.commit()
+
                             ignore_list.remove(message._js_obj["quotedMsgObj"]["sender"]["id"])
                             driver.chat_send_message(message.chat_id, "Done!!")
                         else:
