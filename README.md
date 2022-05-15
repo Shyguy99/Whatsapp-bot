@@ -1,6 +1,6 @@
 # WhatsApp Bot :fire: 
 A simple Whatsapp bot made using wa-automate python library with some additional features.</br>
-Try it out by sending #help on +919532122374 this number.
+Try it out by sending #help on +916268727514 this number.
 
 ## :sparkles: Installation
 
